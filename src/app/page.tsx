@@ -1,7 +1,12 @@
 import "@/styles/global.css";
+import Potato from "@/components/Potatoes/Potato";
 
-export default function Home() {
+const getData = async () => {
+    //await hello();
+};
+export default async function Home() {
+    await getData();
     return (
-        <h1>This is the home component</h1>
+        <Potato></Potato>
     );
 }

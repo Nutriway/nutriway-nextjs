@@ -20,7 +20,7 @@ export default async function middleware(req: NextRequest) {
         pathname.startsWith("/api") ||
         pathname.startsWith("/static") ||
         pathname.startsWith("/signin") ||
-        pathname.startsWith("/register") ||
+        pathname.startsWith("/signin") ||
         PUBLIC_FILE.test(pathname)
     ) {
         return NextResponse.next();
