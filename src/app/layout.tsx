@@ -1,4 +1,4 @@
-import "./globals.css";
+import "@/styles/global.css";
 import React from "react";
 
 export const metadata = {
