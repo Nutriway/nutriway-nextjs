@@ -34,7 +34,6 @@ export default async function middleware(req: NextRequest) {
         return NextResponse.redirect(req.nextUrl);
     }
     try {
-        req.headers.set("Authorization", `Bearer ${jwt}`);
         return NextResponse.next();
     } catch (e) {
         console.error(e);
