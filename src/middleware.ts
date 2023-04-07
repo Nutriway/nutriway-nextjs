@@ -21,6 +21,7 @@ export default async function middleware(req: NextRequest) {
         pathname.startsWith("/static") ||
         pathname.startsWith("/signin") ||
         pathname.startsWith("/signin") ||
+        pathname.startsWith("/login") ||
         PUBLIC_FILE.test(pathname)
     ) {
         return NextResponse.next();
@@ -29,16 +30,15 @@ export default async function middleware(req: NextRequest) {
     const jwt = req.cookies.get(process.env.COOKIE_NAME as string);
 
     if (!jwt) {
-        //req.nextUrl.pathname = "/signin"; // change this to /signin as we want to redirect to the signin page if we have no jwt
-        // return NextResponse.redirect(req.nextUrl);
-        return NextResponse.next();
+        req.nextUrl.pathname = "/login"; // change this to /signin as we want to redirect to the signin page if we have no jwt
+        return NextResponse.redirect(req.nextUrl);
     }
     try {
         req.headers.set("Authorization", `Bearer ${jwt}`);
         return NextResponse.next();
     } catch (e) {
         console.error(e);
-        req.nextUrl.pathname = "/signin";
+        req.nextUrl.pathname = "/login";
         return NextResponse.redirect(req.nextUrl);
     }
 }
