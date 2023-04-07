@@ -31,11 +31,10 @@ export default async function middleware(req: NextRequest) {
     if (!jwt) {
         //req.nextUrl.pathname = "/signin"; // change this to /signin as we want to redirect to the signin page if we have no jwt
         // return NextResponse.redirect(req.nextUrl);
-        return;
+        return NextResponse.next();
     }
-
     try {
-        await verifyJWT(jwt.value);
+        req.headers.set("Authorization", `Bearer ${jwt}`);
         return NextResponse.next();
     } catch (e) {
         console.error(e);

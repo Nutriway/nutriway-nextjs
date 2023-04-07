@@ -5,8 +5,10 @@ type FetcherParameters = {
     json?: boolean,
 }
 
+const BASE_URL = process.env.REACT_APP_PROD || "http://localhost:1337/api";
+
 export const fetcher = async ({ url, method, body, json = true }: FetcherParameters) => {
-    const res = await fetch(url, {
+    const res = await fetch(`${BASE_URL}${url}`, {
         method: method.toUpperCase(),
         ...(body && { body: JSON.stringify(body) }),
         headers: {
