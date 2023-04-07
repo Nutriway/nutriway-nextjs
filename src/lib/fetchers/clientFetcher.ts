@@ -20,13 +20,17 @@ type UseFetcherParameters = {
     shouldFetch?: boolean,
 }
 
-type UseFetcherReturn = {
-    data?: any,
+type UseFetcherReturn<DataType> = {
+    data?: DataType,
     isLoading: boolean,
     isError: boolean,
 }
 
-export function useFetcher({ url, json = true, shouldFetch = true }: UseFetcherParameters): UseFetcherReturn {
+export function useFetcher<DataType>({
+                                         url,
+                                         json = true,
+                                         shouldFetch = true
+                                     }: UseFetcherParameters): UseFetcherReturn<DataType> {
     const { data, error, isLoading } = useSWR(() => (shouldFetch ? [url, json] : null),
         ([url, json]) => clientFetcher({ url, method: "get", json }));
 
