@@ -1,6 +1,6 @@
 type FetcherParameters = {
     url: string,
-    method: "get" | "post",
+    method: "get" | "post" | "put" | "delete",
     body?: object,
     json?: boolean,
     jwt?: string | boolean | null,

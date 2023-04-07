@@ -3,13 +3,13 @@ import { fetcher } from "@/lib/fetchers/fetchUtil";
 
 type FetcherParameters = {
     url: string,
-    method: "get" | "post",
+    method: "get" | "post" | "put" | "delete",
     body?: object,
     json?: boolean,
 }
 
 
-export const serverFetcher = async ({ url, method, body, json = true }: FetcherParameters) => {
+export const serverFetcher = async (params: FetcherParameters) => {
     const jwt = cookies().get("jwt-cookie")?.value;
-    return fetcher({ url, method, body, json, jwt });
+    return fetcher({ ...params, jwt });
 };

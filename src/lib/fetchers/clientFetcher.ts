@@ -4,7 +4,7 @@ import useSWR from "swr";
 
 type FetcherParameters = {
     url: string,
-    method: "get" | "post",
+    method: "post" | "put" | "delete",
     body?: object,
     json?: boolean,
 }
@@ -32,6 +32,7 @@ export function useFetcher<DataType>({
                                          shouldFetch = true
                                      }: UseFetcherParameters): UseFetcherReturn<DataType> {
     const { data, error, isLoading } = useSWR(() => (shouldFetch ? [url, json] : null),
+        // @ts-ignore this is important to make sure we do not use GET for the normal client fetcher
         ([url, json]) => clientFetcher({ url, method: "get", json }));
 
     return {
