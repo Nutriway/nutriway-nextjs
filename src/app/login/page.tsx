@@ -54,6 +54,9 @@ export default function Login() {
     const { trigger } = useSWRMutation("/auth/local", doLogin);
 
     // use a memo on every client component for these things
+    // this should be really done if we have a lot of data being changed
+    // if we have just one, like in this case its kinda meh.
+    // IMPORTANT NOTE: on the server, we don't need to create a memo, we can compute it outside the component.
     const content = useMemo(() => ({
         title: isError ? "Error" : isLoading ? "Loading" : data?.data[0].attributes.meeting_url
     }), [data?.data, isError, isLoading]);
