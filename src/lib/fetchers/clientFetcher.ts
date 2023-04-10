@@ -1,6 +1,6 @@
 import { getCookie } from "cookies-next";
 import { fetcher } from "@/lib/fetchers/fetchUtil";
-import useSWR from "swr";
+import useSWR, { SWRConfiguration } from "swr";
 
 type FetcherParameters = {
     url: string,
@@ -19,6 +19,7 @@ type UseFetcherParameters = {
     url: string,
     json?: boolean,
     shouldFetch?: boolean,
+    config?: SWRConfiguration
 }
 
 type UseFetcherReturn<DataType> = {
@@ -32,11 +33,12 @@ type UseFetcherReturn<DataType> = {
 export function useFetcher<DataType>({
                                          url,
                                          json = true,
-                                         shouldFetch = true
+                                         shouldFetch = true,
+                                         config = {} // define some default configs
                                      }: UseFetcherParameters): UseFetcherReturn<DataType> {
     const { data, error, isLoading, isValidating } = useSWR(() => (shouldFetch ? [url, json] : null),
         // @ts-ignore this is important to make sure we do not use GET for the normal client fetcher
-        ([url, json]) => clientFetcher({ url, method: "get", json }));
+        ([url, json]) => clientFetcher({ url, method: "get", json }), config);
 
     return {
         data,
