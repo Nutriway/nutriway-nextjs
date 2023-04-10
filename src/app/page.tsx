@@ -17,6 +17,7 @@ const content = {
 };
 
 export default async function Home() {
+    // Start using URL parameters for stuff like pagination
     const jwt = await getData(1);
     return (
         <div>

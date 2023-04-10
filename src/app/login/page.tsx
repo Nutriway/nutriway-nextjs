@@ -50,7 +50,7 @@ export default function Login() {
         shouldFetch: !!appointment, // is appointment defined?
         url: `/appointments?populate[appointment_payment][populate]=*&populate[nutritionist_availability][populate]=*&populate[client][populate]=*&populate[appointment_result][populate]=*&pagination[pageSize]=2000&filters[id][$eq]=${appointment?.data[0].id}`
     });
-    // this is for the login button mutation
+    // this is for the login button mutation; key= the url
     const { trigger } = useSWRMutation("/auth/local", doLogin);
 
     // use a memo on every client component for these things

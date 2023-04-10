@@ -9,6 +9,7 @@ type FetcherParameters = {
     json?: boolean,
 }
 
+// POST, PUT, DELETE fetcher
 export function clientFetcher(params: FetcherParameters) {
     const jwt = getCookie("jwt-cookie");
     return fetcher({ ...params, jwt });
@@ -24,20 +25,23 @@ type UseFetcherReturn<DataType> = {
     data?: DataType,
     isLoading: boolean,
     isError: boolean,
+    isValidating: boolean,
 }
 
+// SWR GET fetcher
 export function useFetcher<DataType>({
                                          url,
                                          json = true,
                                          shouldFetch = true
                                      }: UseFetcherParameters): UseFetcherReturn<DataType> {
-    const { data, error, isLoading } = useSWR(() => (shouldFetch ? [url, json] : null),
+    const { data, error, isLoading, isValidating } = useSWR(() => (shouldFetch ? [url, json] : null),
         // @ts-ignore this is important to make sure we do not use GET for the normal client fetcher
         ([url, json]) => clientFetcher({ url, method: "get", json }));
 
     return {
         data,
         isLoading,
-        isError: error
+        isError: error,
+        isValidating
     };
 }
