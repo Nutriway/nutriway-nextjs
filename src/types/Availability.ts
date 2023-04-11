@@ -1,4 +1,4 @@
-import { Nutritionist } from "@/types/Nutritionist";
+import { Nutritionist } from "./Nutritionist";
 
 export type Availability = {
     id: number;

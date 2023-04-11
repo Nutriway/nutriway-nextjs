@@ -3,6 +3,7 @@ import Potato from "@/components/Potatoes/Potato";
 import { cookies } from "next/headers";
 import { serverFetcher } from "@/lib/fetchers/serverFetcher";
 import { Appointment } from "@/types/Appointment";
+import Link from "next/link";
 
 const getAllAppointments = async () => {
     return serverFetcher<Appointment>({
@@ -18,7 +19,7 @@ const getAppointmentFromId = async (id: number) => {
     });
     console.log(data);
     await new Promise(resolve => setTimeout(resolve, 1000)); // this is only here so that we can see the loading animation
-    // please remove this after :D 
+    // please remove this after :D
     return cookies().get("jwt-cookie")?.value;
 };
 
@@ -35,6 +36,12 @@ export default async function Home() {
             <Potato></Potato>
             <h1>{content.title}</h1>
             <p>{jwt}</p>
+            <Link href={`/cool`}>
+                <div
+                    className="hover:ring-gray-300 cursor-pointer ring">
+                    {"Click this to start"}
+                </div>
+            </Link>
         </div>
     );
 }
