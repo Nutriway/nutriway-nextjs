@@ -4,8 +4,8 @@ type FetcherParameters = {
     body?: object,
     json?: boolean,
     jwt?: string | boolean | null,
-    revalidate?: number,
-    cache?: "default" | "no-cache" | "reload" | "force-cache" | "only-if-cached"
+    revalidate?: number, // https://beta.nextjs.org/docs/data-fetching/revalidating
+    cache?: "default" | "no-cache" | "reload" | "force-cache" | "only-if-cached" // https://beta.nextjs.org/docs/data-fetching/caching
 }
 
 const BASE_URL = process.env.REACT_APP_PROD || "http://127.0.0.1:1337/api";
@@ -17,7 +17,7 @@ export async function fetcher({
                                   body,
                                   json = true,
                                   jwt,
-                                  revalidate = 10,
+                                  revalidate = undefined,
                                   cache = "default"
                               }: FetcherParameters) {
     const res = await fetch(`${BASE_URL}${url}`, {
