@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { fetcher } from "@/lib/fetchers/fetchUtil";
+import { StrapiResponse } from "@/types/StrapiResponse";
 
 type FetcherParameters = {
     url: string,
@@ -8,8 +9,7 @@ type FetcherParameters = {
     json?: boolean,
 }
 
-
-export const serverFetcher = async (params: FetcherParameters) => {
+export async function serverFetcher<DataType>(params: FetcherParameters): Promise<StrapiResponse<DataType> | undefined> {
     const jwt = cookies().get("jwt-cookie")?.value;
     return fetcher({ ...params, jwt });
-};
+}
