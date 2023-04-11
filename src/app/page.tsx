@@ -17,6 +17,8 @@ const getAppointmentFromId = async (id: number) => {
         method: "get"
     });
     console.log(data);
+    await new Promise(resolve => setTimeout(resolve, 1000)); // this is only here so that we can see the loading animation
+    // please remove this after :D 
     return cookies().get("jwt-cookie")?.value;
 };
 
