@@ -18,5 +18,4 @@ export type Appointment = {
         appointment_payment: { data: AppointmentPayment };
         goal: string;
     };
-
 };

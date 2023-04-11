@@ -1,6 +1,7 @@
 import { getCookie } from "cookies-next";
 import { fetcher } from "@/lib/fetchers/fetchUtil";
 import useSWR, { SWRConfiguration } from "swr";
+import { StrapiResponse } from "@/types/StrapiResponse";
 
 type FetcherParameters = {
     url: string,
@@ -35,7 +36,7 @@ export function useFetcher<DataType>({
                                          json = true,
                                          shouldFetch = true,
                                          config = {} // define some default configs
-                                     }: UseFetcherParameters): UseFetcherReturn<DataType> {
+                                     }: UseFetcherParameters): UseFetcherReturn<StrapiResponse<DataType>> {
     const { data, error, isLoading, isValidating } = useSWR(() => (shouldFetch ? [url, json] : null),
         // @ts-ignore this is important to make sure we do not use GET for the normal client fetcher
         ([url, json]) => clientFetcher({ url, method: "get", json }), config);

@@ -5,6 +5,7 @@ import Button from "@/components/Buttons/Button";
 import { setCookie } from "cookies-next";
 import useSWRMutation from "swr/mutation";
 import { clientFetcher, useFetcher } from "@/lib/fetchers/clientFetcher";
+import { Appointment } from "@/types/Appointment";
 
 
 async function doLogin(url: string, { arg: { email, password } }: { arg: { email: string, password: string } }) {
@@ -24,18 +25,6 @@ async function doLogin(url: string, { arg: { email, password } }: { arg: { email
     });
 }
 
-type Appointment = {
-    data: { id: number }[]
-}
-
-type AppointmentData = {
-    data: {
-        attributes: {
-            meeting_url: string
-        }
-    }[]
-}
-
 export default function Login() {
     // useFetcher is a client side fetcher for GET's ONLY
     // This is a bad example of useFetcher, as these two calls can be done on a server component.
@@ -46,7 +35,7 @@ export default function Login() {
         data,
         isError,
         isLoading
-    } = useFetcher<AppointmentData>({
+    } = useFetcher<Appointment>({
         shouldFetch: !!appointment, // is appointment defined?
         url: `/appointments?populate[appointment_payment][populate]=*&populate[nutritionist_availability][populate]=*&populate[client][populate]=*&populate[appointment_result][populate]=*&pagination[pageSize]=2000&filters[id][$eq]=${appointment?.data[0].id}`
     });
