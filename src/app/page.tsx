@@ -27,7 +27,7 @@ const content = {
 export default async function Home() {
     // Start using URL parameters for stuff like pagination
     const appointment = await getAllAppointments();
-    const jwt = appointment && await getAppointmentFromId(appointment.data[0].id);
+    const jwt = await getAppointmentFromId(appointment?.data[0].id || 1); // this is just an example, don't do the `|| 1` part in your code
     return (
         <div>
             <Potato></Potato>

@@ -52,9 +52,11 @@ export default function Login() {
 
     return (
         <div>
-            <Button onClick={async () => {
-                await trigger({ email: "andre@email.com", password: "password" });
-            }}>Click me</Button>
+            <Button
+                onClick={async () => {
+                    await trigger({ email: "andre@email.com", password: "password" });
+                }}
+            >Click me</Button>
             <p>{content.title}</p>
         </div>
     );
