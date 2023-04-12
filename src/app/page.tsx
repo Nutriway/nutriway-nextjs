@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { serverFetcher } from "@/lib/fetchers/serverFetcher";
 import { Appointment } from "@/types/Appointment";
 import Link from "next/link";
+import HomeCheck from "@/components/Forms/HomeCheck";
 
 const getAllAppointments = async () => {
     return serverFetcher<Appointment>({
@@ -42,6 +43,7 @@ export default async function Home() {
                     {"Click this to start"}
                 </div>
             </Link>
+            <HomeCheck />
         </div>
     );
 }
