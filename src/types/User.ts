@@ -1,0 +1,21 @@
+export type User = {
+    id: number;
+    email: string;
+    username: string;
+    type: "client" | "consultant" | "nutritionist";
+    age: string;
+    gender: string;
+    height: string;
+    weight: string;
+    activity: string;
+    metabolicRate: number;
+    city: string;
+    street: string;
+    zipCode: string;
+    phoneNumber: string;
+    blocked: boolean;
+    confirmed: boolean;
+    provider: string;
+    createAt: string;
+    updateAt: string;
+};
