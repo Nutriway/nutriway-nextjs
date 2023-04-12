@@ -30,7 +30,9 @@ export default function Login() {
     // This is a bad example of useFetcher, as these two calls can be done on a server component.
     // I am using it here to show how dependencies work in fetching on the client.
     // There is also a mutation example to show how to use the useSWRMutation hook
-    const { data: appointment } = useFetcher<Appointment>({ url: `/appointments` });
+    const { data: appointment } = useFetcher<Appointment>({
+        url: `/appointments`
+    });
     const {
         data,
         isError,

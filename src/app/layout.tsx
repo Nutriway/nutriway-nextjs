@@ -3,6 +3,7 @@ import React from "react";
 import { Inter } from "next/font/google";
 import { serverFetcher } from "@/lib/fetchers/serverFetcher";
 import { User } from "@/types/User";
+import { cookies } from "next/headers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +25,7 @@ export default async function RootLayout({
 }) {
     // get current user type
     // @ts-ignore This endpoint is different from the others, has no `data` key :(
-    const user = await serverFetcher<User>({ url: "/users/me", method: "get" }) as User;
+    const user = cookies().get("jwt-cookie") && await serverFetcher<User>({ url: "/users/me", method: "get" }) as User;
     const userType = user?.type === "client" ? client : nutritionist;
 
     return (
