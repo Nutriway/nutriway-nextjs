@@ -17,7 +17,7 @@ export async function fetcher({
                                   body,
                                   json = true,
                                   jwt,
-                                  revalidate = undefined,
+                                  revalidate = 60,
                                   cache = "default"
                               }: FetcherParameters) {
     const res = await fetch(`${BASE_URL}${url}`, {
