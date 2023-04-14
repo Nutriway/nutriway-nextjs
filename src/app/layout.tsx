@@ -25,6 +25,8 @@ export default async function RootLayout({
 }) {
     // get current user type
     // @ts-ignore This endpoint is different from the others, has no `data` key :(
+    // every other endpoint returns { data: {}, meta: {} }
+    // this should be fixed in the future versions of our API
     const user = cookies().get("jwt-cookie") && await serverFetcher<User>({ url: "/users/me", method: "get" }) as User;
     const userType = user?.type === "client" ? client : nutritionist;
 
