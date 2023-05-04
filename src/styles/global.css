@@ -11,3 +11,20 @@
 * {
     box-sizing: border-box;
 }
+
+html {
+    font-family: Urbanist, sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+}
+
+#toggle_nav:checked ~ div #hamburger #line {
+    @apply rotate-45 translate-y-1.5
+}
+
+#toggle_nav:checked ~ div #hamburger #line2 {
+    @apply -rotate-45 -translate-y-1
+}
