@@ -1,10 +1,10 @@
 import React from "react";
-import HeroSection from "@/components/HeroSection";
-import Features from "@/components/Features";
-import Stats from "@/components/Stats";
-import Testimonials from "@/components/Testimonials";
-import CallToAction from "@/components/CallToAction";
-import Blog from "@/components/Blog";
+import HeroSection from "@/components/IntroSection/HeroSection";
+import Features from "@/components/IntroSection/Features";
+import Stats from "@/components/IntroSection/Stats";
+import Testimonials from "@/components/IntroSection/Testimonials";
+import CallToAction from "@/components/IntroSection/CallToAction";
+import Blog from "@/components/IntroSection/Blog";
 
 export default function Intro() {
     return (
