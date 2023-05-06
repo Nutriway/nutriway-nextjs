@@ -13,7 +13,7 @@ export default function AppHeader() {
                             <a href="#home" aria-label="logo" className="flex space-x-2 items-center">
                                 <div aria-hidden="true" className="flex space-x-1">
                                     <div className="h-4 w-4 rounded-full bg-gray-900 light:bg-white"></div>
-                                    <div className="h-6 w-2 bg-primary"></div>
+                                    <div className="h-6 w-2 bg-primary-900"></div>
                                 </div>
                                 <span className="text-2xl font-bold text-gray-900 light:text-white">Nutriway</span>
                             </a>
@@ -38,23 +38,23 @@ export default function AppHeader() {
                             <div className="text-gray-600 light:text-gray-300 lg:pr-4 lg:w-auto w-full lg:pt-0">
                                 <ul className="tracking-wide font-medium lg:text-sm flex-col flex lg:flex-row gap-6 lg:gap-0">
                                     <li>
-                                        <a href="#features" className="block md:px-4 transition hover:text-primary">
+                                        <a href="#features" className="block md:px-4 transition hover:text-primary-900">
                                             <span>Features</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#solution" className="block md:px-4 transition hover:text-primary">
+                                        <a href="#solution" className="block md:px-4 transition hover:text-primary-900">
                                             <span>Solution</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#testimonials"
-                                           className="block md:px-4 transition hover:text-primary">
+                                           className="block md:px-4 transition hover:text-primary-900">
                                             <span>Testimonials</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#blog" className="block md:px-4 transition hover:text-primary">
+                                        <a href="#blog" className="block md:px-4 transition hover:text-primary-900">
                                             <span>Blog</span>
                                         </a>
                                     </li>
@@ -64,7 +64,7 @@ export default function AppHeader() {
                             <div className="mt-12 lg:mt-0">
                                 <a
                                     href="#"
-                                    className="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
+                                    className="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary-900 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
                                 >
                             <span className="relative text-sm font-semibold text-white"
                             >Get Started</span

@@ -12,18 +12,19 @@ export default function AppFooter() {
                             className="flex w-full justify-center space-x-12 text-gray-600 light:text-gray-300 sm:w-7/12 md:justify-start"
                         >
                             <ul className="list-inside list-disc space-y-8">
-                                <li><a href="#" className="transition hover:text-primary">Home</a></li>
+                                <li><a href="#" className="transition hover:text-primary-900-900">Home</a></li>
 
-                                <li><a href="#" className="transition hover:text-primary">About</a></li>
-                                <li><a href="#" className="transition hover:text-primary">Guide</a></li>
-                                <li><a href="#" className="transition hover:text-primary">Blocks</a></li>
-                                <li><a href="#" className="transition hover:text-primary">Contact</a></li>
-                                <li><a href="#" className="transition hover:text-primary">Terms of Use</a></li>
+                                <li><a href="#" className="transition hover:text-primary-900-900">About</a></li>
+                                <li><a href="#" className="transition hover:text-primary-900-900">Guide</a></li>
+                                <li><a href="#" className="transition hover:text-primary-900-900">Blocks</a></li>
+                                <li><a href="#" className="transition hover:text-primary-900-900">Contact</a></li>
+                                <li><a href="#" className="transition hover:text-primary-900-900">Terms of Use</a></li>
                             </ul>
 
                             <ul role="list" className="space-y-8">
                                 <li>
-                                    <a href="#" className="flex items-center space-x-3 transition hover:text-primary">
+                                    <a href="#"
+                                       className="flex items-center space-x-3 transition hover:text-primary-900">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="currentColor"
@@ -38,7 +39,8 @@ export default function AppFooter() {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="flex items-center space-x-3 transition hover:text-primary">
+                                    <a href="#"
+                                       className="flex items-center space-x-3 transition hover:text-primary-900">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="currentColor"
@@ -53,7 +55,8 @@ export default function AppFooter() {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="flex items-center space-x-3 transition hover:text-primary">
+                                    <a href="#"
+                                       className="flex items-center space-x-3 transition hover:text-primary-900">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="currentColor"
@@ -69,7 +72,8 @@ export default function AppFooter() {
                                 </li>
 
                                 <li>
-                                    <a href="#" className="flex items-center space-x-3 transition hover:text-primary">
+                                    <a href="#"
+                                       className="flex items-center space-x-3 transition hover:text-primary-900">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="currentColor"
@@ -84,7 +88,8 @@ export default function AppFooter() {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="flex items-center space-x-3 transition hover:text-primary">
+                                    <a href="#"
+                                       className="flex items-center space-x-3 transition hover:text-primary-900">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="currentColor"
@@ -99,7 +104,8 @@ export default function AppFooter() {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="flex items-center space-x-3 transition hover:text-primary">
+                                    <a href="#"
+                                       className="flex items-center space-x-3 transition hover:text-primary-900">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             width="16"
@@ -116,7 +122,8 @@ export default function AppFooter() {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="flex items-center space-x-3 transition hover:text-primary">
+                                    <a href="#"
+                                       className="flex items-center space-x-3 transition hover:text-primary-900">
                                         <Image
                                             className="h-5 w-5"
                                             width="32"
@@ -128,7 +135,8 @@ export default function AppFooter() {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="flex items-center space-x-3 transition hover:text-primary">
+                                    <a href="#"
+                                       className="flex items-center space-x-3 transition hover:text-primary-900">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="currentColor"
