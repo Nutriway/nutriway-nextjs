@@ -56,10 +56,10 @@ export default function CallToAction() {
                         />
                     </div>
                     <div className="mt-6 m-auto space-y-6 md:w-8/12 lg:w-7/12">
-                        <h1 className="text-center text-4xl font-bold text-gray-800 light:text-white md:text-5xl">Get
-                            Started now</h1>
+                        <h1 className="text-center text-4xl font-bold text-gray-800 light:text-white md:text-5xl">Comece
+                            já</h1>
                         <p className="text-center text-xl text-gray-600 light:text-gray-300">
-                            Be part of millions people around the world using tailus in modern User Interfaces.
+                            Junte-se a nós e descubra como a nutrição adequada pode transformar sua vida!
                         </p>
                         <div className="flex flex-wrap justify-center gap-6">
                             <a
@@ -67,7 +67,7 @@ export default function CallToAction() {
                                 className="relative flex h-12 w-full items-center justify-center px-8 before:absolute before:inset-0 before:rounded-full before:bg-primary-900 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
                             >
               <span className="relative text-base font-semibold text-white light:text-dark"
-              >Get Started</span
+              >Comece já</span
               >
                             </a>
                             <a
@@ -76,7 +76,7 @@ export default function CallToAction() {
                             >
               <span
                   className="relative text-base font-semibold text-primary-900 light:text-white"
-              >More about</span
+              >Saber mais</span
               >
                             </a>
                         </div>

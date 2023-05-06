@@ -7,7 +7,7 @@ export default function Testimonials() {
             <Container>
                 <div className="mb-20 space-y-4 px-6 md:px-0">
                     <h2 className="text-center text-2xl font-bold text-gray-800 light:text-white md:text-4xl">
-                        We have some fans.
+                        Nós temos alguns fãs.
                     </h2>
                 </div>
                 <div className="md:columns-2 lg:columns-3 gap-8 space-y-8">
