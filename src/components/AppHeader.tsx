@@ -39,23 +39,18 @@ export default function AppHeader() {
                                 <ul className="tracking-wide font-medium lg:text-sm flex-col flex lg:flex-row gap-6 lg:gap-0">
                                     <li>
                                         <a href="#features" className="block md:px-4 transition hover:text-primary-900">
-                                            <span>Features</span>
+                                            <span>O que oferecemos</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#solution" className="block md:px-4 transition hover:text-primary-900">
-                                            <span>Solution</span>
+                                            <span>Consultas</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="#testimonials"
                                            className="block md:px-4 transition hover:text-primary-900">
-                                            <span>Testimonials</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#blog" className="block md:px-4 transition hover:text-primary-900">
-                                            <span>Blog</span>
+                                            <span>Testimonios</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -67,7 +62,7 @@ export default function AppHeader() {
                                     className="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary-900 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
                                 >
                             <span className="relative text-sm font-semibold text-white"
-                            >Get Started</span
+                            >Comece já</span
                             >
                                 </a>
                             </div>
