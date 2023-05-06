@@ -29,13 +29,13 @@ export default function Stats() {
                     </div>
                     <div className="md:7/12 lg:w-1/2">
                         <h2 className="text-3xl font-bold text-gray-900 md:text-4xl light:text-white">
-                            Nuxt development is carried out by passionate developers
+                            As consultas de nutrição são feitas por profissionais altamente competentes
                         </h2>
                         <p className="my-8 text-gray-600 light:text-gray-300">
-                            Nobis minus voluptatibus pariatur dignissimos libero quaerat iure expedita at?
-                            Asperiores nemo possimus nesciunt dicta veniam aspernatur quam mollitia. <br /> <br /> Vitae
-                            error, quaerat officia delectus voluptatibus explicabo quo pariatur impedit, at
-                            reprehenderit aliquam a ipsum quas voluptatem. Quo pariatur asperiores eum amet.
+                            Acreditamos na importância de oferecer um atendimento personalizado e de qualidade, por
+                            isso, os nossos nutricionistas são selecionados criteriosamente. Eles são registrados nos
+                            orgãos competentes e possuem especializações em diversas áreas, como nutrição esportiva,
+                            nutrição clínica, gestão de peso, alimentação vegetariana e muito mais.
                         </p>
                         <div className="divide-y space-y-4 divide-gray-100 light:divide-gray-800">
                             <div className="mt-8 flex gap-4 md:items-center">
@@ -48,10 +48,10 @@ export default function Stats() {
                                     </svg>
                                 </div>
                                 <div className="w-5/6">
-                                    <h4 className="font-semibold text-lg text-gray-700 light:text-indigo-300">Chat
-                                        Anytime</h4>
-                                    <p className="text-gray-500 light:text-gray-400">Asperiores nemo possimus nesciunt
-                                        quam mollitia.</p>
+                                    <h4 className="font-semibold text-lg text-gray-700 light:text-indigo-300">Consultas
+                                        online</h4>
+                                    <p className="text-gray-500 light:text-gray-400">Tenha um acompanhamento com os
+                                        nossos profissionais de saúde.</p>
                                 </div>
                             </div>
                             <div className="pt-4 flex gap-4 md:items-center">
@@ -64,10 +64,10 @@ export default function Stats() {
                                     </svg>
                                 </div>
                                 <div className="w-5/6">
-                                    <h4 className="font-semibold text-lg text-gray-700 light:text-teal-300">Real Time
-                                        Location</h4>
-                                    <p className="text-gray-500 light:text-gray-400">Asperiores nemo possimus nesciunt
-                                        quam mollitia.</p>
+                                    <h4 className="font-semibold text-lg text-gray-700 light:text-teal-300">Plano
+                                        personalizado</h4>
+                                    <p className="text-gray-500 light:text-gray-400">A partir da sua consulta obterá um
+                                        plano personalizado.</p>
                                 </div>
                             </div>
                         </div>

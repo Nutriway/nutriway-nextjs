@@ -4,7 +4,6 @@ import Features from "@/components/IntroSection/Features";
 import Stats from "@/components/IntroSection/Stats";
 import Testimonials from "@/components/IntroSection/Testimonials";
 import CallToAction from "@/components/IntroSection/CallToAction";
-import Blog from "@/components/IntroSection/Blog";
 
 export default function Intro() {
     return (
@@ -14,7 +13,6 @@ export default function Intro() {
             <Stats />
             <Testimonials />
             <CallToAction />
-            <Blog />
         </main>
     );
 }
