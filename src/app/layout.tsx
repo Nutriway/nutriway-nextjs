@@ -34,7 +34,7 @@ export default async function RootLayout({
 
     return (
         <html lang="pt">
-        <body className={`bg-white dark:bg-gray-900 ${inter.className}`}>
+        <body className={`bg-white light:bg-gray-900 text-black ${inter.className}`}>
         <AppHeader />
         {userType}
         {children}
