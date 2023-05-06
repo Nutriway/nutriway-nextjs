@@ -14,6 +14,11 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "c5.patreon.com",
                 port: ""
+            },
+            {
+                protocol: "https",
+                hostname: "cdn-icons-png.flaticon.com",
+                port: ""
             }
         ]
     }

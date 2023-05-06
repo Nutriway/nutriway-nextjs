@@ -1,11 +1,12 @@
 import React from "react";
 import Container from "@/components/Container";
+import Image from "next/image";
 
 export default function Features() {
     return (
         <div id="features">
             <Container>
-                <div className="md:w-2/3 lg:w-1/2">
+                <div className="md:w-2/3 lg:w-3/4">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                          className="w-6 h-6 text-secondary">
                         <path fillRule="evenodd"
@@ -14,12 +15,12 @@ export default function Features() {
                     </svg>
 
                     <h2 className="my-8 text-2xl font-bold text-gray-700 light:text-white md:text-4xl">
-                        A technology-first approach to payments
-                        and finance
+                        Consultas Online de Nutrição - O Seu Guia Para Uma Vida Saudável!
                     </h2>
-                    <p className="text-gray-600 light:text-gray-300">Lorem ipsum dolor sit amet consectetur adipisicing
-                        elit. Natus ad ipsum pariatur autem, fugit laborum in atque amet obcaecati? Nisi minima
-                        aspernatur, quidem nulla cupiditate nam consequatur eligendi magni adipisci.</p>
+                    <p className="text-gray-600 light:text-gray-300">Oferecemos consultas personalizadas, acompanhamento
+                        nutricional e planos alimentares individualizados, tudo no conforto da sua casa. Os nossos
+                        nutricionistas são especializados em diferentes áreas da nutrição, garantindo que receberá
+                        o melhor atendimento possível.</p>
                 </div>
                 <div
                     className="mt-16 grid divide-x divide-y divide-gray-100 light:divide-gray-700 overflow-hidden rounded-3xl border border-gray-100 text-gray-600 light:border-gray-700 sm:grid-cols-2 lg:grid-cols-4 lg:divide-y-0 xl:grid-cols-4"
@@ -27,8 +28,8 @@ export default function Features() {
                     <div
                         className="group relative bg-white light:bg-gray-800 transition hover:z-[1] hover:shadow-2xl hover:shadow-gray-600/10">
                         <div className="relative space-y-8 py-12 p-8">
-                            <img
-                                src="https://cdn-icons-png.flaticon.com/512/4341/4341139.png"
+                            <Image
+                                src="/images/features/nutritionist.png"
                                 className="w-12"
                                 width="512"
                                 height="512"
@@ -39,14 +40,14 @@ export default function Features() {
                                 <h5
                                     className="text-xl font-semibold text-gray-700 light:text-white transition group-hover:text-secondary"
                                 >
-                                    First feature
+                                    Consultas online
                                 </h5>
                                 <p className="text-gray-600 light:text-gray-300">
-                                    Neque Dolor, fugiat non cum doloribus aperiam voluptates nostrum.
+                                    Consultas no conforto da sua casa.
                                 </p>
                             </div>
                             <a href="#" className="flex items-center justify-between group-hover:text-secondary">
-                                <span className="text-sm">Read more</span>
+                                <span className="text-sm">Experimente</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                      className="w-5 h-5 -translate-x-4 text-2xl opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100">
                                     <path fillRule="evenodd"
@@ -59,8 +60,8 @@ export default function Features() {
                     <div
                         className="group relative bg-white light:bg-gray-800 transition hover:z-[1] hover:shadow-2xl hover:shadow-gray-600/10">
                         <div className="relative space-y-8 py-12 p-8">
-                            <img
-                                src="https://cdn-icons-png.flaticon.com/512/4341/4341134.png"
+                            <Image
+                                src="/images/features/goal.png"
                                 className="w-12"
                                 width="512"
                                 height="512"
@@ -71,14 +72,14 @@ export default function Features() {
                                 <h5
                                     className="text-xl font-semibold text-gray-700 light:text-white transition group-hover:text-secondary"
                                 >
-                                    Second feature
+                                    Planos personalizados
                                 </h5>
                                 <p className="text-gray-600 light:text-gray-300">
-                                    Neque Dolor, fugiat non cum doloribus aperiam voluptates nostrum.
+                                    Feito aos seus gostos e objetivos.
                                 </p>
                             </div>
                             <a href="#" className="flex items-center justify-between group-hover:text-secondary">
-                                <span className="text-sm">Read more</span>
+                                <span className="text-sm">Experimente</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                      className="w-5 h-5 -translate-x-4 text-2xl opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100">
                                     <path fillRule="evenodd"
@@ -91,8 +92,8 @@ export default function Features() {
                     <div
                         className="group relative bg-white light:bg-gray-800 transition hover:z-[1] hover:shadow-2xl hover:shadow-gray-600/10">
                         <div className="relative space-y-8 py-12 p-8">
-                            <img
-                                src="https://cdn-icons-png.flaticon.com/512/4341/4341160.png"
+                            <Image
+                                src="/images/features/recipe.png"
                                 className="w-12"
                                 width="512"
                                 height="512"
@@ -103,14 +104,14 @@ export default function Features() {
                                 <h5
                                     className="text-xl font-semibold text-gray-700 light:text-white transition group-hover:text-secondary"
                                 >
-                                    Third feature
+                                    Receitas deliciosas
                                 </h5>
                                 <p className="text-gray-600 light:text-gray-300">
-                                    Neque Dolor, fugiat non cum doloribus aperiam voluptates nostrum.
+                                    Receitas deliciosas aprovadas pelos nossos nutricionistas.
                                 </p>
                             </div>
                             <a href="#" className="flex items-center justify-between group-hover:text-secondary">
-                                <span className="text-sm">Read more</span>
+                                <span className="text-sm">Experimente</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                      className="w-5 h-5 -translate-x-4 text-2xl opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100">
                                     <path fillRule="evenodd"
@@ -126,8 +127,8 @@ export default function Features() {
                         <div
                             className="relative space-y-8 py-12 p-8 transition duration-300 group-hover:bg-white light:group-hover:bg-gray-800"
                         >
-                            <img
-                                src="https://cdn-icons-png.flaticon.com/512/4341/4341025.png"
+                            <Image
+                                src="/images/features/healthy-food.png"
                                 className="w-12"
                                 width="512"
                                 height="512"
@@ -138,14 +139,14 @@ export default function Features() {
                                 <h5
                                     className="text-xl font-semibold text-gray-700 light:text-white transition group-hover:text-secondary"
                                 >
-                                    More features
+                                    Resultados garantidos
                                 </h5>
                                 <p className="text-gray-600 light:text-gray-300">
-                                    Neque Dolor, fugiat non cum doloribus aperiam voluptates nostrum.
+                                    Obtemos resultados sem dietas restritivas.
                                 </p>
                             </div>
                             <a href="#" className="flex items-center justify-between group-hover:text-secondary">
-                                <span className="text-sm">Read more</span>
+                                <span className="text-sm">Experimente</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                      className="w-5 h-5 -translate-x-4 text-2xl opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100">
                                     <path fillRule="evenodd"
