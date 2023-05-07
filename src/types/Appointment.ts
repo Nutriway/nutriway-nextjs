@@ -1,7 +1,7 @@
-import { AppointmentResult } from "./AppointmentResult";
-import { Client } from "./Client";
-import { Availability } from "./Availability";
-import { AppointmentPayment } from "./AppointmentPayment";
+import { AppointmentResult } from './AppointmentResult';
+import { Client } from './Client';
+import { Availability } from './Availability';
+import { AppointmentPayment } from './AppointmentPayment';
 
 export type Appointment = {
     id: number;

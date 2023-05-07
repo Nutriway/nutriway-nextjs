@@ -2,7 +2,7 @@ export type User = {
     id: number;
     email: string;
     username: string;
-    type: "client" | "consultant" | "nutritionist";
+    type: 'client' | 'consultant' | 'nutritionist';
     age: string;
     gender: string;
     height: string;
