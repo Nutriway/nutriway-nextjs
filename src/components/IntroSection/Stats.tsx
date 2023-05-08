@@ -12,7 +12,7 @@ export default function Stats() {
 
                 <div className="space-y-6 justify-between text-gray-600 md:flex flex-row-reverse md:gap-6 md:space-y-0 lg:gap-12 lg:items-center">
                     <div className="md:5/12 lg:w-1/2">
-                        <Image src="./images/pie.svg" alt="image" loading="lazy" width="200" height="200" className="w-full" />
+                        <Image src="/images/hero/woman.png" alt="image" loading="lazy" width="600" height="600" className="w-full" />
                     </div>
                     <div className="md:7/12 lg:w-1/2">
                         <h2 className="text-3xl font-bold text-gray-900 md:text-4xl light:text-white">As consultas de nutrição são feitas por profissionais altamente competentes</h2>
