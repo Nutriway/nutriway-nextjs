@@ -1,6 +1,7 @@
 import React from 'react';
 import Container from '@/components/Container';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Features() {
     return (
@@ -23,12 +24,12 @@ export default function Features() {
                                 <h5 className="text-xl font-semibold text-gray-700 light:text-white transition group-hover:text-secondary">Consultas online</h5>
                                 <p className="text-gray-600 light:text-gray-300">Consultas no conforto da sua casa.</p>
                             </div>
-                            <a href="#" className="flex items-center justify-between group-hover:text-secondary">
+                            <Link href="/login" className="flex items-center justify-between group-hover:text-secondary">
                                 <span className="text-sm">Experimente</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 -translate-x-4 text-2xl opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100">
                                     <path fillRule="evenodd" d="M12.97 3.97a.75.75 0 011.06 0l7.5 7.5a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 11-1.06-1.06l6.22-6.22H3a.75.75 0 010-1.5h16.19l-6.22-6.22a.75.75 0 010-1.06z" clipRule="evenodd" />
                                 </svg>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                     <div className="group relative bg-white light:bg-gray-800 transition hover:z-[1] hover:shadow-2xl hover:shadow-gray-600/10">
@@ -39,12 +40,12 @@ export default function Features() {
                                 <h5 className="text-xl font-semibold text-gray-700 light:text-white transition group-hover:text-secondary">Planos personalizados</h5>
                                 <p className="text-gray-600 light:text-gray-300">Feito aos seus gostos e objetivos.</p>
                             </div>
-                            <a href="#" className="flex items-center justify-between group-hover:text-secondary">
+                            <Link href="/login" className="flex items-center justify-between group-hover:text-secondary">
                                 <span className="text-sm">Experimente</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 -translate-x-4 text-2xl opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100">
                                     <path fillRule="evenodd" d="M12.97 3.97a.75.75 0 011.06 0l7.5 7.5a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 11-1.06-1.06l6.22-6.22H3a.75.75 0 010-1.5h16.19l-6.22-6.22a.75.75 0 010-1.06z" clipRule="evenodd" />
                                 </svg>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                     <div className="group relative bg-white light:bg-gray-800 transition hover:z-[1] hover:shadow-2xl hover:shadow-gray-600/10">
@@ -55,12 +56,12 @@ export default function Features() {
                                 <h5 className="text-xl font-semibold text-gray-700 light:text-white transition group-hover:text-secondary">Receitas deliciosas</h5>
                                 <p className="text-gray-600 light:text-gray-300">Receitas deliciosas aprovadas pelos nossos nutricionistas.</p>
                             </div>
-                            <a href="#" className="flex items-center justify-between group-hover:text-secondary">
+                            <Link href="/login" className="flex items-center justify-between group-hover:text-secondary">
                                 <span className="text-sm">Experimente</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 -translate-x-4 text-2xl opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100">
                                     <path fillRule="evenodd" d="M12.97 3.97a.75.75 0 011.06 0l7.5 7.5a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 11-1.06-1.06l6.22-6.22H3a.75.75 0 010-1.5h16.19l-6.22-6.22a.75.75 0 010-1.06z" clipRule="evenodd" />
                                 </svg>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                     <div className="group relative bg-gray-50 light:bg-gray-900 transition hover:z-[1] hover:shadow-2xl hover:shadow-gray-600/10">
@@ -71,12 +72,12 @@ export default function Features() {
                                 <h5 className="text-xl font-semibold text-gray-700 light:text-white transition group-hover:text-secondary">Resultados garantidos</h5>
                                 <p className="text-gray-600 light:text-gray-300">Obtemos resultados sem dietas restritivas.</p>
                             </div>
-                            <a href="#" className="flex items-center justify-between group-hover:text-secondary">
+                            <Link href="/login" className="flex items-center justify-between group-hover:text-secondary">
                                 <span className="text-sm">Experimente</span>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 -translate-x-4 text-2xl opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100">
                                     <path fillRule="evenodd" d="M12.97 3.97a.75.75 0 011.06 0l7.5 7.5a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 11-1.06-1.06l6.22-6.22H3a.75.75 0 010-1.5h16.19l-6.22-6.22a.75.75 0 010-1.06z" clipRule="evenodd" />
                                 </svg>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

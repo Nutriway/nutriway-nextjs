@@ -1,6 +1,7 @@
 import React from 'react';
 import Container from '@/components/Container';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function AppHeader() {
     return (
@@ -10,9 +11,9 @@ export default function AppHeader() {
                     <div className="flex flex-wrap items-center justify-between py-2 gap-6 md:py-4 md:gap-0 relative">
                         <input aria-hidden="true" type="checkbox" name="toggle_nav" id="toggle_nav" className="hidden peer" />
                         <div className="relative z-20 w-full flex justify-between lg:w-max md:px-0">
-                            <a href="#home" aria-label="logo" className="flex space-x-2 items-center">
+                            <Link href="/" aria-label="logo" className="flex space-x-2 items-center">
                                 <Image className="w-40 mr-2" src="./images/logo.svg" loading="lazy" alt="logo" width="800" height="800" />
-                            </a>
+                            </Link>
 
                             <div className="relative flex items-center lg:hidden max-h-10">
                                 <label role="button" htmlFor="toggle_nav" aria-label="humburger" id="hamburger" className="relative  p-6 -mr-6">
@@ -49,9 +50,9 @@ export default function AppHeader() {
                             </div>
 
                             <div className="mt-12 lg:mt-0">
-                                <a href="#" className="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary-900 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
+                                <Link href="/login" className="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary-900 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
                                     <span className="relative text-sm font-semibold text-white">Comece já</span>
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,7 @@
 import React from 'react';
 import Container from '@/components/Container';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function HeroSection() {
     return (
@@ -16,9 +18,9 @@ export default function HeroSection() {
                         </h1>
                         <p className="mt-8 text-gray-700 light:text-gray-300">Consultas personalizadas, acompanhamento nutricional e planos alimentares individualizados, tudo no conforto da sua casa!</p>
                         <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
-                            <a href="#" className="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary-900 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
+                            <Link href="/login" className="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary-900 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
                                 <span className="relative text-base font-semibold text-white">Marque uma consulta!</span>
-                            </a>
+                            </Link>
                             <a href="#" className="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary-900/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 light:before:border-gray-700 light:before:bg-gray-800 sm:w-max">
                                 <span className="relative text-base font-semibold text-primary-900 light:text-white">Saber mais</span>
                             </a>
@@ -40,22 +42,22 @@ export default function HeroSection() {
                     </div>
                     <div className="mt-12 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6">
                         <div className="p-4 grayscale transition duration-200 hover:grayscale-0">
-                            <img src="./images/clients/microsoft.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="" height="" />
+                            <Image src="./images/clients/microsoft.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="20" height="20" />
                         </div>
                         <div className="p-4 grayscale transition duration-200 hover:grayscale-0">
-                            <img src="./images/clients/airbnb.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="" height="" />
+                            <Image src="./images/clients/airbnb.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="20" height="20" />
                         </div>
                         <div className="p-4 flex grayscale transition duration-200 hover:grayscale-0">
-                            <img src="./images/clients/google.svg" className="h-9 w-auto m-auto" loading="lazy" alt="client logo" width="" height="" />
+                            <Image src="./images/clients/google.svg" className="h-9 w-auto m-auto" loading="lazy" alt="client logo" width="20" height="20" />
                         </div>
                         <div className="p-4 grayscale transition duration-200 hover:grayscale-0">
-                            <img src="./images/clients/ge.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="" height="" />
+                            <Image src="./images/clients/ge.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="20" height="20" />
                         </div>
                         <div className="p-4 flex grayscale transition duration-200 hover:grayscale-0">
-                            <img src="./images/clients/netflix.svg" className="h-8 w-auto m-auto" loading="lazy" alt="client logo" width="" height="" />
+                            <Image src="./images/clients/netflix.svg" className="h-8 w-auto m-auto" loading="lazy" alt="client logo" width="20" height="20" />
                         </div>
                         <div className="p-4 grayscale transition duration-200 hover:grayscale-0">
-                            <img src="./images/clients/google-cloud.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="" height="" />
+                            <Image src="./images/clients/google-cloud.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="20" height="20" />
                         </div>
                     </div>
                 </div>
