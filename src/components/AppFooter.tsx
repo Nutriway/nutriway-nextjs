@@ -3,7 +3,7 @@ import Container from '@/components/Container';
 
 export default function AppFooter() {
     return (
-        <footer className="pb-20 md:pb-10 w-full">
+        <footer className="py-20 md:pb-10 w-full">
             <Container>
                 <div className="m-auto md:w-10/12 lg:w-8/12 xl:w-full">
                     <div className="flex flex-wrap items-center justify-between md:flex-nowrap">
