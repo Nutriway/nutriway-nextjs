@@ -1,6 +1,38 @@
+"use client";
 import Image from "next/image";
+import { useState } from "react";
+import { clientFetcher } from "@/lib/fetchers/clientFetcher";
+import { setCookie } from "cookies-next";
+import useSWRMutation from "swr/mutation";
+import { useRouter } from "next/navigation";
+
+const initialState = {
+    email: "",
+    password: ""
+};
+
+async function doLogin(url: string, { arg: { email, password } }: { arg: { email: string, password: string } }) {
+    console.log(email, password);
+    const { jwt } = await clientFetcher({
+        url,
+        method: "post",
+        body: { identifier: email, password: password }
+    });
+
+    // this cookie part is specific to this login request
+    // mustn't appear on other calls
+    setCookie("jwt-cookie", jwt, {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+        sameSite: "lax",
+        secure: true
+    });
+}
 
 export default function LoginForm() {
+    const [login, setLogin] = useState(initialState);
+    const { trigger } = useSWRMutation("/auth/local", doLogin);
+    const router = useRouter();
     return (
         <section className="bg-gray-50 light:bg-gray-900">
             <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-20 lg:py-16 lg:grid-cols-12">
@@ -19,7 +51,11 @@ export default function LoginForm() {
                             </a>
                             .
                         </p>
-                        <form className="mt-4 space-y-6 sm:mt-6" action="#">
+                        <form className="mt-4 space-y-6 sm:mt-6" method="POST" onSubmit={async (e) => {
+                            e.preventDefault();
+                            await trigger({ email: login.email, password: login.password });
+                            router.push("/intro");
+                        }}>
                             <div className="grid gap-6 sm:grid-cols-2">
                                 <div>
                                     <label htmlFor="email"
@@ -28,7 +64,10 @@ export default function LoginForm() {
                                     </label>
                                     <input type="email" name="email" id="email"
                                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500"
-                                           placeholder="name@company.com" required />
+                                           placeholder="name@company.com" required value={login.email}
+                                           onChange={(e) => {
+                                               setLogin({ ...login, email: e.target.value });
+                                           }} />
                                 </div>
                                 <div>
                                     <label htmlFor="password"
@@ -37,7 +76,10 @@ export default function LoginForm() {
                                     </label>
                                     <input type="password" name="password" id="password" placeholder="••••••••"
                                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 light:bg-gray-700 light:border-gray-600 light:placeholder-gray-400 light:text-white light:focus:ring-blue-500 light:focus:border-blue-500"
-                                           required />
+                                           required value={login.password}
+                                           onChange={(e) => {
+                                               setLogin({ ...login, password: e.target.value });
+                                           }} />
                                 </div>
                             </div>
                             <div className="flex items-center">
@@ -94,8 +136,7 @@ export default function LoginForm() {
                                 <div className="flex items-start">
                                     <div className="flex items-center h-5">
                                         <input id="remember" aria-describedby="remember" type="checkbox"
-                                               className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 light:bg-gray-700 light:border-gray-600 light:focus:ring-primary-600 light:ring-offset-gray-800"
-                                               required />
+                                               className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 light:bg-gray-700 light:border-gray-600 light:focus:ring-primary-600 light:ring-offset-gray-800" />
                                     </div>
                                     <div className="ml-3 text-sm">
                                         <label htmlFor="remember" className="text-gray-500 light:text-gray-300">
