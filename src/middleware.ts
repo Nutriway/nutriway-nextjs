@@ -10,12 +10,12 @@ export default async function middleware(req: NextRequest) {
 
     const jwt = req.cookies.get(process.env.COOKIE_NAME as string);
 
-    if (!(jwt || pathname.startsWith('/login') || pathname.startsWith('/register'))) {
+    if (!(jwt || pathname.startsWith('/login') || pathname.startsWith('/register') || pathname === '/')) {
         req.nextUrl.pathname = '/login';
         return NextResponse.redirect(req.nextUrl);
     }
-    if (jwt && (pathname.startsWith('/login') || pathname.startsWith('/register'))) {
-        req.nextUrl.pathname = '/intro';
+    if (jwt && (pathname.startsWith('/login') || pathname.startsWith('/register') || pathname === '/')) {
+        req.nextUrl.pathname = '/home';
         return NextResponse.redirect(req.nextUrl);
     }
     try {
