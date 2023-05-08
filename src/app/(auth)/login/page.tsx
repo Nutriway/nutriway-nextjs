@@ -26,7 +26,7 @@ export default function Login() {
                     </div>
                 </div>
                 <div className="mr-auto place-self-center lg:col-span-6">
-                    <Image className="hidden mx-auto lg:flex" width={600} height={600} src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg" alt="illustration" />
+                    <Image className="hidden mx-auto lg:flex" width={500} height={500} src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg" alt="illustration" />
                 </div>
             </div>
         </section>

@@ -1,7 +1,6 @@
 import React from 'react';
 import Container from '@/components/Container';
 import Link from 'next/link';
-import Image from 'next/image';
 
 export default function HeroSection() {
     return (
@@ -38,26 +37,6 @@ export default function HeroSection() {
                                 <h6 className="text-lg mr-2 font-semibold text-gray-700 light:text-white">Resultados garantidos</h6>
                                 <p className="mt-2 mr-4 text-gray-500">Obtenha resultados mesmo a partir da sua casa.</p>
                             </div>
-                        </div>
-                    </div>
-                    <div className="mt-12 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6">
-                        <div className="p-4 grayscale transition duration-200 hover:grayscale-0">
-                            <Image src="./images/clients/microsoft.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="20" height="20" />
-                        </div>
-                        <div className="p-4 grayscale transition duration-200 hover:grayscale-0">
-                            <Image src="./images/clients/airbnb.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="20" height="20" />
-                        </div>
-                        <div className="p-4 flex grayscale transition duration-200 hover:grayscale-0">
-                            <Image src="./images/clients/google.svg" className="h-9 w-auto m-auto" loading="lazy" alt="client logo" width="20" height="20" />
-                        </div>
-                        <div className="p-4 grayscale transition duration-200 hover:grayscale-0">
-                            <Image src="./images/clients/ge.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="20" height="20" />
-                        </div>
-                        <div className="p-4 flex grayscale transition duration-200 hover:grayscale-0">
-                            <Image src="./images/clients/netflix.svg" className="h-8 w-auto m-auto" loading="lazy" alt="client logo" width="20" height="20" />
-                        </div>
-                        <div className="p-4 grayscale transition duration-200 hover:grayscale-0">
-                            <Image src="./images/clients/google-cloud.svg" className="h-12 w-auto mx-auto" loading="lazy" alt="client logo" width="20" height="20" />
                         </div>
                     </div>
                 </div>

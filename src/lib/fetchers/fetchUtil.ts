@@ -27,6 +27,7 @@ export async function fetcher({ url, method, body, json = true, jwt, revalidate 
 
     if (!res.ok) {
         // handle error
+        console.error(res);
         throw new Error('API error ' + res.statusText);
     }
 

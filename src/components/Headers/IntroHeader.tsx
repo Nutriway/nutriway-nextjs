@@ -43,7 +43,7 @@ export default function IntroHeader() {
                                     </li>
                                     <li>
                                         <a href="#testimonials" className="block md:px-4 transition hover:text-primary-900">
-                                            <span>Testimonios</span>
+                                            <span>Testemunhos</span>
                                         </a>
                                     </li>
                                 </ul>
