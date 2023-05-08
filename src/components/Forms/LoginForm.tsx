@@ -39,6 +39,7 @@ export default function LoginForm() {
                 e.preventDefault();
                 await trigger({ email: login.email, password: login.password });
                 router.push('/home');
+                router.refresh();
             }}
         >
             <div className="grid gap-6 sm:grid-cols-2">
