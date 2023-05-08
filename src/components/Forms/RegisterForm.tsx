@@ -3,16 +3,24 @@ import * as Form from '@radix-ui/react-form';
 import { useState } from 'react';
 import { clientFetcher } from '@/lib/fetchers/clientFetcher';
 import { setCookie } from 'cookies-next';
+import useSWRMutation from 'swr/mutation';
+import { useRouter } from 'next/navigation';
 
-// TODO: register account with the information
-async function doRegister(url: string, { arg: { email, password } }: { arg: { email: string; password: string } }) {
+async function doRegister(
+    url: string,
+    {
+        arg: { username, email, password, type },
+    }: {
+        arg: { username: string; email: string; password: string; type: 'client' | 'nutritionist' | 'consultant' };
+    }
+) {
     const { jwt } = await clientFetcher({
         url,
         method: 'post',
-        body: { identifier: email, password: password },
+        body: { username, email, password, type },
     });
 
-    // this cookie part is specific to this login request
+    // this cookie part is specific to this register request
     // mustn't appear on other calls
     setCookie('jwt-cookie', jwt, {
         path: '/',
@@ -31,12 +39,22 @@ const initialState = {
 
 export default function RegisterForm() {
     const [formState, setFormState] = useState(initialState);
+    const { trigger } = useSWRMutation('/auth/local/register', doRegister);
+    const router = useRouter();
     return (
         <Form.Root
             className="mt-4 space-y-6 sm:mt-6"
             method="POST"
             onSubmit={async (e) => {
                 e.preventDefault();
+                await trigger({
+                    username: formState.name,
+                    email: formState.email,
+                    password: formState.password,
+                    type: 'client',
+                });
+                router.push('/home');
+                router.refresh();
             }}
         >
             <div className="grid gap-6 sm:grid-cols-2">
