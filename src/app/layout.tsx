@@ -4,8 +4,6 @@ import { Inter } from 'next/font/google';
 import { serverFetcher } from '@/lib/fetchers/serverFetcher';
 import { User } from '@/types/User';
 import { cookies } from 'next/headers';
-import AppHeader from '@/components/AppHeader';
-import AppFooter from '@/components/AppFooter';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -30,10 +28,8 @@ export default async function RootLayout({ children, modal, nutritionist, client
     return (
         <html lang="pt">
             <body className={`bg-white light:bg-gray-900 text-black ${inter.className}`}>
-                <AppHeader />
                 {user ? userType : children}
                 {modal}
-                <AppFooter />
             </body>
         </html>
     );

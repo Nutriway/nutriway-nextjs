@@ -3,7 +3,18 @@ import Container from '@/components/Container';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function AppHeader() {
+type HeaderProps = {
+    items: {
+        title: string;
+        href: string;
+    }[];
+    button: {
+        title: string;
+        href: string;
+    };
+};
+
+export default function AppHeader({ items, button }: HeaderProps) {
     return (
         <header>
             <nav className="z-10 w-full absolute">
@@ -31,27 +42,19 @@ export default function AppHeader() {
                         >
                             <div className="text-gray-600 light:text-gray-300 lg:pr-4 lg:w-auto w-full lg:pt-0">
                                 <ul className="tracking-wide font-medium lg:text-sm flex-col flex lg:flex-row gap-6 lg:gap-0">
-                                    <li>
-                                        <a href="#features" className="block md:px-4 transition hover:text-primary-900">
-                                            <span>O que oferecemos</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#solution" className="block md:px-4 transition hover:text-primary-900">
-                                            <span>Consultas</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#testimonials" className="block md:px-4 transition hover:text-primary-900">
-                                            <span>Testimonios</span>
-                                        </a>
-                                    </li>
+                                    {items.map((item) => (
+                                        <li key={item.title}>
+                                            <Link href={item.href} className="block md:px-4 transition hover:text-primary-900">
+                                                <span>{item.title}</span>
+                                            </Link>
+                                        </li>
+                                    ))}
                                 </ul>
                             </div>
 
                             <div className="mt-12 lg:mt-0">
-                                <Link href="/login" className="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary-900 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
-                                    <span className="relative text-sm font-semibold text-white">Comece já</span>
+                                <Link href={button.href} className="relative flex h-9 w-full items-center justify-center px-4 before:absolute before:inset-0 before:rounded-full before:bg-primary-900 before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
+                                    <span className="relative text-sm font-semibold text-white">{button.title}</span>
                                 </Link>
                             </div>
                         </div>

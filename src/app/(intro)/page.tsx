@@ -8,12 +8,14 @@ import CallToAction from '@/components/IntroSection/CallToAction';
 
 export default function Home() {
     return (
-        <main className="space-y-40 mb-40">
-            <HeroSection />
-            <Features />
-            <Stats />
-            <Testimonials />
-            <CallToAction />
-        </main>
+        <>
+            <main className="space-y-40 mb-40">
+                <HeroSection />
+                <Features />
+                <Stats />
+                <Testimonials />
+                <CallToAction />
+            </main>
+        </>
     );
 }
