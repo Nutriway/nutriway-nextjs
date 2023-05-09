@@ -34,6 +34,3 @@ export default async function RootLayout({ children, modal, nutritionist, client
         </html>
     );
 }
-
-// data: {}, meta: {}
-// {}
