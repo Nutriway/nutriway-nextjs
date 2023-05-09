@@ -152,17 +152,11 @@ function Consultation({ consultation }: { consultation: Consultation }) {
                             <Menu.Item>
                                 {({ active }) => (
                                     <a href="#" className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} block px-4 py-2 text-sm`}>
-                                        Editar
+                                        Informações
                                     </a>
                                 )}
                             </Menu.Item>
-                            <Menu.Item>
-                                {({ active }) => (
-                                    <a href="#" className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} block px-4 py-2 text-sm`}>
-                                        Cancelar
-                                    </a>
-                                )}
-                            </Menu.Item>
+                            <Menu.Item>{({ active }) => <a className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} block px-4 py-2 text-sm cursor-pointer`}>Cancelar</a>}</Menu.Item>
                         </div>
                     </Menu.Items>
                 </Transition>

@@ -1,7 +1,5 @@
 import BlogShowcase from '@/components/Blogs/BlogShowcase';
 import React from 'react';
-import Instagram from '@/components/Embeds/Instagram';
-import NutritionistCalendar from '@/components/Calendars/NutritionistCalendar';
 
 export default function Home() {
     // @ts-ignore
@@ -23,8 +21,6 @@ export default function Home() {
                     //@ts-ignore
                     <BlogShowcase />
                 }
-                <Instagram />
-                <NutritionistCalendar />
             </section>
         </>
     );
