@@ -12,11 +12,12 @@ const nutritionistHeader = {
     button: { title: 'Perfil', href: '/perfil' },
 };
 
-export default function NutritionistLayout({ children }: { children: React.ReactNode }) {
+export default function NutritionistLayout({ children, modal }: { children: React.ReactNode; modal: React.ReactNode }) {
     return (
         <>
             <AppHeader {...nutritionistHeader} />
             <div className="pt-20">{children}</div>
+            {modal}
             <AppFooter />
         </>
     );

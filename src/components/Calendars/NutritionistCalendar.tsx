@@ -4,56 +4,17 @@ import { add, eachDayOfInterval, endOfMonth, format, getDay, isEqual, isSameDay,
 import React, { Fragment, useState } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon, DotsVerticalIcon } from '@radix-ui/react-icons';
 import { pt } from 'date-fns/locale';
-
-// TODO: get this from the backend
-type Consultation = {
-    id: number;
-    name: string;
-    imageUrl: string;
-    startDatetime: string;
-    endDatetime: string;
-};
-const consultations: Consultation[] = [
-    {
-        id: 1,
-        name: 'Leslie Alexander',
-        imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        startDatetime: '2023-05-11T13:00',
-        endDatetime: '2023-05-11T14:30',
-    },
-    {
-        id: 2,
-        name: 'Michael Foster',
-        imageUrl: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        startDatetime: '2023-05-11T15:00',
-        endDatetime: '2023-05-11T16:30',
-    },
-    {
-        id: 3,
-        name: 'Dries Vincent',
-        imageUrl: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        startDatetime: '2023-05-13T13:00',
-        endDatetime: '2023-05-13T14:30',
-    },
-    {
-        id: 4,
-        name: 'Leslie Alexander',
-        imageUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        startDatetime: '2023-05-13T18:00',
-        endDatetime: '2023-05-13T19:30',
-    },
-    {
-        id: 5,
-        name: 'Michael Foster',
-        imageUrl: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        startDatetime: '2023-05-20T13:00',
-        endDatetime: '2023-05-20T14:30',
-    },
-];
+import Image from 'next/image';
+import { Appointment } from '@/types/Appointment';
+import Link from 'next/link';
 
 let colStartClasses = ['', 'col-start-2', 'col-start-3', 'col-start-4', 'col-start-5', 'col-start-6', 'col-start-7'];
 
-export default function NutritionistCalendar() {
+export type NutritionistCalendarProps = {
+    appointments: Appointment[];
+};
+
+export default function NutritionistCalendar({ appointments }: NutritionistCalendarProps) {
     let today = startOfToday();
     let [selectedDay, setSelectedDay] = useState(today);
     let [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'));
@@ -74,7 +35,7 @@ export default function NutritionistCalendar() {
         setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'));
     }
 
-    let selectedDayMeetings = consultations.filter((consultation) => isSameDay(parseISO(consultation.startDatetime), selectedDay));
+    let selectedDayMeetings = appointments.filter((consultation) => isSameDay(parseISO(consultation.attributes.date), selectedDay));
 
     return (
         <div className="pt-16">
@@ -108,7 +69,7 @@ export default function NutritionistCalendar() {
                                         <time dateTime={format(day, 'yyyy-MM-dd')}>{format(day, 'd')}</time>
                                     </button>
 
-                                    <div className="w-1 h-1 mx-auto mt-1">{consultations.some((consultation) => isSameDay(parseISO(consultation.startDatetime), day)) && <div className="w-1 h-1 rounded-full bg-sky-500"></div>}</div>
+                                    <div className="w-1 h-1 mx-auto mt-1">{appointments.some((consultation) => isSameDay(parseISO(consultation.attributes.date), day)) && <div className="w-1 h-1 rounded-full bg-sky-500"></div>}</div>
                                 </div>
                             ))}
                         </div>
@@ -125,17 +86,18 @@ export default function NutritionistCalendar() {
     );
 }
 
-function Consultation({ consultation }: { consultation: Consultation }) {
-    let startDateTime = parseISO(consultation.startDatetime);
-    let endDateTime = parseISO(consultation.endDatetime);
+function Consultation({ consultation }: { consultation: Appointment }) {
+    let startDateTime = parseISO(consultation.attributes.date);
+    let endDateTime = new Date();
+    endDateTime.setTime(startDateTime.getTime() + 60 * 30 * 1000);
 
     return (
         <li className="flex items-center px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
-            <img src={consultation.imageUrl} alt="" className="flex-none w-10 h-10 rounded-full" />
+            <Image src={'/images/avatars/user.png'} alt="" className="flex-none w-10 h-10 rounded-full" width={50} height={50} />
             <div className="flex-auto">
-                <p className="text-gray-900">{consultation.name}</p>
+                <p className="text-gray-900">{consultation.attributes.client.data.attributes.username}</p>
                 <p className="mt-0.5">
-                    <time dateTime={consultation.startDatetime}>{format(startDateTime, 'HH:mm ', { locale: pt })}</time>- <time dateTime={consultation.endDatetime}>{format(endDateTime, 'HH:mm')}</time>
+                    <time dateTime={consultation.attributes.date}>{format(startDateTime, 'HH:mm ', { locale: pt })}</time>- <time dateTime={endDateTime.toString()}>{format(endDateTime, 'HH:mm')}</time>
                 </p>
             </div>
             <Menu as="div" className="relative opacity-0 focus-within:opacity-100 group-hover:opacity-100">
@@ -151,9 +113,9 @@ function Consultation({ consultation }: { consultation: Consultation }) {
                         <div className="py-1">
                             <Menu.Item>
                                 {({ active }) => (
-                                    <a href="#" className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} block px-4 py-2 text-sm`}>
+                                    <Link href={`/appointment/${consultation.id}`} className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} block px-4 py-2 text-sm`}>
                                         Informações
-                                    </a>
+                                    </Link>
                                 )}
                             </Menu.Item>
                             <Menu.Item>{({ active }) => <a className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} block px-4 py-2 text-sm cursor-pointer`}>Cancelar</a>}</Menu.Item>

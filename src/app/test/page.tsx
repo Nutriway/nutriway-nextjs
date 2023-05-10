@@ -5,16 +5,17 @@ import { Appointment } from '@/types/Appointment';
 import Link from 'next/link';
 import HomeCheck from '@/components/Buttons/HomeCheck';
 import EmailQuestionForm from '@/components/Forms/EmailQuestionForm';
+import { StrapiResponse } from '@/types/StrapiResponse';
 
 const getAllAppointments = async () => {
-    return serverFetcher<Appointment>({
+    return serverFetcher<StrapiResponse<Appointment>>({
         url: `/appointments`,
         method: 'get',
     });
 };
 
 const getAppointmentFromId = async (id: number) => {
-    const data = await serverFetcher<Appointment>({
+    const data = await serverFetcher<StrapiResponse<Appointment>>({
         url: `/appointments?populate[appointment_payment][populate]=*&populate[nutritionist_availability][populate]=*&populate[client][populate]=*&populate[appointment_result][populate]=*&pagination[pageSize]=2000&filters[id][$eq]=${id}`,
         method: 'get',
     });
