@@ -3,6 +3,7 @@ import { serverFetcher } from '@/lib/fetchers/serverFetcher';
 import { SingleStrapiResponse } from '@/types/StrapiResponse';
 import { Appointment } from '@/types/Appointment';
 import React from 'react';
+import NotFound from '@/components/Errors/404';
 
 type AppointmentDetailsParams = {
     params: { id: string };
@@ -19,7 +20,7 @@ export default async function AppointmentDetails({ params }: AppointmentDetailsP
     const info = await getInfo(params.id);
 
     if (!info?.data) {
-        return <div>404</div>;
+        return <NotFound />;
     }
 
     return <ClientDetails info={info?.data} />;
