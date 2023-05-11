@@ -4,8 +4,12 @@ import { Inter } from 'next/font/google';
 import { serverFetcher } from '@/lib/fetchers/serverFetcher';
 import { User } from '@/types/User';
 import { cookies } from 'next/headers';
+import { pt } from 'date-fns/locale';
+import { setDefaultOptions } from 'date-fns';
 
 const inter = Inter({ subsets: ['latin'] });
+
+setDefaultOptions({ locale: pt });
 
 export const metadata = {
     title: 'Nutriway',
