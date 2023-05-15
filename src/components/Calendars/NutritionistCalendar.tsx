@@ -8,7 +8,16 @@ import Image from 'next/image';
 import { Appointment } from '@/types/Appointment';
 import Link from 'next/link';
 
-let colStartClasses = ['', 'col-start-2', 'col-start-3', 'col-start-4', 'col-start-5', 'col-start-6', 'col-start-7'];
+// This function is used to get the styles of the days in the calendar
+// It can be seen as where on the calendar should the day go to
+// e.g. sunday -> 1 -> col-start-1
+//      monday -> 2 -> col-start-2
+// etc.
+function getDayStyle(index: number, day: Date) {
+    let colStartClasses = ['', 'col-start-2', 'col-start-3', 'col-start-4', 'col-start-5', 'col-start-6', 'col-start-7'];
+
+    return index === 0 && colStartClasses[getDay(day)];
+}
 
 export type NutritionistCalendarProps = {
     appointments: Appointment[];
@@ -64,7 +73,7 @@ export default function NutritionistCalendar({ appointments }: NutritionistCalen
                         </div>
                         <div className="grid grid-cols-7 mt-2 text-sm">
                             {days.map((day: Date, dayIdx: number) => (
-                                <div key={day.toString()} className={`${dayIdx === 0 && colStartClasses[getDay(day)]} py-1.5`}>
+                                <div key={day.toString()} className={`${getDayStyle(dayIdx, day)} py-1.5`}>
                                     <button type="button" onClick={() => setSelectedDay(day)} className={`${isEqual(day, selectedDay) && 'text-white'} ${!isEqual(day, selectedDay) && isToday(day) && 'text-red-500'} ${!isEqual(day, selectedDay) && !isToday(day) && isSameMonth(day, firstDayCurrentMonth) && 'text-gray-900'} ${!isEqual(day, selectedDay) && !isToday(day) && !isSameMonth(day, firstDayCurrentMonth) && 'text-gray-400'} ${isEqual(day, selectedDay) && isToday(day) && 'bg-red-500'} ${isEqual(day, selectedDay) && !isToday(day) && 'bg-gray-900'} ${!isEqual(day, selectedDay) && 'hover:bg-gray-200'} ${(isEqual(day, selectedDay) || isToday(day)) && 'font-semibold'} mx-auto flex h-8 w-8 items-center justify-center rounded-full`}>
                                         <time dateTime={format(day, 'yyyy-MM-dd')}>{format(day, 'd')}</time>
                                     </button>
