@@ -28,7 +28,7 @@ export default function ClientDetails({ info }: ClientDetailsProps) {
             <div className="py-8 mx-auto max-w-6xl lg:py-16">
                 <div className="grid gap-4 px-4 mb-4 sm:mb-5 sm:grid-cols-3 sm:gap-6 md:gap-12">
                     <div className="sm:col-span-2">
-                        <h1 className="text-primary-400 m-0 mb-10 text-3xl font-medium">Detalhes da consulta</h1>
+                        <h1 className="text-primary-500 m-0 mb-10 text-3xl font-medium">Detalhes da consulta</h1>
                         <div className="flex items-center space-x-4">
                             <Image className="mb-4 w-16 h-16 rounded-full sm:w-20 sm:h-20" src="/images/avatars/user.png" alt="avatar" width={50} height={50} />
                             <div>

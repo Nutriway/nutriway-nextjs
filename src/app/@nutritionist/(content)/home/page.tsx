@@ -40,12 +40,18 @@ export default async function Home() {
     const nutritionistAvailability = (await getNutritionistAvailability(user)) || [];
 
     const hasAvailability = nutritionistAvailability.length > 0;
-    const availabilityComponent = hasAvailability ? <SimpleCTA title="Ainda não marcou a sua disponibilidade..." description="Sem a sua disponibilidade os cliente não conseguem marcar consultas consigo." buttonText="Marcar Disponibilidade" /> : <NutritionistAvailabilityOverview />;
+    const availabilityComponent = !hasAvailability ? (
+        <SimpleCTA title="Ainda não marcou a sua disponibilidade..." description="Sem a sua disponibilidade os cliente não conseguem marcar consultas consigo." buttonText="Marcar Disponibilidade" />
+    ) : (
+        <div className="py-8 px-8 max-w-screen-xl sm:py-16 rounded-2xl bg-gray-50">
+            <NutritionistAvailabilityOverview />
+        </div>
+    );
 
     return (
         <div className="flex space-x-5 justify-center">
             {availabilityComponent}
-            <section className="bg-white lightbg-gray-900">
+            <section className="bg-white">
                 <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6 rounded-2xl bg-gray-50">
                     <div className="mx-auto max-w-screen-lg text-center">
                         <h2 className="mb-4 text-4xl tracking-tight font-extrabold leading-tight text-gray-900 lighttext-white">As minhas Consultas</h2>
