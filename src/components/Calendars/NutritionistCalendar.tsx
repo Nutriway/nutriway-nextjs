@@ -15,27 +15,27 @@ export type NutritionistCalendarProps = {
 };
 
 export default function NutritionistCalendar({ appointments }: NutritionistCalendarProps) {
-    let today = startOfToday();
-    let [selectedDay, setSelectedDay] = useState(today);
-    let [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'));
-    let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date());
+    const today = startOfToday();
+    const [selectedDay, setSelectedDay] = useState(today);
+    const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'));
+    const firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date());
 
-    let days = eachDayOfInterval({
+    const days = eachDayOfInterval({
         start: firstDayCurrentMonth,
         end: endOfMonth(firstDayCurrentMonth),
     });
 
     function previousMonth() {
-        let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
+        const firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
         setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'));
     }
 
     function nextMonth() {
-        let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
+        const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
         setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'));
     }
 
-    let selectedDayMeetings = appointments.filter((consultation) => isSameDay(parseISO(consultation.attributes.date), selectedDay));
+    const selectedDayMeetings = appointments.filter((consultation) => isSameDay(parseISO(consultation.attributes.date), selectedDay));
 
     return (
         <div className="pt-16">
@@ -87,8 +87,8 @@ export default function NutritionistCalendar({ appointments }: NutritionistCalen
 }
 
 function Consultation({ consultation }: { consultation: Appointment }) {
-    let startDateTime = parseISO(consultation.attributes.date);
-    let endDateTime = new Date();
+    const startDateTime = parseISO(consultation.attributes.date);
+    const endDateTime = new Date();
     endDateTime.setTime(startDateTime.getTime() + 60 * 30 * 1000);
 
     return (
