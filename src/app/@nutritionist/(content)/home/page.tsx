@@ -1,16 +1,16 @@
-import NutritionistCalendar from "@/components/Calendars/NutritionistCalendar";
-import React from "react";
-import { serverFetcher } from "@/lib/fetchers/serverFetcher";
-import { Appointment } from "@/types/Appointment";
-import { User } from "@/types/User";
-import { StrapiResponse } from "@/types/StrapiResponse";
-import { NutritionistAvailability } from "@/types/NutritionistAvailability";
-import SimpleCTA from "@/components/CTA/SimpleCTA";
+import NutritionistCalendar from '@/components/Calendars/NutritionistCalendar';
+import React from 'react';
+import { serverFetcher } from '@/lib/fetchers/serverFetcher';
+import { Appointment } from '@/types/Appointment';
+import { User } from '@/types/User';
+import { StrapiResponse } from '@/types/StrapiResponse';
+import { NutritionistAvailability } from '@/types/NutritionistAvailability';
+import SimpleCTA from '@/components/CTA/SimpleCTA';
 
 async function getUser() {
     return serverFetcher<User>({
-        url: "/users/me",
-        method: "get",
+        url: '/users/me',
+        method: 'get',
         revalidate: 500,
     });
 }
@@ -18,7 +18,7 @@ async function getUser() {
 async function getNutritionistAppointments(user: User | undefined) {
     const response = await serverFetcher<StrapiResponse<Appointment>>({
         url: `/appointments?populate[appointment_payment][populate]&populate[client][populate]&filter[appointment_payment.nutritionist]=${user?.id}`,
-        method: "get",
+        method: 'get',
     });
 
     return response?.data;
@@ -27,7 +27,7 @@ async function getNutritionistAppointments(user: User | undefined) {
 async function getNutritionistAvailability(user: User | undefined) {
     const response = await serverFetcher<StrapiResponse<NutritionistAvailability>>({
         url: `/nutritionist-availabilities?populate[nutritionist][populate]&filters[nutritionist][id]=${user?.id}`,
-        method: "get",
+        method: 'get',
     });
 
     return response?.data;
@@ -39,6 +39,7 @@ export default async function Home() {
     const nutritionistAvailability = (await getNutritionistAvailability(user)) || [];
 
     const hasAvailability = nutritionistAvailability.length > 0;
+    // TODO: add here the future component for the availability
     const availabilityComponent = hasAvailability ? <SimpleCTA title="Ainda não marcou a sua disponibilidade..." description="Sem a sua disponibilidade os cliente não conseguem marcar consultas consigo." buttonText="Marcar Disponibilidade" /> : <></>;
 
     return (
