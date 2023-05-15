@@ -6,6 +6,7 @@ import { User } from '@/types/User';
 import { StrapiResponse } from '@/types/StrapiResponse';
 import { NutritionistAvailability } from '@/types/NutritionistAvailability';
 import SimpleCTA from '@/components/CTA/SimpleCTA';
+import NutritionistAvailabilityOverview from '@/components/Calendars/NutritionistAvaliabilityOverview';
 
 async function getUser() {
     return serverFetcher<User>({
@@ -39,8 +40,7 @@ export default async function Home() {
     const nutritionistAvailability = (await getNutritionistAvailability(user)) || [];
 
     const hasAvailability = nutritionistAvailability.length > 0;
-    // TODO: add here the future component for the availability
-    const availabilityComponent = hasAvailability ? <SimpleCTA title="Ainda não marcou a sua disponibilidade..." description="Sem a sua disponibilidade os cliente não conseguem marcar consultas consigo." buttonText="Marcar Disponibilidade" /> : <></>;
+    const availabilityComponent = hasAvailability ? <SimpleCTA title="Ainda não marcou a sua disponibilidade..." description="Sem a sua disponibilidade os cliente não conseguem marcar consultas consigo." buttonText="Marcar Disponibilidade" /> : <NutritionistAvailabilityOverview />;
 
     return (
         <div className="flex space-x-5 justify-center">
