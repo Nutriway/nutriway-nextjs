@@ -4,8 +4,12 @@ import { Inter } from 'next/font/google';
 import { serverFetcher } from '@/lib/fetchers/serverFetcher';
 import { User } from '@/types/User';
 import { cookies } from 'next/headers';
+import { pt } from 'date-fns/locale';
+import { setDefaultOptions } from 'date-fns';
 
 const inter = Inter({ subsets: ['latin'] });
+
+setDefaultOptions({ locale: pt });
 
 export const metadata = {
     title: 'Nutriway',
@@ -13,10 +17,6 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children, modal, nutritionist, client }: { children: React.ReactNode; modal: React.ReactNode; nutritionist: React.ReactNode; client: React.ReactNode }) {
-    // get current user type
-    // @ts-ignore This endpoint is different from the others, has no `data` key :(
-    // every other endpoint returns { data: {}, meta: {} }
-    // this should be fixed in the future versions of our API
     const user =
         cookies().get('jwt-cookie') &&
         ((await serverFetcher<User>({

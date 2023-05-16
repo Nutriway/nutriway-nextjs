@@ -1,9 +1,7 @@
 import BlogShowcase from '@/components/Blogs/BlogShowcase';
 import React from 'react';
-import Instagram from '@/components/Embeds/Instagram';
 
 export default function Home() {
-    // @ts-ignore
     return (
         <>
             <section className="bg-white lightbg-gray-900">
@@ -22,7 +20,6 @@ export default function Home() {
                     //@ts-ignore
                     <BlogShowcase />
                 }
-                <Instagram />
             </section>
         </>
     );

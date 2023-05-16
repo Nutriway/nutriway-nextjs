@@ -9,3 +9,15 @@ export type StrapiResponse<T> = {
         };
     };
 };
+
+export type SingleStrapiResponse<T> = {
+    data: T;
+    meta?: {
+        pagination: {
+            page: number;
+            pageSize: number;
+            pageCount: number;
+            total: number;
+        };
+    };
+};
