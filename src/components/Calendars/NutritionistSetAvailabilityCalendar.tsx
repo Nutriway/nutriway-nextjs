@@ -3,7 +3,15 @@ import React, { useState } from 'react';
 import { add, format, previousSunday, sub } from 'date-fns';
 import ScheduleSelector from 'react-schedule-selector';
 
-const daysOfCalendar = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+const daysOfCalendar = [
+    'Domingo',
+    'Segunda-feira',
+    'Terça-feira',
+    'Quarta-feira',
+    'Quinta-feira',
+    'Sexta-feira',
+    'Sábado',
+];
 
 function hasCellBefore(date: Date, schedule: Date[], selected: boolean) {
     if (selected) {
@@ -39,7 +47,15 @@ export default function NutritionistSetAvailabilityCalendar() {
                 return <div className="text-left mx-2 my-0.5">{`${format(time, 'HH:mm')}`}</div>;
             }}
             renderDateCell={(date, selected) => {
-                return <div className={`${!selected && 'border border-gray-100'} ${selected && 'bg-primary-400'} ${inSchedule(date, schedule) && !hasCellBefore(date, schedule, selected) && 'rounded-t-lg'} ${inSchedule(date, schedule) && !hasCellAfter(date, schedule, selected) && 'rounded-b-lg'} h-full hover:bg-primary-100 hover:animate-pulse bg-gray-50`} />;
+                return (
+                    <div
+                        className={`${!selected && 'border border-gray-100'} ${selected && 'bg-primary-400'} ${
+                            inSchedule(date, schedule) && !hasCellBefore(date, schedule, selected) && 'rounded-t-lg'
+                        } ${
+                            inSchedule(date, schedule) && !hasCellAfter(date, schedule, selected) && 'rounded-b-lg'
+                        } h-full hover:bg-primary-100 hover:animate-pulse bg-gray-50`}
+                    />
+                );
             }}
             startDate={previousSunday(new Date())}
             selection={schedule}

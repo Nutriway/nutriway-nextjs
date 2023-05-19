@@ -10,7 +10,15 @@ type FetcherParameters = {
 
 const BASE_URL = process.env.REACT_APP_PROD || 'http://127.0.0.1:1337/api';
 
-export async function fetcher({ url, method, body, json = true, jwt, revalidate = 60, cache = 'default' }: FetcherParameters) {
+export async function fetcher({
+    url,
+    method,
+    body,
+    json = true,
+    jwt,
+    revalidate = 60,
+    cache = 'default',
+}: FetcherParameters) {
     const res = await fetch(`${BASE_URL}${url}`, {
         method: method.toUpperCase(),
         ...(body && { body: JSON.stringify(body) }),

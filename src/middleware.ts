@@ -4,7 +4,12 @@ const PUBLIC_FILE = /\.(.*)$/;
 
 export default async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
-    if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname.startsWith('/static') || PUBLIC_FILE.test(pathname)) {
+    if (
+        pathname.startsWith('/_next') ||
+        pathname.startsWith('/api') ||
+        pathname.startsWith('/static') ||
+        PUBLIC_FILE.test(pathname)
+    ) {
         return NextResponse.next();
     }
 

@@ -16,7 +16,17 @@ export const metadata = {
     description: 'Bringing health and nutrition to your life.',
 };
 
-export default async function RootLayout({ children, modal, nutritionist, client }: { children: React.ReactNode; modal: React.ReactNode; nutritionist: React.ReactNode; client: React.ReactNode }) {
+export default async function RootLayout({
+    children,
+    modal,
+    nutritionist,
+    client,
+}: {
+    children: React.ReactNode;
+    modal: React.ReactNode;
+    nutritionist: React.ReactNode;
+    client: React.ReactNode;
+}) {
     const user =
         cookies().get('jwt-cookie') &&
         ((await serverFetcher<User>({
