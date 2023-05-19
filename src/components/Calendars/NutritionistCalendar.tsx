@@ -48,10 +48,10 @@ export default function NutritionistCalendar({ appointments }: NutritionistCalen
 
     return (
         <div className="pt-16">
-            <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
+            <div className="max-w-md px-4 mx-2 sm:px-7 md:max-w-4xl md:px-6">
                 <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
-                    <div className="md:pr-14">
-                        <div className="flex items-center">
+                    <div className="md:pr-14 w-full">
+                        <div className="flex items-center w-full">
                             <h2 className="flex-auto font-semibold text-gray-900">{format(firstDayCurrentMonth, 'MMMM yyyy', { locale: pt })}</h2>
                             <button type="button" onClick={previousMonth} className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500">
                                 <span className="sr-only">Mês Passado</span>
@@ -83,7 +83,7 @@ export default function NutritionistCalendar({ appointments }: NutritionistCalen
                             ))}
                         </div>
                     </div>
-                    <section className="mt-12 md:mt-0 md:pl-14">
+                    <section className="mt-12 md:mt-0 md:pl-14 w-80">
                         <h2 className="font-semibold text-gray-900">
                             Consultas para <time dateTime={format(selectedDay, 'yyyy-MM-dd', { locale: pt })}>{format(selectedDay, 'MMMM dd, yyy', { locale: pt })}</time>
                         </h2>
