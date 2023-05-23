@@ -20,7 +20,10 @@ export default async function ClientDetailsDialog({ info }: { info: Appointment 
                 >
                     <ClientDetails info={info} />
                     <Dialog.Close asChild>
-                        <button className="text-primary-300 hover:bg-gray-50 focus:shadow-primary-300 absolute top-[15px] right-[20px] flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none" aria-label="Close">
+                        <button
+                            className="text-primary-300 hover:bg-gray-50 focus:shadow-primary-300 absolute top-[15px] right-[20px] flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
+                            aria-label="Close"
+                        >
                             <Cross2Icon />
                         </button>
                     </Dialog.Close>

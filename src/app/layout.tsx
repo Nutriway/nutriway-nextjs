@@ -6,6 +6,7 @@ import { User } from '@/types/User';
 import { cookies } from 'next/headers';
 import { pt } from 'date-fns/locale';
 import { setDefaultOptions } from 'date-fns';
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,7 +17,17 @@ export const metadata = {
     description: 'Bringing health and nutrition to your life.',
 };
 
-export default async function RootLayout({ children, modal, nutritionist, client }: { children: React.ReactNode; modal: React.ReactNode; nutritionist: React.ReactNode; client: React.ReactNode }) {
+export default async function RootLayout({
+    children,
+    modal,
+    nutritionist,
+    client,
+}: {
+    children: React.ReactNode;
+    modal: React.ReactNode;
+    nutritionist: React.ReactNode;
+    client: React.ReactNode;
+}) {
     const user =
         cookies().get('jwt-cookie') &&
         ((await serverFetcher<User>({
@@ -27,6 +38,26 @@ export default async function RootLayout({ children, modal, nutritionist, client
 
     return (
         <html lang="pt">
+            <head>
+                <Script
+                    strategy="afterInteractive"
+                    src={`https://www.googletagmanager.com/gtag/js?id=${process.env.ANALYTICS}`}
+                ></Script>
+                <Script
+                    id="google-analytics"
+                    strategy="afterInteractive"
+                    dangerouslySetInnerHTML={{
+                        __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${process.env.ANALYTICS}', {
+            page_path: window.location.pathname,
+          });
+        `,
+                    }}
+                />
+            </head>
             <body className={`bg-white light:bg-gray-900 text-black ${inter.className}`}>
                 {user ? userType : children}
                 {modal}

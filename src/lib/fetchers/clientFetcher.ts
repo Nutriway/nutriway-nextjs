@@ -41,7 +41,7 @@ export function useFetcher<DataType>({
         () => (shouldFetch ? [url, json] : null),
         // @ts-ignore this is important to make sure we do not use GET for the normal client fetcher
         ([url, json]) => clientFetcher({ url, method: 'get', json }),
-        config
+        config,
     );
 
     return {
