@@ -71,9 +71,9 @@ export default function NutritionistCalendar({ appointments }: NutritionistCalen
 
     return (
         <div className="pt-16">
-            <div className="max-w-md px-4 mx-2 sm:px-7 md:max-w-4xl md:px-6">
+            <div className="px-4 mx-2 max-w-md sm:px-7 md:px-6 md:max-w-4xl">
                 <div className="md:grid md:grid-cols-2 md:divide-x md:divide-gray-200">
-                    <div className="md:pr-14 w-full">
+                    <div className="w-full md:pr-14">
                         <div className="flex items-center w-full">
                             <h2 className="flex-auto font-semibold text-gray-900">
                                 {format(firstDayCurrentMonth, 'MMMM yyyy', { locale: pt })}
@@ -81,7 +81,7 @@ export default function NutritionistCalendar({ appointments }: NutritionistCalen
                             <button
                                 type="button"
                                 onClick={previousMonth}
-                                className="-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+                                className="flex flex-none justify-center items-center p-1.5 -my-1.5 text-gray-400 hover:text-gray-500"
                             >
                                 <span className="sr-only">Mês Passado</span>
                                 <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
@@ -89,7 +89,7 @@ export default function NutritionistCalendar({ appointments }: NutritionistCalen
                             <button
                                 onClick={nextMonth}
                                 type="button"
-                                className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+                                className="flex flex-none justify-center items-center p-1.5 -my-1.5 ml-2 -mr-1.5 text-gray-400 hover:text-gray-500"
                             >
                                 <span className="sr-only">Mês Seguinte</span>
                                 <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
@@ -131,7 +131,7 @@ export default function NutritionistCalendar({ appointments }: NutritionistCalen
                                         <time dateTime={format(day, 'yyyy-MM-dd')}>{format(day, 'd')}</time>
                                     </button>
 
-                                    <div className="w-1 h-1 mx-auto mt-1">
+                                    <div className="mx-auto mt-1 w-1 h-1">
                                         {appointments.some((consultation) =>
                                             isSameDay(parseISO(consultation.attributes.date), day),
                                         ) && <div className="w-1 h-1 rounded-full bg-sky-500"></div>}
@@ -140,7 +140,7 @@ export default function NutritionistCalendar({ appointments }: NutritionistCalen
                             ))}
                         </div>
                     </div>
-                    <section className="mt-12 md:mt-0 md:pl-14 w-80">
+                    <section className="mt-12 w-80 md:pl-14 md:mt-0">
                         <h2 className="font-semibold text-gray-900">
                             Consultas para{' '}
                             <time dateTime={format(selectedDay, 'yyyy-MM-dd', { locale: pt })}>
@@ -169,7 +169,7 @@ function Consultation({ consultation }: { consultation: Appointment }) {
     endDateTime.setTime(startDateTime.getTime() + 60 * 30 * 1000);
 
     return (
-        <li className="flex items-center px-4 py-2 space-x-4 group rounded-xl focus-within:bg-gray-100 hover:bg-gray-100">
+        <li className="flex items-center py-2 px-4 space-x-4 rounded-xl focus-within:bg-gray-100 hover:bg-gray-100 group">
             <Image
                 src={'/images/avatars/user.png'}
                 alt=""
@@ -186,9 +186,9 @@ function Consultation({ consultation }: { consultation: Appointment }) {
                     - <time dateTime={endDateTime.toString()}>{format(endDateTime, 'HH:mm')}</time>
                 </p>
             </div>
-            <Menu as="div" className="relative opacity-0 focus-within:opacity-100 group-hover:opacity-100">
+            <Menu as="div" className="relative opacity-0 group-hover:opacity-100 focus-within:opacity-100">
                 <div>
-                    <Menu.Button className="-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600">
+                    <Menu.Button className="flex items-center p-1.5 -m-2 text-gray-500 rounded-full hover:text-gray-600">
                         <span className="sr-only">Abrir opções</span>
                         <DotsVerticalIcon className="w-6 h-6" aria-hidden="true" />
                     </Menu.Button>
@@ -203,7 +203,7 @@ function Consultation({ consultation }: { consultation: Appointment }) {
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
                 >
-                    <Menu.Items className="absolute right-0 z-10 mt-2 origin-top-right bg-white rounded-md shadow-lg w-36 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-36 bg-white rounded-md ring-1 ring-black ring-opacity-5 shadow-lg origin-top-right focus:outline-none">
                         <div className="py-1">
                             <Menu.Item>
                                 {({ active }) => (
