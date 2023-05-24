@@ -3,7 +3,7 @@ on: [push]
 
 jobs:
   build:
-    name: Test
+    name: Lint Code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
