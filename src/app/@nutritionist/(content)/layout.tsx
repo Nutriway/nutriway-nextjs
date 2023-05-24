@@ -10,6 +10,7 @@ const nutritionistHeader = {
         },
     ],
     button: { title: 'Perfil', href: '/perfil' },
+    logo: true,
 };
 
 export default function NutritionistLayout({ children, modal }: { children: React.ReactNode; modal: React.ReactNode }) {

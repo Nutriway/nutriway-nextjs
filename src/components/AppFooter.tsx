@@ -3,19 +3,19 @@ import Container from '@/components/Container';
 
 export default function AppFooter() {
     return (
-        <footer className="py-20 md:pb-10 w-full">
+        <footer className="py-20 w-full md:pb-10">
             <Container>
                 <div className="m-auto md:w-10/12 lg:w-8/12 xl:w-full">
-                    <div className="flex flex-wrap items-center justify-between md:flex-nowrap">
-                        <div className="flex w-full justify-center space-x-12 text-gray-600 light:text-gray-300 sm:w-7/12 md:justify-start">
-                            <ul className="list-inside list-disc space-y-8">
+                    <div className="flex flex-wrap justify-between items-center md:flex-nowrap">
+                        <div className="flex justify-center space-x-12 w-full text-gray-600 sm:w-7/12 md:justify-start light:text-gray-300">
+                            <ul className="space-y-8 list-disc list-inside">
                                 <li>
-                                    <a href="#" className="transition hover:text-primary-900-900">
+                                    <a href="/" className="transition hover:text-primary-900-900">
                                         Página Inicial
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" className="transition hover:text-primary-900-900">
+                                    <a href="mailto:info@nutriway.pt" className="transition hover:text-primary-900-900">
                                         Entre em contacto
                                     </a>
                                 </li>
@@ -24,7 +24,7 @@ export default function AppFooter() {
                             <ul role="list" className="space-y-8">
                                 <li>
                                     <a
-                                        href="#"
+                                        href="https://www.facebook.com/Nutriwayplan"
                                         className="flex items-center space-x-3 transition hover:text-primary-900"
                                     >
                                         <svg
@@ -40,7 +40,7 @@ export default function AppFooter() {
                                 </li>
                                 <li>
                                     <a
-                                        href="#"
+                                        href="https://www.instagram.com/nutriway_plan"
                                         className="flex items-center space-x-3 transition hover:text-primary-900"
                                     >
                                         <svg
@@ -56,7 +56,7 @@ export default function AppFooter() {
                                 </li>
                             </ul>
                         </div>
-                        <div className="m-auto mt-16 w-10/12 space-y-6 text-center sm:mt-auto sm:w-5/12 sm:text-left">
+                        <div className="m-auto mt-16 space-y-6 w-10/12 text-center sm:mt-auto sm:w-5/12 sm:text-left">
                             <span className="block text-gray-500 light:text-gray-400">
                                 Junte-se a nós e descubra como a nutrição adequada pode transformar sua vida
                             </span>
@@ -73,8 +73,11 @@ export default function AppFooter() {
                             </span>
 
                             <span className="block text-gray-500 light:text-gray-400">
-                                Preicsa de ajuda?{' '}
-                                <a href="#" className="font-semibold text-gray-600 light:text-white">
+                                Precisa de ajuda?{' '}
+                                <a
+                                    href="mailto:info@nutriway.pt"
+                                    className="font-semibold text-gray-600 light:text-white"
+                                >
                                     {' '}
                                     Contacte-nos
                                 </a>

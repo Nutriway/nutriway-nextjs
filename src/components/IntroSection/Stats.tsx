@@ -23,8 +23,8 @@ export default function Stats() {
                     />
                 </svg>
 
-                <div className="space-y-6 justify-between text-gray-600 md:flex flex-row-reverse md:gap-6 md:space-y-0 lg:gap-12 lg:items-center">
-                    <div className="md:5/12 lg:w-1/2">
+                <div className="flex-row-reverse justify-between space-y-6 text-gray-600 md:flex md:gap-6 md:space-y-0 lg:gap-12 lg:items-center">
+                    <div className="lg:w-1/2 md:5/12">
                         <Image
                             src="/images/hero/woman.png"
                             alt="image"
@@ -34,24 +34,28 @@ export default function Stats() {
                             className="w-full"
                         />
                     </div>
-                    <div className="md:7/12 lg:w-1/2">
+                    <div className="lg:w-1/2 md:7/12">
                         <h2 className="text-3xl font-bold text-gray-900 md:text-4xl light:text-white">
                             As consultas de nutrição são feitas por profissionais altamente competentes
                         </h2>
-                        <p className="my-8 text-gray-600 light:text-gray-300">
+                        <div className="my-9 text-gray-600 light:text-gray-300">
                             Acreditamos na importância de oferecer um atendimento personalizado e de qualidade, por
-                            isso, os nossos nutricionistas são selecionados criteriosamente. Eles são registrados nos
-                            orgãos competentes e possuem especializações em diversas áreas, como nutrição esportiva,
-                            nutrição clínica, gestão de peso, alimentação vegetariana e muito mais.
-                        </p>
-                        <div className="divide-y space-y-4 divide-gray-100 light:divide-gray-800">
-                            <div className="mt-8 flex gap-4 md:items-center">
-                                <div className="w-12 h-12 flex gap-4 rounded-full bg-indigo-100 light:bg-indigo-900/20">
+                            isso, os nossos nutricionistas são selecionados criteriosamente.
+                            <br />
+                            Eles são registrados nos orgãos competentes e possuem especializações em diversas áreas,
+                            como <strong>
+                                nutrição esportiva, clínica, gestão de peso, alimentação vegetarianao
+                            </strong>{' '}
+                            e muito mais.
+                        </div>
+                        <div className="space-y-4 divide-y divide-gray-100 light:divide-gray-800">
+                            <div className="flex gap-4 mt-8 md:items-center">
+                                <div className="flex gap-4 w-12 h-12 bg-indigo-100 rounded-full light:bg-indigo-900/20">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24"
                                         fill="currentColor"
-                                        className="w-6 h-6 m-auto text-indigo-500 light:text-indigo-400"
+                                        className="m-auto w-6 h-6 text-indigo-500 light:text-indigo-400"
                                     >
                                         <path
                                             fillRule="evenodd"
@@ -61,21 +65,22 @@ export default function Stats() {
                                     </svg>
                                 </div>
                                 <div className="w-5/6">
-                                    <h4 className="font-semibold text-lg text-gray-700 light:text-indigo-300">
+                                    <h4 className="text-lg font-semibold text-gray-700 light:text-indigo-300">
                                         Consultas online
                                     </h4>
                                     <p className="text-gray-500 light:text-gray-400">
-                                        Tenha um acompanhamento com os nossos profissionais de saúde.
+                                        Consegue agendar uma consulta com um nutricionista de forma rápida e fácil.
+                                        Tendo a consulta diretamente através do nosso portal.
                                     </p>
                                 </div>
                             </div>
-                            <div className="pt-4 flex gap-4 md:items-center">
-                                <div className="w-12 h-12 flex gap-4 rounded-full bg-teal-100 light:bg-teal-900/20">
+                            <div className="flex gap-4 pt-4 md:items-center">
+                                <div className="flex gap-4 w-12 h-12 bg-teal-100 rounded-full light:bg-teal-900/20">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24"
                                         fill="currentColor"
-                                        className="w-6 h-6 m-auto text-teal-600 light:text-teal-400"
+                                        className="m-auto w-6 h-6 text-teal-600 light:text-teal-400"
                                     >
                                         <path
                                             fillRule="evenodd"
@@ -85,11 +90,13 @@ export default function Stats() {
                                     </svg>
                                 </div>
                                 <div className="w-5/6">
-                                    <h4 className="font-semibold text-lg text-gray-700 light:text-teal-300">
+                                    <h4 className="text-lg font-semibold text-gray-700 light:text-teal-300">
                                         Plano personalizado
                                     </h4>
                                     <p className="text-gray-500 light:text-gray-400">
-                                        A partir da sua consulta obterá um plano personalizado.
+                                        A partir da sua consulta obterá um plano personalizado para atingir os seus
+                                        objetivos. Terá um apoio constante do seu profissional de nutrição e poderá
+                                        estar a par do plano a partir do nosso portal.
                                     </p>
                                 </div>
                             </div>
