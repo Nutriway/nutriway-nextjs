@@ -1,6 +1,7 @@
 import BlogShowcase from '@/components/Blogs/BlogShowcase';
 import React from 'react';
 import SimpleCTA from '@/components/CTA/SimpleCTA';
+import ClientScheduleAppointment from '@/components/Calendars/ClientScheduleAppointment';
 
 export default function Home() {
     return (
@@ -10,6 +11,9 @@ export default function Home() {
                 description="Reserve agora a sua primeira consulta."
                 buttonText="Marcar consulta"
             />
+
+            <ClientScheduleAppointment />
+
             <section>
                 {
                     //@ts-ignore
