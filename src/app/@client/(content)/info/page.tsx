@@ -11,5 +11,7 @@ async function getUser(): Promise<User> {
 export default async function Info() {
     const user = await getUser();
 
-    return <UserInfoForm currentUser={user} />;
+    return (
+        <UserInfoForm currentUser={user} appointmentDate={new Date()} nutritionistAvailability={1} nutritionistId={1} />
+    );
 }

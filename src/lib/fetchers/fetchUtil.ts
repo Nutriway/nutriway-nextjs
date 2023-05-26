@@ -19,30 +19,35 @@ export async function fetcher({
     revalidate = 60,
     cache = 'default',
 }: FetcherParameters) {
-    const res = await fetch(`${BASE_URL}${url}`, {
-        method: method.toUpperCase(),
-        ...(body && { body: JSON.stringify(body) }),
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            ...(jwt && { Authorization: `Bearer ${jwt}` }),
-        },
-        next: {
-            revalidate,
-        },
-        cache,
-    });
+    try {
+        const res = await fetch(`${BASE_URL}${url}`, {
+            method: method.toUpperCase(),
+            ...(body && { body: JSON.stringify(body) }),
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                ...(jwt && { Authorization: `Bearer ${jwt}` }),
+            },
+            next: {
+                revalidate,
+            },
+            cache,
+        });
 
-    if (!res.ok) {
-        if (res.status === 404) {
-            return undefined;
+        if (!res.ok) {
+            console.error(res);
+            console.error('url: ', `${BASE_URL}${url}`);
+            console.error('body: ', JSON.stringify(body));
+            console.error('method: ', method);
+            return new Error('An error occurred while fetching the data.');
         }
-        // handle error
-        console.error(res);
-        throw new Error('API error ' + res.statusText);
-    }
 
-    if (json) {
-        return await res.json();
+        if (json) {
+            return await res.json();
+        }
+    } catch (error) {
+        console.error('url: ', `${BASE_URL}${url}`);
+        console.error('body: ', JSON.stringify(body));
+        console.error('method: ', method);
     }
 }

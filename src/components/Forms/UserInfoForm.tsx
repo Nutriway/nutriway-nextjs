@@ -2,6 +2,9 @@
 import { useState } from 'react';
 import { User } from '@/types/User';
 import useSWRMutation from 'swr/mutation';
+import { clientFetcher } from '@/lib/fetchers/clientFetcher';
+import { Appointment } from '@/types/Appointment';
+import { StrapiResponse } from '@/types/StrapiResponse';
 
 function getActivityRate(activity: string) {
     switch (activity) {
@@ -19,24 +22,16 @@ function getActivityRate(activity: string) {
     return 1;
 }
 
-function calculateMetabolicRate({
-    gender,
-    weight,
-    height,
-    age,
-    activity,
-}: {
-    gender: string;
-    weight: number;
-    height: number;
-    age: number;
-    activity: string;
-}) {
-    const activityRate = getActivityRate(activity);
-    if (gender === 'male') {
-        return Math.round(activityRate * (66 + (weight * 13.7 + height * 5 - age * 6.8)));
+function calculateMetabolicRate(user: User) {
+    if (user.activity && user.weight && user.height && user.age) {
+        const activityRate = getActivityRate(user.activity);
+        if (user.gender === 'male') {
+            return Math.round(activityRate * (66 + (+user.weight * 13.7 + +user.height * 5 - +user.age * 6.8)));
+        }
+        return Math.round(activityRate * (66.5 + (+user.weight * 9.6 + +user.height * 1.8 - +user.age * 4.7)));
+    } else {
+        return 0;
     }
-    return Math.round(activityRate * (66.5 + (weight * 9.6 + height * 1.8 - age * 4.7)));
 }
 
 export type Form = {
@@ -45,27 +40,88 @@ export type Form = {
 };
 
 async function updateUser(url: string, { arg }: { arg: User }) {
-    console.log('Updating user', arg);
+    return clientFetcher<User>({
+        url,
+        method: 'put',
+        body: {
+            gender: arg.gender,
+            age: arg.age,
+            weight: arg.weight,
+            height: arg.height,
+            activity: arg.activity,
+            metabolicRate: Math.abs(calculateMetabolicRate(arg)),
+        },
+    });
 }
 
-async function createAppointment(url: string, { arg }: { arg: Form }) {
-    console.log('Creating appointment', arg);
+async function createAppointment(
+    url: string,
+    {
+        arg,
+    }: {
+        arg: {
+            form: Form;
+            appointmentDate: Date;
+            clientId: number;
+            nutritionistId: number;
+            nutritionistAvailability: number;
+        };
+    },
+) {
+    return clientFetcher<StrapiResponse<Appointment>>({
+        url,
+        method: 'post',
+        body: {
+            data: {
+                goal: '',
+                nutritionist: arg.nutritionistId,
+                client: arg.clientId,
+                medical_condition: arg.form.condition,
+                nutritionist_availability: { id: arg.nutritionistAvailability },
+                date: arg.appointmentDate,
+                meeting_url: `https://meet.jit.si/${arg.nutritionistAvailability}-${arg.appointmentDate.getTime()}`,
+            },
+        },
+    });
 }
 
-export default function UserInfoForm({ currentUser }: { currentUser: User }) {
+export default function UserInfoForm({
+    currentUser,
+    appointmentDate,
+    nutritionistId,
+    nutritionistAvailability,
+}: {
+    currentUser: User;
+    appointmentDate: Date;
+    nutritionistId: number;
+    nutritionistAvailability: number;
+}) {
     const [user, setUser] = useState<User>(currentUser);
     const [form, setForm] = useState<Form>({ condition: '', motivation: '' });
 
-    const { trigger: userTrigger } = useSWRMutation('/changethis', updateUser);
-    const { trigger: formTrigger } = useSWRMutation('/changethis', createAppointment);
+    const { trigger: userTrigger } = useSWRMutation(`/users/${user.id}`, updateUser);
+    const { trigger: formTrigger } = useSWRMutation('/appointments', createAppointment);
 
     return (
         <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
             <h2 className="mb-4 text-xl font-bold text-gray-900">Informações do cliente</h2>
             <form
                 method="POST"
-                onSubmit={async () => {
-                    await Promise.all([userTrigger({ ...user }), formTrigger({ ...form })]);
+                onSubmit={async (e) => {
+                    e.preventDefault();
+                    const [updateduser, appointment] = await Promise.all([
+                        userTrigger(user),
+                        formTrigger({
+                            form,
+                            appointmentDate,
+                            clientId: user.id,
+                            nutritionistId,
+                            nutritionistAvailability,
+                        }),
+                    ]);
+                    //TODO: continue from here
+                    console.log('user: ', updateduser);
+                    console.log('appointment: ', appointment);
                 }}
             >
                 <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
@@ -104,7 +160,7 @@ export default function UserInfoForm({ currentUser }: { currentUser: User }) {
                         </label>
                         <select
                             id="gender"
-                            value={user.gender}
+                            value={user.gender || 'N/A'}
                             onChange={(e) => setUser({ ...user, gender: e.target.value })}
                             className="block p-2.5 w-full text-sm placeholder-gray-400 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
                         >
@@ -122,8 +178,8 @@ export default function UserInfoForm({ currentUser }: { currentUser: User }) {
                             type="number"
                             name="age"
                             id="age"
-                            value={user.age}
-                            onChange={(e) => setUser({ ...user, age: e.target.value })}
+                            value={user.age || ''}
+                            onChange={(e) => setUser({ ...user, age: +e.target.value })}
                             className="block p-2.5 w-full text-sm placeholder-gray-400 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600"
                             placeholder="Idade"
                             required
@@ -137,8 +193,8 @@ export default function UserInfoForm({ currentUser }: { currentUser: User }) {
                             type="number"
                             name="weight"
                             id="weight"
-                            value={user.weight}
-                            onChange={(e) => setUser({ ...user, weight: e.target.value })}
+                            value={user.weight || ''}
+                            onChange={(e) => setUser({ ...user, weight: +e.target.value })}
                             className="block p-2.5 w-full text-sm placeholder-gray-400 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600"
                             placeholder="Peso (kg)"
                             required
@@ -152,8 +208,8 @@ export default function UserInfoForm({ currentUser }: { currentUser: User }) {
                             type="number"
                             name="height"
                             id="height"
-                            value={user.height}
-                            onChange={(e) => setUser({ ...user, height: e.target.value })}
+                            value={user.height || ''}
+                            onChange={(e) => setUser({ ...user, height: +e.target.value })}
                             className="block p-2.5 w-full text-sm placeholder-gray-400 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-600 focus:border-primary-600"
                             placeholder="Altura (cm)"
                             required
@@ -165,7 +221,7 @@ export default function UserInfoForm({ currentUser }: { currentUser: User }) {
                         </label>
                         <select
                             id="activity"
-                            value={user.activity}
+                            value={user.activity || 'low'}
                             onChange={(e) => setUser({ ...user, activity: e.target.value })}
                             className="block p-2.5 w-full text-sm placeholder-gray-400 text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
                         >

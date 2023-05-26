@@ -3,10 +3,10 @@ export type User = {
     email: string;
     username: string;
     type: 'client' | 'consultant' | 'nutritionist';
-    age?: string;
+    age?: number;
     gender?: string;
-    height?: string;
-    weight?: string;
+    height?: number;
+    weight?: number;
     activity?: string;
     metabolicRate?: number;
     city?: string;

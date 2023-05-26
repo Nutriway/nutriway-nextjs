@@ -11,7 +11,7 @@ const initialState = {
 };
 
 async function doLogin(url: string, { arg: { email, password } }: { arg: { email: string; password: string } }) {
-    const { jwt } = await clientFetcher({
+    const response = await clientFetcher<{ jwt: string }>({
         url,
         method: 'post',
         body: { identifier: email, password: password },
@@ -19,10 +19,10 @@ async function doLogin(url: string, { arg: { email, password } }: { arg: { email
 
     // this cookie part is specific to this login request
     // mustn't appear on other calls
-    setCookie('jwt-cookie', jwt, {
+    setCookie('jwt-cookie', response?.jwt, {
         path: '/',
         maxAge: 60 * 60 * 24 * 7,
-        sameSite: 'lax',
+        sameSite: 'strict',
         secure: true,
     });
 }
