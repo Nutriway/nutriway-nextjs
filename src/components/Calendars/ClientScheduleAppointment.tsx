@@ -111,9 +111,13 @@ export default function ClientScheduleAppointment() {
 
     const selectHour = (hour: number) => {
         setSelectedHour(hour);
+    };
 
+    const submitDate = () => {
+        console.log(`${datepickerValue} às ${selectedHour}h`);
+
+        //juntar data e hora numa string pronta a entregar ao André
         //GO TO FORM
-        //SHOULD HAVE A CONFIRMATION BUTTON FIRST
     };
 
     const hasNoAvailability = (day: number): boolean => {
@@ -410,6 +414,16 @@ export default function ClientScheduleAppointment() {
                                                     </div>
                                                 );
                                             })}
+                                    </div>
+
+                                    <div className="flex justify-end w-full">
+                                        <button
+                                            onClick={submitDate}
+                                            disabled={!selectedHour}
+                                            className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-xs px-4 py-2 lightbg-primary-600 lighthover:bg-primary-700 focus:outline-none lightfocus:ring-primary-800"
+                                        >
+                                            {'Avançar'}
+                                        </button>
                                     </div>
                                 </div>
                             )}
