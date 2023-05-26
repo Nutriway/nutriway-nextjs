@@ -9,9 +9,9 @@ const testimonials = [
         phrase: '“Adorei a consulta, fácil marcação e rápida disponibilidade, um plano alimentar realista com atenção aos meus objetivos e que encaixa perfeitamente na minha rotina. Estou bastante satisfeita.”',
     },
     {
-        author: 'Julyane Fernandes',
-        date: '6 de Março de 2023',
-        phrase: '“Adorei a consulta, fácil marcação e rápida disponibilidade, um plano alimentar realista com atenção aos meus objetivos e que encaixa perfeitamente na minha rotina. Estou bastante satisfeita.”',
+        author: 'Tomás Santos',
+        date: '12 de Fevereiro de 2023',
+        phrase: '“Adorei a consulta! Com este plano alimentar digital fica me muito mais fácil comprar os ingredientes para as receitas.”',
     },
     {
         author: 'Julyane Fernandes',
