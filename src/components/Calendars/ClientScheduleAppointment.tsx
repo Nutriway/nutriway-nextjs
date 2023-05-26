@@ -7,8 +7,6 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function ClientScheduleAppointment() {
     //CHANGE THIS ID TO CATARINA'S
-
-    //deixo isto para deixar marcar apenas para amanhã?
     const today = new Date().toISOString().substring(0, 10);
     const { data, error } = useSWR(
         `http://localhost:1337/api/nutritionist-availabilities?populate[nutritionist][populate]&filters[nutritionist][id]=2&filters[date][$gte]=${today}`,
@@ -39,16 +37,9 @@ export default function ClientScheduleAppointment() {
     const [datepickerValue, setDatepickerValue] = useState('');
     const [selectedHour, setSelectedHour] = useState<number | null>();
 
-    //colocar step para data e dps hora - usar simbolos a verde como o the fork
     const [step, setStep] = useState(0);
-
     const [availabilities, setAvailabilities] = useState<Map<string, number[]>>();
     const [availableHours, setAvailableHours] = useState<number[]>();
-
-    /*   //DO I NEED THESE 2 USE EFFECTS
-    useEffect(() => {
-        // initDate();
-    }, []); */
 
     // Calculates the number of days in the given month
     const getNoOfDays = useCallback(
@@ -72,13 +63,13 @@ export default function ClientScheduleAppointment() {
         [year],
     );
 
-    //sempre que mudo o mes estou a contruir o mapa - n pode ser - separar
     useEffect(() => {
         getNoOfDays(month);
-        if (data?.data) {
-            //console.log(data.data);
-            const datesList = data.data.map((d: any) => d.attributes.date);
+    }, [month, getNoOfDays]);
 
+    useEffect(() => {
+        if (data?.data) {
+            const datesList = data.data.map((d: any) => d.attributes.date);
             const dateMap: Map<string, number[]> = new Map();
 
             for (let d of datesList) {
@@ -96,17 +87,7 @@ export default function ClientScheduleAppointment() {
 
             console.log(dateMap);
         }
-    }, [data, getNoOfDays, month]);
-
-    const handleAvailableHours = (date: string) => {
-        //agora procuro as horas
-        //no fim - setAvailableHours
-    };
-
-    /*  const initDate = () => {
-        let today = new Date();
-        setDatepickerValue(() => new Date(year, month, today.getDate()).toDateString());
-    }; */
+    }, [data]);
 
     // Checks if the day is the current day
     const isToday = (date: number) => {
@@ -130,9 +111,9 @@ export default function ClientScheduleAppointment() {
 
     const selectHour = (hour: number) => {
         setSelectedHour(hour);
-        console.log(hour);
 
-        //que faço depois disto? formulário?
+        //GO TO FORM
+        //SHOULD HAVE A CONFIRMATION BUTTON FIRST
     };
 
     const hasNoAvailability = (day: number): boolean => {
@@ -159,233 +140,280 @@ export default function ClientScheduleAppointment() {
     };
 
     return (
-        <div className=" antialiased sans-serif">
-            <div className="container mx-auto px-4 py-2">
-                <div className=" w-72">
-                    <div className="relative">
-                        <input type="hidden" name="date" />
-
-                        <div
-                            style={{ backgroundColor: 'rgb(243, 252, 243)' }}
-                            className="flex justify-center items-center border border-grey-400 rounded-lg m-2 w-auto h-9 cursor-pointer p-1"
-                        >
-                            <div
-                                style={{
-                                    backgroundColor: 'rgb(88, 148, 66)',
-                                    color: 'white',
-                                }}
-                                className="font-skylight text-xs font text-center h-full rounded-l-lg flex-1 flex justify-center items-center"
-                                onClick={() => setStep(0)}
-                            >
-                                {datepickerValue ? new Date(datepickerValue).toLocaleDateString() : 'Data'}
-                            </div>
+        <div className="w-full flex justify-center items-center my-4">
+            <div className="antialiased sans-serif">
+                <div className="container px-8 py-2">
+                    <div className="w-72 h-72">
+                        <div className="relative">
+                            <input type="hidden" name="date" />
 
                             <div
-                                className="text-center h-full flex justify-center items-center"
-                                style={{
-                                    backgroundColor: 'rgb(88, 148, 66)',
-                                }}
+                                style={{ backgroundColor: 'rgb(243, 252, 243)' }}
+                                className="flex justify-center items-center border border-grey-400 rounded-lg m-2 w-auto h-9 cursor-pointer p-1"
                             >
-                                <svg
-                                    className="h-4 w-5 text-gray-300 inline-flex"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="white"
+                                <div
+                                    style={{
+                                        backgroundColor: 'rgb(88, 148, 66)',
+                                        color: 'white',
+                                    }}
+                                    className="font-skylight text-xs font text-center h-full rounded-l-lg flex-1 flex justify-center items-center "
+                                    onClick={() => setStep(0)}
                                 >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M9 5l7 7-7 7"
-                                    />
-                                </svg>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth="1.5"
+                                        stroke="currentColor"
+                                        className="w-5 h-5 mx-2"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+                                        />
+                                    </svg>
+
+                                    {datepickerValue ? new Date(datepickerValue).toLocaleDateString() : 'Data'}
+                                </div>
+
+                                <div
+                                    className="text-center h-full flex justify-center items-center"
+                                    style={{
+                                        backgroundColor: 'rgb(88, 148, 66)',
+                                    }}
+                                >
+                                    <svg
+                                        className="h-4 w-5 text-gray-300 inline-flex"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="white"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M9 5l7 7-7 7"
+                                        />
+                                    </svg>
+                                </div>
+
+                                <div
+                                    style={{
+                                        backgroundColor: step === 1 ? 'rgb(88, 148, 66)' : 'transparent',
+                                        color: step === 1 ? 'white' : 'black',
+                                    }}
+                                    className="font-skylight text-xs font text-center h-full rounded-r-lg flex-1 flex justify-center items-center"
+                                    onClick={() => {
+                                        if (datepickerValue) setStep(1);
+                                    }}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth="1.5"
+                                        stroke="currentColor"
+                                        className="w-5 h-5 mx-2"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                                        />
+                                    </svg>
+
+                                    {selectedHour ? `${selectedHour}h` : 'Hora'}
+                                </div>
                             </div>
 
-                            <div
-                                style={{
-                                    backgroundColor: step === 1 ? 'rgb(88, 148, 66)' : 'transparent',
-                                    color: step === 1 ? 'white' : 'black',
-                                }}
-                                className="font-skylight text-xs font text-center h-full rounded-r-lg flex-1 flex justify-center items-center"
-                                onClick={() => {
-                                    if (datepickerValue) setStep(1);
-                                }}
-                            >
-                                {selectedHour ? `${selectedHour}h` : 'Hora'}
-                            </div>
-                        </div>
-
-                        {step === 0 && (
-                            <div className="bg-white mt-10 rounded-lg shadow p-4 absolute top-0 left-0 w-full">
-                                <div className="flex justify-between items-center mb-2">
-                                    <div>
-                                        <span className="text-lg font-bold text-gray-800 font-skylight">
-                                            {' '}
-                                            {MONTH_NAMES[month]}
-                                        </span>
-                                        <span className="ml-1 text-lg text-gray-600 font-normal font-skylight">
-                                            {' '}
-                                            {year}
-                                        </span>
-                                    </div>{' '}
-                                    <div>
-                                        <button
-                                            type="button"
-                                            className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full"
-                                            disabled={month == 0 ? true : false}
-                                            onClick={() => {
-                                                setMonth((prev) => prev - 1);
-                                                getNoOfDays(month - 1);
-                                            }}
-                                        >
-                                            <svg
-                                                className="h-6 w-6 text-gray-500 inline-flex"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
+                            {step === 0 && (
+                                <div className="bg-white mt-1 rounded-lg shadow p-4 w-full">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <div>
+                                            <span className="text-lg font-bold text-gray-800 font-skylight">
+                                                {' '}
+                                                {MONTH_NAMES[month]}
+                                            </span>
+                                            <span className="ml-1 text-lg text-gray-600 font-normal font-skylight">
+                                                {' '}
+                                                {year}
+                                            </span>
+                                        </div>{' '}
+                                        <div>
+                                            <button
+                                                type="button"
+                                                className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full"
+                                                disabled={month == 0 ? true : false}
+                                                onClick={() => {
+                                                    setMonth((prev) => prev - 1);
+                                                    getNoOfDays(month - 1);
+                                                }}
                                             >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth="2"
-                                                    d="M15 19l-7-7 7-7"
-                                                />
-                                            </svg>
-                                        </button>
-                                        <button
-                                            type="button"
-                                            className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-700 p-1 rounded-full"
-                                            disabled={month == 11 ? true : false}
-                                            onClick={() => {
-                                                setMonth((prev) => prev + 1);
-                                                getNoOfDays(month + 1);
-                                            }}
-                                        >
-                                            <svg
-                                                className="h-6 w-6 text-gray-500 inline-flex"
-                                                fill="none"
-                                                viewBox="0 0 24 24"
-                                                stroke="currentColor"
+                                                <svg
+                                                    className="h-6 w-6 text-gray-500 inline-flex"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M15 19l-7-7 7-7"
+                                                    />
+                                                </svg>
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-700 p-1 rounded-full"
+                                                disabled={month == 11 ? true : false}
+                                                onClick={() => {
+                                                    setMonth((prev) => prev + 1);
+                                                    getNoOfDays(month + 1);
+                                                }}
                                             >
-                                                <path
-                                                    strokeLinecap="round"
-                                                    strokeLinejoin="round"
-                                                    strokeWidth="2"
-                                                    d="M9 5l7 7-7 7"
-                                                />
-                                            </svg>
-                                        </button>
+                                                <svg
+                                                    className="h-6 w-6 text-gray-500 inline-flex"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    stroke="currentColor"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        strokeWidth="2"
+                                                        d="M9 5l7 7-7 7"
+                                                    />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="flex flex-wrap mb-3 -mx-1">
-                                    {DAYS.map((day, index) => {
-                                        return (
-                                            <div className="px-1" key={index}>
-                                                <div
-                                                    key={index}
-                                                    className="text-gray-800 font-medium text-center text-xs w-7 font-skylight"
-                                                >
-                                                    {day}
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                                <div className="flex flex-wrap -mx-1">
-                                    {blankdays.map((day, index) => {
-                                        return (
-                                            <div className="px-1 mb-1" key={index}>
-                                                <div
-                                                    key={index}
-                                                    className="cursor-pointer text-center text-sm rounded-lg leading-loose font-skylight w-7 text-gray-700"
-                                                >
-                                                    {}
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                    {no_of_days.map((day, index) => {
-                                        return (
-                                            <div className="px-1 mb-1" key={index}>
-                                                <div
-                                                    key={index}
-                                                    onClick={() => {
-                                                        if (!hasNoAvailability(day)) selectDateValue(day);
-                                                    }}
-                                                    className={
-                                                        hasNoAvailability(day)
-                                                            ? 'text-center text-sm rounded-lg leading-loose w-7 font-skylight text-decoration-line: line-through'
-                                                            : 'cursor-pointer text-center text-sm rounded-lg leading-loose w-7 font-skylight'
-                                                    }
-                                                    style={{
-                                                        backgroundColor: hasNoAvailability(day)
-                                                            ? 'rgb(236, 237, 239)'
-                                                            : isSelectedDate(day)
-                                                            ? 'rgb(243, 252, 243)'
-                                                            : 'white',
-
-                                                        color: isToday(day)
-                                                            ? 'rgb(88, 148, 66)'
-                                                            : hasNoAvailability(day)
-                                                            ? 'rgb(149, 155, 167)'
-                                                            : 'black',
-
-                                                        border: hasNoAvailability(day)
-                                                            ? '1px solid rgb(236, 237, 239)'
-                                                            : isSelectedDate(day)
-                                                            ? '1px solid rgb(88, 148, 66)'
-                                                            : '1px solid rgb(149, 155, 167)',
-                                                    }}
-                                                >
-                                                    {' '}
-                                                    {day}
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        )}
-
-                        {step === 1 && (
-                            <div className="bg-white mt-10 rounded-lg shadow p-4 absolute top-0 left-0 w-full">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <span className="text-lg font-bold text-gray-800 font-skylight">
-                                            {'Selecione a Hora'}
-                                        </span>
-                                    </div>{' '}
-                                </div>
-                                <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
-                                <div className="flex flex-wrap mb-3 -mx-1">
-                                    {availableHours &&
-                                        availableHours.map((hour, index) => {
+                                    <div className="flex flex-wrap mb-3 -mx-1">
+                                        {DAYS.map((day, index) => {
                                             return (
                                                 <div className="px-1" key={index}>
                                                     <div
                                                         key={index}
-                                                        className="cursor-pointer text-center text-sm rounded-lg leading-loose w-7  hover:bg-blue-400 font-skylight"
-                                                        onClick={() => {
-                                                            selectHour(hour);
-                                                        }}
-                                                        style={{
-                                                            backgroundColor: isSelectedHour(hour)
-                                                                ? 'rgb(243, 252, 243)'
-                                                                : 'white',
-                                                            color: 'black',
-                                                            border: isSelectedHour(hour)
-                                                                ? '1px solid rgb(88, 148, 66)'
-                                                                : '1px solid rgb(149, 155, 167)',
-                                                        }}
+                                                        className="text-gray-800 font-medium text-center text-xs w-7 font-skylight"
                                                     >
-                                                        {hour}
+                                                        {day}
                                                     </div>
                                                 </div>
                                             );
                                         })}
+                                    </div>
+                                    <div className="flex flex-wrap -mx-1">
+                                        {blankdays.map((day, index) => {
+                                            return (
+                                                <div className="px-1 mb-1" key={index}>
+                                                    <div
+                                                        key={index}
+                                                        className="cursor-pointer text-center text-sm rounded-lg leading-loose font-skylight w-7 text-gray-700"
+                                                    >
+                                                        {}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                        {no_of_days.map((day, index) => {
+                                            return (
+                                                <div className="px-1 mb-1" key={index}>
+                                                    <div
+                                                        key={index}
+                                                        onClick={() => {
+                                                            if (!hasNoAvailability(day)) selectDateValue(day);
+                                                        }}
+                                                        className={
+                                                            hasNoAvailability(day)
+                                                                ? 'text-center text-sm rounded-lg leading-loose w-7 font-skylight text-decoration-line: line-through'
+                                                                : 'cursor-pointer text-center text-sm rounded-lg leading-loose w-7 font-skylight'
+                                                        }
+                                                        style={{
+                                                            backgroundColor: hasNoAvailability(day)
+                                                                ? 'rgb(236, 237, 239)'
+                                                                : isSelectedDate(day)
+                                                                ? 'rgb(243, 252, 243)'
+                                                                : 'white',
+
+                                                            color: isToday(day)
+                                                                ? 'rgb(88, 148, 66)'
+                                                                : hasNoAvailability(day)
+                                                                ? 'rgb(149, 155, 167)'
+                                                                : 'black',
+
+                                                            border: hasNoAvailability(day)
+                                                                ? '1px solid rgb(236, 237, 239)'
+                                                                : isSelectedDate(day)
+                                                                ? '1px solid rgb(88, 148, 66)'
+                                                                : '1px solid rgb(149, 155, 167)',
+                                                        }}
+                                                    >
+                                                        {' '}
+                                                        {day}
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+
+                            {step === 1 && (
+                                <div className="bg-white mt-1 rounded-lg shadow p-4 w-full">
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex justify-between items-center">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                strokeWidth="1.5"
+                                                stroke="currentColor"
+                                                className="w-6 h-6 mr-2"
+                                            >
+                                                <path
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                />
+                                            </svg>
+
+                                            <span className="text-lg font-bold text-gray-800 font-skylight">
+                                                {'Selecione a Hora'}
+                                            </span>
+                                        </div>{' '}
+                                    </div>
+                                    <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
+                                    <div className="flex flex-wrap mb-3 -mx-1">
+                                        {availableHours &&
+                                            availableHours.map((hour, index) => {
+                                                return (
+                                                    <div className="px-1" key={index}>
+                                                        <div
+                                                            key={index}
+                                                            className="cursor-pointer text-center text-sm rounded-lg leading-loose w-7  hover:bg-blue-400 font-skylight"
+                                                            onClick={() => {
+                                                                selectHour(hour);
+                                                            }}
+                                                            style={{
+                                                                backgroundColor: isSelectedHour(hour)
+                                                                    ? 'rgb(243, 252, 243)'
+                                                                    : 'white',
+                                                                color: 'black',
+                                                                border: isSelectedHour(hour)
+                                                                    ? '1px solid rgb(88, 148, 66)'
+                                                                    : '1px solid rgb(149, 155, 167)',
+                                                            }}
+                                                        >
+                                                            {hour}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
