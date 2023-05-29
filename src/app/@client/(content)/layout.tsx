@@ -5,6 +5,7 @@ import AppHeader from '@/components/Headers/AppHeader';
 const clientHeader = {
     items: [{ title: 'Consultas', href: '/consultas' }],
     button: { title: 'Perfil', href: '/perfil' },
+    logo: true,
 };
 
 export default function ClientContentLayout({ children }: { children: React.ReactNode }) {

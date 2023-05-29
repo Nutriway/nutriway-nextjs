@@ -6,29 +6,29 @@ import Link from 'next/link';
 export default function Register() {
     return (
         <section className="bg-gray-50 light:bg-gray-900">
-            <div className="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-20 lg:py-16 lg:grid-cols-12">
-                <div className="w-full p-6 mx-auto bg-white rounded-lg shadow light:bg-gray-800 sm:max-w-xl lg:col-span-6 sm:p-8">
-                    <a
-                        href=""
-                        className="inline-flex w-full items-center mb-4 text-xl font-semibold text-gray-900 light:text-white"
+            <div className="grid py-8 px-4 mx-auto max-w-screen-xl lg:grid-cols-12 lg:gap-20 lg:py-16">
+                <div className="p-6 mx-auto w-full bg-white rounded-lg shadow sm:p-8 sm:max-w-xl lg:col-span-6 light:bg-gray-800">
+                    <Link
+                        href="/"
+                        className="inline-flex items-center mb-4 w-full text-xl font-semibold text-gray-900 light:text-white"
                     >
                         <Image
-                            className="w-80 mr-2"
+                            className="mr-2 w-80"
                             src="./images/logo.svg"
-                            loading="lazy"
+                            loading="eager"
                             alt="logo"
                             width="800"
                             height="800"
                         />
-                    </a>
-                    <h1 className="mb-2 text-2xl font-bold leading-tight tracking-tight text-gray-900 light:text-white">
+                    </Link>
+                    <h1 className="mb-2 text-2xl font-bold tracking-tight leading-tight text-gray-900 light:text-white">
                         Crie a sua conta
                     </h1>
                     <p className="text-sm font-light text-gray-500 light:text-gray-300">
                         Entre para agendar consultas. Já tem uma conta?{' '}
                         <Link
                             href="/login"
-                            className="font-medium text-primary-600 hover:underline light:text-primary-500"
+                            className="font-medium hover:underline text-primary-600 light:text-primary-500"
                         >
                             Entre aqui
                         </Link>
@@ -36,9 +36,10 @@ export default function Register() {
                     </p>
                     <RegisterForm />
                 </div>
-                <div className="mr-auto place-self-center lg:col-span-6">
+                <div className="place-self-center mr-auto lg:col-span-6">
                     <Image
                         className="hidden mx-auto lg:flex"
+                        loading="eager"
                         width={500}
                         height={500}
                         src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg"
