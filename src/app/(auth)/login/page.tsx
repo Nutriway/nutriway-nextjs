@@ -17,7 +17,7 @@ export default function Login() {
                             <Image
                                 className="mr-2 w-80"
                                 src="./images/logo.svg"
-                                loading="eager"
+                                priority
                                 alt="logo"
                                 width="800"
                                 height="800"
@@ -42,7 +42,7 @@ export default function Login() {
                 <div className="place-self-center mr-auto lg:col-span-6">
                     <Image
                         className="hidden mx-auto lg:flex"
-                        loading="eager"
+                        priority
                         width={500}
                         height={500}
                         src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg"
