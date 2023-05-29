@@ -31,7 +31,6 @@
         "next": "13.4.2-canary.4",
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "underscore": "1.12.1",
         "react-schedule-selector": "^3.0.2",
         "styled-components": "^6.0.0-rc.1",
         "swr": "^2.1.2",
