@@ -24,7 +24,7 @@ type UseFetcherParameters = {
 };
 
 type UseFetcherReturn<DataType> = {
-    data?: DataType;
+    data: DataType;
     isLoading: boolean;
     isError: boolean;
     isValidating: boolean;
@@ -36,7 +36,7 @@ export function useFetcher<DataType>({
     json = true,
     shouldFetch = true,
     config = {}, // define some default configs
-}: UseFetcherParameters): UseFetcherReturn<StrapiResponse<DataType>> {
+}: UseFetcherParameters): UseFetcherReturn<DataType> {
     const { data, error, isLoading, isValidating } = useSWR(
         () => (shouldFetch ? [url, json] : null),
         // @ts-ignore this is important to make sure we do not use GET for the normal client fetcher

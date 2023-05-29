@@ -8,17 +8,20 @@ const nutritionistHeader = {
             title: 'Minhas Consultas',
             href: '/consultas',
         },
+        {
+            title: 'Planos alimentares',
+            href: '/dietPlan',
+        },
     ],
     button: { title: 'Perfil', href: '/perfil' },
     logo: true,
 };
 
-export default function NutritionistLayout({ children, modal }: { children: React.ReactNode; modal: React.ReactNode }) {
+export default function NutritionistLayout({ children }: { children: React.ReactNode }) {
     return (
         <>
             <AppHeader {...nutritionistHeader} />
             <div className="pt-20">{children}</div>
-            {modal}
             <AppFooter />
         </>
     );
