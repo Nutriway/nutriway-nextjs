@@ -10,7 +10,7 @@ type FetcherParameters = {
 };
 
 // POST, PUT, DELETE fetcher
-export function clientFetcher<DataType>(params: FetcherParameters): Promise<DataType | undefined> {
+export function clientFetcher<DataType>(params: FetcherParameters): Promise<DataType> {
     const jwt = getCookie('jwt-cookie');
     return fetcher({ ...params, jwt });
 }
@@ -23,7 +23,7 @@ type UseFetcherParameters = {
 };
 
 type UseFetcherReturn<DataType> = {
-    data?: DataType;
+    data: DataType;
     isLoading: boolean;
     isError: boolean;
     isValidating: boolean;

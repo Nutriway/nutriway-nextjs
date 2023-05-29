@@ -10,7 +10,7 @@ type FetcherParameters = {
     cache?: 'default' | 'no-cache' | 'reload' | 'force-cache' | 'only-if-cached'; // https://beta.nextjs.org/docs/data-fetching/caching
 };
 
-export async function serverFetcher<DataType>(params: FetcherParameters): Promise<DataType | undefined> {
+export async function serverFetcher<DataType>(params: FetcherParameters): Promise<DataType> {
     const jwt = cookies().get('jwt-cookie')?.value;
     return fetcher({ ...params, jwt });
 }
