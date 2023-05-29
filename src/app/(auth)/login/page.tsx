@@ -17,7 +17,7 @@ export default function Login() {
                             <Image
                                 className="mr-2 w-80"
                                 src="./images/logo.svg"
-                                priority
+                                loading="eager"
                                 alt="logo"
                                 width="800"
                                 height="800"
