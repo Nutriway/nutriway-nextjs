@@ -19,10 +19,10 @@ async function getInfo(id: string) {
 export default async function AppointmentDetails({ params }: AppointmentDetailsParams) {
     const info = await getInfo(params.id);
 
-    if (!info?.data) {
+    if (info?.data) {
         return <NotFoundDialog />;
     }
 
-    // @ts-ignore this is a hack around the fact that typescript doesnt allow async components yet
+    // @ts-ignore this is a hack around the fact that typescript doesn't allow async components yet
     return <ClientDetailsDialog info={info.data} />;
 }

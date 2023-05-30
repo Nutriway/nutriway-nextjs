@@ -14,7 +14,7 @@ async function doRegister(
         arg: { username: string; email: string; password: string; type: 'client' | 'nutritionist' | 'consultant' };
     },
 ) {
-    const { jwt } = await clientFetcher({
+    const response = await clientFetcher<{ jwt: string }>({
         url,
         method: 'post',
         body: { username, email, password, type },
