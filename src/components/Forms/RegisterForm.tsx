@@ -22,12 +22,14 @@ async function doRegister(
 
     // this cookie part is specific to this register request
     // mustn't appear on other calls
-    setCookie('jwt-cookie', jwt, {
-        path: '/',
-        maxAge: 60 * 60 * 24 * 7,
-        sameSite: 'lax',
-        secure: true,
-    });
+    if (jwt) {
+        setCookie('jwt-cookie', jwt, {
+            path: '/',
+            maxAge: 60 * 60 * 24 * 7,
+            sameSite: 'lax',
+            secure: true,
+        });
+    }
 }
 
 const initialState = {

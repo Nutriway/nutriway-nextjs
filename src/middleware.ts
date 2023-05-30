@@ -15,11 +15,13 @@ export default async function middleware(req: NextRequest) {
 
     const jwt = req.cookies.get(process.env.COOKIE_NAME as string);
 
-    if (!(jwt || pathname.startsWith('/login') || pathname.startsWith('/register') || pathname === '/')) {
+    const valid = jwt && jwt.value.length > 0;
+
+    if (!(valid || pathname.startsWith('/login') || pathname.startsWith('/register') || pathname === '/')) {
         req.nextUrl.pathname = '/login';
         return NextResponse.redirect(req.nextUrl);
     }
-    if (jwt && (pathname.startsWith('/login') || pathname.startsWith('/register') || pathname === '/')) {
+    if (valid && (pathname.startsWith('/login') || pathname.startsWith('/register') || pathname === '/')) {
         req.nextUrl.pathname = '/home';
         return NextResponse.redirect(req.nextUrl);
     }
