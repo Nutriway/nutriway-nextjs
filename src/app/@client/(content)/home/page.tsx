@@ -1,7 +1,6 @@
 import BlogShowcase from '@/components/Blogs/BlogShowcase';
 import React from 'react';
 import SimpleCTA from '@/components/CTA/SimpleCTA';
-import StrapiPayment from '@/components/StrapiPayment';
 
 export default function Home() {
     return (
@@ -17,7 +16,6 @@ export default function Home() {
                     <BlogShowcase />
                 }
             </section>
-            <StrapiPayment />
         </>
     );
 }

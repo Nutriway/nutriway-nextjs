@@ -11,7 +11,7 @@ const initialState = {
 };
 
 async function doLogin(url: string, { arg: { email, password } }: { arg: { email: string; password: string } }) {
-    const response = await clientFetcher<{ jwt: string }>({
+    const { jwt } = await clientFetcher<{ jwt: string }>({
         url,
         method: 'post',
         body: { identifier: email, password: password },
