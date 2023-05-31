@@ -26,7 +26,9 @@ export default async function Home() {
                 buttonText="Marcar consulta"
             />
 
-            <ClientScheduleAppointment availabilities={availabilities.data} />
+            <ClientScheduleAppointment
+                availableDates={availabilities.data.map((av: Availability) => new Date(av.attributes.date))}
+            />
 
             <section>
                 {
