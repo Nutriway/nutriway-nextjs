@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import isToday from 'date-fns/isToday';
-import isSameDay from 'date-fns/isSameDay';
+import { getDaysInMonth, isToday, isSameDay } from 'date-fns';
 
 type ClientScheduleAppointmentProps = {
     availableDates: Date[];
@@ -25,6 +24,24 @@ const MONTH_NAMES = [
 
 const DAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
+// Calculates the number of days in the given month
+const getNoOfDays = (date: Date) => {
+    const daysInMonth = getDaysInMonth(date);
+    const dayOfWeek = date.getDay();
+
+    const blankdaysArray: number[] = [];
+    for (var i = 1; i <= dayOfWeek; i++) {
+        blankdaysArray.push(i);
+    }
+
+    const daysArray: number[] = [];
+    for (var i = 1; i <= daysInMonth; i++) {
+        daysArray.push(i);
+    }
+
+    return { blankDays: blankdaysArray, numDays: daysArray };
+};
+
 const isSelectedDate = (newDate: Date, selectedDate: Date) => {
     return isSameDay(newDate, selectedDate);
 };
@@ -42,37 +59,9 @@ const submitDate = (selectedDate: Date) => {
 export default function ClientScheduleAppointment({ availableDates }: ClientScheduleAppointmentProps) {
     const [month, setMonth] = useState(new Date().getMonth());
     const [year, setYear] = useState(new Date().getFullYear());
-    const [no_of_days, setNumDays] = useState<number[]>([]);
-    const [blankdays, setBlankDays] = useState<number[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date>();
     const [selectedHour, setSelectedHour] = useState<number | undefined>();
     const [step, setStep] = useState(0);
-
-    // Calculates the number of days in the given month
-    const getNoOfDays = useCallback(
-        (month: number) => {
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const dayOfWeek = new Date(year, month).getDay();
-
-            const blankdaysArray: number[] = [];
-            for (var i = 1; i <= dayOfWeek; i++) {
-                blankdaysArray.push(i);
-            }
-
-            const daysArray: number[] = [];
-            for (var i = 1; i <= daysInMonth; i++) {
-                daysArray.push(i);
-            }
-
-            setBlankDays(blankdaysArray);
-            setNumDays(daysArray);
-        },
-        [year],
-    );
-
-    useEffect(() => {
-        getNoOfDays(month);
-    }, [month, getNoOfDays]);
 
     const selectDateValue = useCallback(
         (day: number) => {
@@ -106,7 +95,7 @@ export default function ClientScheduleAppointment({ availableDates }: ClientSche
                             disabled={month == 0 ? true : false}
                             onClick={() => {
                                 setMonth((prev) => prev - 1);
-                                getNoOfDays(month - 1);
+                                getNoOfDays(new Date(year, month - 1));
                             }}
                         >
                             <svg
@@ -129,7 +118,7 @@ export default function ClientScheduleAppointment({ availableDates }: ClientSche
                             disabled={month == 11 ? true : false}
                             onClick={() => {
                                 setMonth((prev) => prev + 1);
-                                getNoOfDays(month + 1);
+                                getNoOfDays(new Date(year, month + 1));
                             }}
                         >
                             <svg
@@ -159,7 +148,7 @@ export default function ClientScheduleAppointment({ availableDates }: ClientSche
                 </div>
 
                 <div className="flex flex-wrap mx-1">
-                    {blankdays.map((day, index) => {
+                    {getNoOfDays(new Date(year, month)).blankDays.map((day, index) => {
                         return (
                             <div className="px-0.5 mb-2" key={index}>
                                 <div
@@ -171,7 +160,7 @@ export default function ClientScheduleAppointment({ availableDates }: ClientSche
                             </div>
                         );
                     })}
-                    {no_of_days.map((day, index) => {
+                    {getNoOfDays(new Date(year, month)).numDays.map((day, index) => {
                         return (
                             <div className="px-0.5 mb-2" key={index}>
                                 <div
