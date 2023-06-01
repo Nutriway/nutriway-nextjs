@@ -7,7 +7,7 @@ import { StrapiResponse } from '@/types/StrapiResponse';
 import { Availability } from '@/types/Availability';
 
 const fetchAvailabilities = async () => {
-    const today = new Date().toISOString().substring(0, 10);
+    const today = new Date().toISOString();
 
     return serverFetcher<StrapiResponse<Availability>>({
         url: `/nutritionist-availabilities?populate[nutritionist][populate]&filters[nutritionist][id]=2&filters[date][$gte]=${today}`,
@@ -26,9 +26,7 @@ export default async function Home() {
                 buttonText="Marcar consulta"
             />
 
-            <ClientScheduleAppointment
-                availableDates={availabilities.data.map((av: Availability) => new Date(av.attributes.date))}
-            />
+            <ClientScheduleAppointment availabilities={availabilities.data} />
 
             <section>
                 {

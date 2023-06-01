@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { getDaysInMonth, isToday, isSameDay } from 'date-fns';
+import React, { useState, useCallback, useMemo } from 'react';
+import { getDaysInMonth, isToday, isSameDay, isEqual } from 'date-fns';
+import { Availability } from '@/types/Availability';
 
 type ClientScheduleAppointmentProps = {
-    availableDates: Date[];
+    availabilities: Availability[];
 };
 
 const MONTH_NAMES = [
@@ -24,7 +25,9 @@ const MONTH_NAMES = [
 
 const DAYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-// Calculates the number of days in the given month
+const DATE_SELECTION = 0;
+const HOUR_SELECTION = 1;
+
 const getNoOfDays = (date: Date) => {
     const daysInMonth = getDaysInMonth(date);
     const dayOfWeek = date.getDay();
@@ -42,220 +45,232 @@ const getNoOfDays = (date: Date) => {
     return { blankDays: blankdaysArray, numDays: daysArray };
 };
 
-const isSelectedDate = (newDate: Date, selectedDate: Date) => {
-    return isSameDay(newDate, selectedDate);
-};
-
-const isSelectedHour = (hour: number, selectedHour: number | undefined) => {
-    return selectedHour === hour;
-};
-
-const submitDate = (selectedDate: Date) => {
-    if (selectedDate) {
-        //send the selectedDate object
+const submitDate = (selectedAvailability: Availability) => {
+    if (selectedAvailability) {
+        //send the availability object
     }
 };
 
-export default function ClientScheduleAppointment({ availableDates }: ClientScheduleAppointmentProps) {
+export default function ClientScheduleAppointment({ availabilities }: ClientScheduleAppointmentProps) {
     const [month, setMonth] = useState(new Date().getMonth());
     const [year, setYear] = useState(new Date().getFullYear());
-    const [selectedDate, setSelectedDate] = useState<Date>();
+    const [selectedAvailability, setSelectedAvailability] = useState<Availability>();
     const [selectedHour, setSelectedHour] = useState<number | undefined>();
-    const [step, setStep] = useState(0);
+    const [selectedDate, setSelectedDate] = useState<Date>();
+
+    const [step, setStep] = useState(DATE_SELECTION);
 
     const selectDateValue = useCallback(
         (day: number) => {
             const selectedDate = new Date(year, month, day);
-
             setSelectedDate(selectedDate);
             setSelectedHour(undefined);
-            setStep(1);
+            setStep(HOUR_SELECTION);
         },
         [month, year],
     );
 
-    const hasNoAvailability = (day: number): boolean => {
-        return !availableDates.find((d: Date) => isSameDay(d, new Date(year, month, day)));
-    };
+    const hasNoAvailability = useCallback(
+        (day: number): boolean => {
+            return !availabilities.find((a: Availability) =>
+                isSameDay(new Date(a.attributes.date), new Date(year, month, day)),
+            );
+        },
+        [availabilities, month, year],
+    );
 
-    const DATE_SELECTION = 0;
-    const HOUR_SELECTION = 1;
-    const content = {
-        DATE_SELECTION: (
-            <div className="bg-white mt-1 rounded-lg shadow p-4 w-full">
-                <div className="flex justify-between items-center mb-3">
-                    <div>
-                        <span className="text-xl font-bold text-gray-800 font-skylight"> {MONTH_NAMES[month]}</span>
-                        <span className="ml-1 text-xl text-gray-600 font-normal font-skylight"> {year}</span>
-                    </div>{' '}
-                    <div>
-                        <button
-                            type="button"
-                            className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full"
-                            disabled={month == 0 ? true : false}
-                            onClick={() => {
-                                setMonth((prev) => prev - 1);
-                                getNoOfDays(new Date(year, month - 1));
-                            }}
-                        >
+    const content = useMemo(() => {
+        if (step === DATE_SELECTION)
+            return (
+                <div className="bg-white mt-1 rounded-lg shadow p-4 w-full">
+                    <div className="flex justify-between items-center mb-3">
+                        <div>
+                            <span className="text-xl font-bold text-gray-800 font-skylight"> {MONTH_NAMES[month]}</span>
+                            <span className="ml-1 text-xl text-gray-600 font-normal font-skylight"> {year}</span>
+                        </div>{' '}
+                        <div>
+                            <button
+                                type="button"
+                                className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full"
+                                disabled={month == 0 ? true : false}
+                                onClick={() => {
+                                    setMonth((prev) => prev - 1);
+                                    getNoOfDays(new Date(year, month - 1));
+                                }}
+                            >
+                                <svg
+                                    className="h-6 w-6 text-gray-500 inline-flex"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M15 19l-7-7 7-7"
+                                    />
+                                </svg>
+                            </button>
+                            <button
+                                type="button"
+                                className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-700 p-1 rounded-full"
+                                disabled={month == 11 ? true : false}
+                                onClick={() => {
+                                    setMonth((prev) => prev + 1);
+                                    getNoOfDays(new Date(year, month + 1));
+                                }}
+                            >
+                                <svg
+                                    className="h-6 w-6 text-gray-500 inline-flex"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M9 5l7 7-7 7"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div className="flex flex-wrap mb-3 mx-1 justify-center">
+                        {DAYS.map((day, index) => {
+                            return (
+                                <div className="px-1" key={index}>
+                                    <div
+                                        key={index}
+                                        className="text-gray-800 font-medium text-center text-sm w-8 font-skylight"
+                                    >
+                                        {day}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    <div className="flex flex-wrap mx-1">
+                        {getNoOfDays(new Date(year, month)).blankDays.map((day, index) => {
+                            return (
+                                <div className="px-0.5 mb-2" key={index}>
+                                    <div
+                                        key={index}
+                                        className="cursor-pointer text-center text-base rounded-lg leading-loose font-skylight w-9 h-9 text-gray-700"
+                                    >
+                                        {}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                        {getNoOfDays(new Date(year, month)).numDays.map((day, index) => {
+                            return (
+                                <div className="px-0.5 mb-2" key={index}>
+                                    <div
+                                        key={index}
+                                        onClick={() => {
+                                            if (!hasNoAvailability(day)) selectDateValue(day);
+                                        }}
+                                        className={
+                                            hasNoAvailability(day)
+                                                ? `text-center text-base rounded-lg leading-loose w-9 h-9 font-skylight text-decoration-line: line-through bg-gray-100 border border-gray-100  ${
+                                                      isToday(new Date(year, month, day))
+                                                          ? ' text-green-700'
+                                                          : 'text-gray-400'
+                                                  }`
+                                                : selectedDate && isSameDay(new Date(year, month, day), selectedDate)
+                                                ? 'cursor-pointer text-center text-base rounded-lg leading-loose w-9 h-9 font-skylight  bg-primary-50 border border-green-700'
+                                                : `cursor-pointer text-center text-base rounded-lg leading-loose w-9 h-9 font-skylight border border-gray-400 ${
+                                                      isToday(new Date(year, month, day))
+                                                          ? ' text-green-700'
+                                                          : 'text-gray-700'
+                                                  }`
+                                        }
+                                    >
+                                        {day}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+        if (step === HOUR_SELECTION)
+            return (
+                <div className="bg-white mt-1 rounded-lg shadow p-4 w-full">
+                    <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center">
                             <svg
-                                className="h-6 w-6 text-gray-500 inline-flex"
+                                xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
+                                strokeWidth="1.5"
                                 stroke="currentColor"
+                                className="w-7 h-7 mr-2"
                             >
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M15 19l-7-7 7-7"
+                                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
                                 />
                             </svg>
-                        </button>
+
+                            <span className="text-xl font-bold text-gray-800 font-skylight">{'Selecione a Hora'}</span>
+                        </div>{' '}
+                    </div>
+                    <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
+                    <div className="flex flex-wrap mb-3 -mx-1">
+                        {selectedDate &&
+                            availabilities
+                                .filter((av: Availability) => isSameDay(new Date(av.attributes.date), selectedDate))
+                                .map((availability, index) => {
+                                    return (
+                                        <div className="px-1" key={index}>
+                                            <div
+                                                key={index}
+                                                className={
+                                                    new Date(availability.attributes.date).getHours() === selectedHour
+                                                        ? 'cursor-pointer text-center text-base rounded-lg leading-loose w-9 font-skylight text-gray-700 bg-primary-50 border border-green-700'
+                                                        : 'cursor-pointer text-center text-base rounded-lg leading-loose w-9 font-skylight border text-gray-700 border-gray-400 '
+                                                }
+                                                onClick={() => {
+                                                    setSelectedHour(new Date(availability.attributes.date).getHours());
+                                                    setSelectedAvailability(availability);
+                                                }}
+                                            >
+                                                {new Date(availability.attributes.date).getHours()}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                    </div>
+
+                    <div className="flex justify-end w-full">
                         <button
-                            type="button"
-                            className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-700 p-1 rounded-full"
-                            disabled={month == 11 ? true : false}
                             onClick={() => {
-                                setMonth((prev) => prev + 1);
-                                getNoOfDays(new Date(year, month + 1));
+                                if (selectedAvailability) submitDate(selectedAvailability);
                             }}
+                            disabled={!selectedHour}
+                            className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lightbg-primary-600 lighthover:bg-primary-700 focus:outline-none lightfocus:ring-primary-800"
                         >
-                            <svg
-                                className="h-6 w-6 text-gray-500 inline-flex"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-                            </svg>
+                            {'Avançar'}
                         </button>
                     </div>
                 </div>
-                <div className="flex flex-wrap mb-3 mx-1 justify-center">
-                    {DAYS.map((day, index) => {
-                        return (
-                            <div className="px-1" key={index}>
-                                <div
-                                    key={index}
-                                    className="text-gray-800 font-medium text-center text-sm w-8 font-skylight"
-                                >
-                                    {day}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-
-                <div className="flex flex-wrap mx-1">
-                    {getNoOfDays(new Date(year, month)).blankDays.map((day, index) => {
-                        return (
-                            <div className="px-0.5 mb-2" key={index}>
-                                <div
-                                    key={index}
-                                    className="cursor-pointer text-center text-base rounded-lg leading-loose font-skylight w-9 h-9 text-gray-700"
-                                >
-                                    {}
-                                </div>
-                            </div>
-                        );
-                    })}
-                    {getNoOfDays(new Date(year, month)).numDays.map((day, index) => {
-                        return (
-                            <div className="px-0.5 mb-2" key={index}>
-                                <div
-                                    key={index}
-                                    onClick={() => {
-                                        if (!hasNoAvailability(day)) selectDateValue(day);
-                                    }}
-                                    className={
-                                        hasNoAvailability(day)
-                                            ? `text-center text-base rounded-lg leading-loose w-9 h-9 font-skylight text-decoration-line: line-through bg-gray-100 border border-gray-100  ${
-                                                  isToday(new Date(year, month, day))
-                                                      ? ' text-green-700'
-                                                      : 'text-gray-400'
-                                              }`
-                                            : selectedDate && isSelectedDate(new Date(year, month, day), selectedDate)
-                                            ? 'cursor-pointer text-center text-base rounded-lg leading-loose w-9 h-9 font-skylight  bg-primary-50 border border-green-700'
-                                            : `cursor-pointer text-center text-base rounded-lg leading-loose w-9 h-9 font-skylight border border-gray-400 ${
-                                                  isToday(new Date(year, month, day))
-                                                      ? ' text-green-700'
-                                                      : 'text-gray-700'
-                                              }`
-                                    }
-                                >
-                                    {day}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        ),
-
-        HOUR_SELECTION: (
-            <div className="bg-white mt-1 rounded-lg shadow p-4 w-full">
-                <div className="flex justify-between items-center">
-                    <div className="flex justify-between items-center">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className="w-7 h-7 mr-2"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-
-                        <span className="text-xl font-bold text-gray-800 font-skylight">{'Selecione a Hora'}</span>
-                    </div>{' '}
-                </div>
-                <hr className="h-px my-3 bg-gray-200 border-0 dark:bg-gray-700" />
-                <div className="flex flex-wrap mb-3 -mx-1">
-                    {selectedDate &&
-                        availableDates
-                            .filter((d: Date) => isSameDay(d, new Date(selectedDate)))
-                            .map((date, index) => {
-                                return (
-                                    <div className="px-1" key={index}>
-                                        <div
-                                            key={index}
-                                            className={
-                                                isSelectedHour(date.getHours(), selectedHour)
-                                                    ? 'cursor-pointer text-center text-base rounded-lg leading-loose w-9 font-skylight text-gray-700 bg-primary-50 border border-green-700'
-                                                    : 'cursor-pointer text-center text-base rounded-lg leading-loose w-9 font-skylight border text-gray-700 border-gray-400 '
-                                            }
-                                            onClick={() => {
-                                                setSelectedHour(date.getHours());
-                                                setSelectedDate(date);
-                                            }}
-                                        >
-                                            {date.getHours()}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                </div>
-
-                <div className="flex justify-end w-full">
-                    <button
-                        onClick={() => {
-                            if (selectedDate) submitDate(selectedDate);
-                        }}
-                        disabled={!selectedHour}
-                        className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lightbg-primary-600 lighthover:bg-primary-700 focus:outline-none lightfocus:ring-primary-800"
-                    >
-                        {'Avançar'}
-                    </button>
-                </div>
-            </div>
-        ),
-    };
+            );
+    }, [
+        availabilities,
+        hasNoAvailability,
+        month,
+        selectDateValue,
+        selectedAvailability,
+        selectedDate,
+        selectedHour,
+        step,
+        year,
+    ]);
 
     return (
         <div className="w-full flex justify-center items-center">
@@ -267,7 +282,7 @@ export default function ClientScheduleAppointment({ availableDates }: ClientSche
                             <div className="flex justify-center items-center border border-grey-400 rounded-lg m-2 w-auto h-11 cursor-pointer p-1 bg-primary-50">
                                 <div
                                     className="font-skylight text-sm font text-center h-full rounded-l-lg flex-1 flex justify-center items-center bg-primary-700 hover:bg-primary-800 text-white"
-                                    onClick={() => setStep(0)}
+                                    onClick={() => setStep(DATE_SELECTION)}
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -310,7 +325,7 @@ export default function ClientScheduleAppointment({ availableDates }: ClientSche
                                             : 'font-skylight text-sm font text-center h-full rounded-r-lg flex-1 flex justify-center items-center bg-transparent'
                                     }
                                     onClick={() => {
-                                        if (selectedDate) setStep(1);
+                                        if (selectedDate) setStep(HOUR_SELECTION);
                                     }}
                                 >
                                     <svg
@@ -331,8 +346,7 @@ export default function ClientScheduleAppointment({ availableDates }: ClientSche
                                     {selectedHour ? `${selectedHour}h` : 'Hora'}
                                 </div>
                             </div>
-                            {step === DATE_SELECTION && content.DATE_SELECTION}
-                            {step === HOUR_SELECTION && content.HOUR_SELECTION}
+                            {content}
                         </div>
                     </div>
                 </div>
