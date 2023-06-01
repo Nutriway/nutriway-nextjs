@@ -10,6 +10,10 @@ type FetcherParameters = {
 
 const BASE_URL = process.env.REACT_APP_PROD || 'http://127.0.0.1:1337/api';
 
+function showError(url: string, body: object | undefined, method: string) {
+    console.error(`url: ${BASE_URL}${url}\nbody: ${JSON.stringify(body)}\nmethod: ${method}`);
+}
+
 export async function fetcher({
     url,
     method,
@@ -35,19 +39,13 @@ export async function fetcher({
         });
 
         if (!res.ok) {
-            console.error(res);
-            console.error('url: ', `${BASE_URL}${url}`);
-            console.error('body: ', JSON.stringify(body));
-            console.error('method: ', method);
-            return new Error('An error occurred while fetching the data.');
-        }
-
-        if (json) {
+            showError(url, body, method);
+            return null;
+        } else if (json) {
             return await res.json();
         }
     } catch (error) {
-        console.error('url: ', `${BASE_URL}${url}`);
-        console.error('body: ', JSON.stringify(body));
-        console.error('method: ', method);
+        console.error(error);
+        showError(url, body, method);
     }
 }
