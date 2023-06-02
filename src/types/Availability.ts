@@ -1,11 +1,11 @@
-import { Nutritionist } from './Nutritionist';
+import { Client } from './Client';
 
 export type Availability = {
     id: number;
     attributes: {
         createdAt: string;
         date: string;
-        nutritionist?: Nutritionist;
+        nutritionist?: Client;
         publishedAt: string;
         updatedAt: string;
     };

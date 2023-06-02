@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { getDaysInMonth, isToday, isSameDay, isEqual } from 'date-fns';
+import { getDaysInMonth, isToday, isSameDay, parseISO } from 'date-fns';
 import { Availability } from '@/types/Availability';
 
 type ClientScheduleAppointmentProps = {
@@ -73,7 +73,7 @@ export default function ClientScheduleAppointment({ availabilities }: ClientSche
     const hasNoAvailability = useCallback(
         (day: number): boolean => {
             return !availabilities.find((a: Availability) =>
-                isSameDay(new Date(a.attributes.date), new Date(year, month, day)),
+                isSameDay(parseISO(a.attributes.date), new Date(year, month, day)),
             );
         },
         [availabilities, month, year],
@@ -224,23 +224,23 @@ export default function ClientScheduleAppointment({ availabilities }: ClientSche
                     <div className="flex flex-wrap mb-3 -mx-1">
                         {selectedDate &&
                             availabilities
-                                .filter((av: Availability) => isSameDay(new Date(av.attributes.date), selectedDate))
+                                .filter((av: Availability) => isSameDay(parseISO(av.attributes.date), selectedDate))
                                 .map((availability, index) => {
                                     return (
                                         <div className="px-1" key={index}>
                                             <div
                                                 key={index}
                                                 className={
-                                                    new Date(availability.attributes.date).getHours() === selectedHour
+                                                    parseISO(availability.attributes.date).getHours() === selectedHour
                                                         ? 'cursor-pointer text-center text-base rounded-lg leading-loose w-9 font-skylight text-gray-700 bg-primary-50 border border-green-700'
                                                         : 'cursor-pointer text-center text-base rounded-lg leading-loose w-9 font-skylight border text-gray-700 border-gray-400 '
                                                 }
                                                 onClick={() => {
-                                                    setSelectedHour(new Date(availability.attributes.date).getHours());
+                                                    setSelectedHour(parseISO(availability.attributes.date).getHours());
                                                     setSelectedAvailability(availability);
                                                 }}
                                             >
-                                                {new Date(availability.attributes.date).getHours()}
+                                                {parseISO(availability.attributes.date).getHours()}
                                             </div>
                                         </div>
                                     );
