@@ -39,7 +39,7 @@ export default function Register() {
                 <div className="place-self-center mr-auto lg:col-span-6">
                     <Image
                         className="hidden mx-auto lg:flex"
-                        loading="eager"
+                        priority
                         width={500}
                         height={500}
                         src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/authentication/illustration.svg"
