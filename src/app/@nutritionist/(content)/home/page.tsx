@@ -7,6 +7,7 @@ import { StrapiResponse } from '@/types/StrapiResponse';
 import { NutritionistAvailability } from '@/types/NutritionistAvailability';
 import SimpleCTA from '@/components/CTA/SimpleCTA';
 import NutritionistAvailabilityOverview from '@/components/Calendars/NutritionistAvaliabilityOverview';
+import NutritionistSetAvailabilityCalendar from '@/components/Calendars/NutritionistSetAvailabilityCalendar';
 
 async function getUser() {
     return serverFetcher<User>({
@@ -27,7 +28,9 @@ async function getNutritionistAppointments(user: User | undefined) {
 
 async function getNutritionistAvailability(user: User | undefined) {
     const response = await serverFetcher<StrapiResponse<NutritionistAvailability>>({
-        url: `/nutritionist-availabilities?populate[nutritionist][populate]&filters[nutritionist][id]=${user?.id}`,
+        url: `/nutritionist-availabilities?populate[nutritionist][populate]&filters[nutritionist][id]=${
+            user?.id
+        }&filters[date]>=${new Date().toISOString()}`,
         method: 'get',
     });
 
@@ -37,15 +40,16 @@ async function getNutritionistAvailability(user: User | undefined) {
 export default async function Home() {
     const user = await getUser();
     const nutritionistAppointments = (await getNutritionistAppointments(user)) || [];
-    const nutritionistAvailability = (await getNutritionistAvailability(user)) || [];
+    const futureNutritionistAvailability = (await getNutritionistAvailability(user)) || [];
 
-    const hasAvailability = nutritionistAvailability.length > 0;
+    const hasAvailability = futureNutritionistAvailability.length > 0;
     const availabilityComponent = !hasAvailability ? (
         <SimpleCTA
             title="Ainda não marcou a sua disponibilidade..."
             description="Sem a sua disponibilidade os cliente não conseguem marcar consultas consigo."
-            buttonText="Marcar Disponibilidade"
-        />
+        >
+            <NutritionistSetAvailabilityCalendar />
+        </SimpleCTA>
     ) : (
         <div className="py-8 px-8 max-w-screen-xl sm:py-16 rounded-2xl bg-gray-50">
             <NutritionistAvailabilityOverview />

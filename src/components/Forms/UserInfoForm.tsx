@@ -5,6 +5,7 @@ import useSWRMutation from 'swr/mutation';
 import { clientFetcher } from '@/lib/fetchers/clientFetcher';
 import { Appointment } from '@/types/Appointment';
 import { StrapiResponse } from '@/types/StrapiResponse';
+import { Availability } from '@/types/Availability';
 
 function getActivityRate(activity: string) {
     switch (activity) {
@@ -61,7 +62,7 @@ async function createAppointment(
     }: {
         arg: {
             form: Form;
-            appointmentDate: Date;
+            appointmentDate: string;
             clientId: number;
             nutritionistId: number;
             nutritionistAvailability: number;
@@ -79,23 +80,15 @@ async function createAppointment(
                 medical_condition: arg.form.condition,
                 nutritionist_availability: { id: arg.nutritionistAvailability },
                 date: arg.appointmentDate,
-                meeting_url: `https://meet.jit.si/${arg.nutritionistAvailability}-${arg.appointmentDate.getTime()}`,
+                meeting_url: `https://meet.jit.si/${arg.nutritionistAvailability}-${new Date(
+                    arg.appointmentDate,
+                ).getTime()}`,
             },
         },
     });
 }
 
-export default function UserInfoForm({
-    currentUser,
-    appointmentDate,
-    nutritionistId,
-    nutritionistAvailability,
-}: {
-    currentUser: User;
-    appointmentDate: Date;
-    nutritionistId: number;
-    nutritionistAvailability: number;
-}) {
+export default function UserInfoForm({ currentUser, availability }: { currentUser: User; availability: Availability }) {
     const [user, setUser] = useState<User>(currentUser);
     const [form, setForm] = useState<Form>({ condition: '', motivation: '' });
 
@@ -113,10 +106,10 @@ export default function UserInfoForm({
                         userTrigger(user),
                         formTrigger({
                             form,
-                            appointmentDate,
+                            appointmentDate: availability.attributes.date,
                             clientId: user.id,
-                            nutritionistId,
-                            nutritionistAvailability,
+                            nutritionistId: availability.attributes.nutritionist!.id,
+                            nutritionistAvailability: availability.id,
                         }),
                     ]);
                     //TODO: continue from here

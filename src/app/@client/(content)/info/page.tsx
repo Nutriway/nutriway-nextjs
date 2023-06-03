@@ -1,15 +1,31 @@
 import { serverFetcher } from '@/lib/fetchers/serverFetcher';
 import { User } from '@/types/User';
 import UserInfoForm from '@/components/Forms/UserInfoForm';
+import { Availability } from '@/types/Availability';
+import { SingleStrapiResponse } from '@/types/StrapiResponse';
+
+type InfoProps = {
+    searchParams: {
+        availability: number;
+    };
+};
 
 async function getUser(): Promise<User> {
     return serverFetcher<User>({ url: '/users/me', method: 'get' });
 }
 
-export default async function Info() {
-    const user = await getUser();
+async function getAvailability(id: number) {
+    return serverFetcher<SingleStrapiResponse<Availability>>({
+        url: `/nutritionist-availabilities/${id}?populate[nutritionist][populate]`,
+        method: 'get',
+    });
+}
 
-    return (
-        <UserInfoForm currentUser={user} appointmentDate={new Date()} nutritionistAvailability={1} nutritionistId={1} />
-    );
+export default async function Info({ searchParams }: InfoProps) {
+    const user = await getUser();
+    const availability = await getAvailability(searchParams.availability);
+
+    // TODO: solve when this availability is not found
+
+    return <UserInfoForm currentUser={user} availability={availability.data} />;
 }

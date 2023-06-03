@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
-import { getDaysInMonth, isToday, isSameDay, parseISO } from 'date-fns';
+import React, { useCallback, useMemo, useState } from 'react';
+import { format, getDaysInMonth, isSameDay, isToday, parseISO } from 'date-fns';
 import { Availability } from '@/types/Availability';
+import Link from 'next/link';
 
 type ClientScheduleAppointmentProps = {
     availabilities: Availability[];
@@ -33,12 +34,12 @@ const getNoOfDays = (date: Date) => {
     const dayOfWeek = date.getDay();
 
     const blankdaysArray: number[] = [];
-    for (var i = 1; i <= dayOfWeek; i++) {
+    for (let i = 1; i <= dayOfWeek; i++) {
         blankdaysArray.push(i);
     }
 
     const daysArray: number[] = [];
-    for (var i = 1; i <= daysInMonth; i++) {
+    for (let i = 1; i <= daysInMonth; i++) {
         daysArray.push(i);
     }
 
@@ -53,9 +54,9 @@ const submitDate = (selectedAvailability: Availability) => {
 
 export default function ClientScheduleAppointment({ availabilities }: ClientScheduleAppointmentProps) {
     const [month, setMonth] = useState(new Date().getMonth());
-    const [year, setYear] = useState(new Date().getFullYear());
+    const year = new Date().getFullYear();
     const [selectedAvailability, setSelectedAvailability] = useState<Availability>();
-    const [selectedHour, setSelectedHour] = useState<number | undefined>();
+    const [selectedHour, setSelectedHour] = useState<string | undefined>();
     const [selectedDate, setSelectedDate] = useState<Date>();
 
     const [step, setStep] = useState(DATE_SELECTION);
@@ -92,7 +93,7 @@ export default function ClientScheduleAppointment({ availabilities }: ClientSche
                             <button
                                 type="button"
                                 className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full"
-                                disabled={month == 0 ? true : false}
+                                disabled={month == 0}
                                 onClick={() => {
                                     setMonth((prev) => prev - 1);
                                     getNoOfDays(new Date(year, month - 1));
@@ -115,7 +116,7 @@ export default function ClientScheduleAppointment({ availabilities }: ClientSche
                             <button
                                 type="button"
                                 className="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-700 p-1 rounded-full"
-                                disabled={month == 11 ? true : false}
+                                disabled={month == 11}
                                 onClick={() => {
                                     setMonth((prev) => prev + 1);
                                     getNoOfDays(new Date(year, month + 1));
@@ -231,16 +232,19 @@ export default function ClientScheduleAppointment({ availabilities }: ClientSche
                                             <div
                                                 key={index}
                                                 className={
-                                                    parseISO(availability.attributes.date).getHours() === selectedHour
-                                                        ? 'cursor-pointer text-center text-base rounded-lg leading-loose w-9 font-skylight text-gray-700 bg-primary-50 border border-green-700'
-                                                        : 'cursor-pointer text-center text-base rounded-lg leading-loose w-9 font-skylight border text-gray-700 border-gray-400 '
+                                                    format(parseISO(availability.attributes.date), 'HH:mm') ===
+                                                    selectedHour
+                                                        ? 'cursor-pointer text-center text-base rounded-lg leading-loose w-12 font-skylight text-gray-700 bg-primary-50 border border-green-700'
+                                                        : 'cursor-pointer text-center text-base rounded-lg leading-loose w-12 font-skylight border text-gray-700 border-gray-400 '
                                                 }
                                                 onClick={() => {
-                                                    setSelectedHour(parseISO(availability.attributes.date).getHours());
+                                                    setSelectedHour(
+                                                        format(parseISO(availability.attributes.date), 'HH:mm'),
+                                                    );
                                                     setSelectedAvailability(availability);
                                                 }}
                                             >
-                                                {parseISO(availability.attributes.date).getHours()}
+                                                {format(parseISO(availability.attributes.date), 'HH:mm')}
                                             </div>
                                         </div>
                                     );
@@ -248,15 +252,17 @@ export default function ClientScheduleAppointment({ availabilities }: ClientSche
                     </div>
 
                     <div className="flex justify-end w-full">
-                        <button
-                            onClick={() => {
-                                if (selectedAvailability) submitDate(selectedAvailability);
+                        <Link
+                            href={{
+                                pathname: '/info',
+                                query: {
+                                    availability: selectedAvailability?.id,
+                                },
                             }}
-                            disabled={!selectedHour}
                             className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 lightbg-primary-600 lighthover:bg-primary-700 focus:outline-none lightfocus:ring-primary-800"
                         >
                             {'Avançar'}
-                        </button>
+                        </Link>
                     </div>
                 </div>
             );
