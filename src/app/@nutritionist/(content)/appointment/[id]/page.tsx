@@ -19,7 +19,7 @@ async function getInfo(id: string) {
 export default async function AppointmentDetails({ params }: AppointmentDetailsParams) {
     const info = await getInfo(params.id);
 
-    if (info?.data) {
+    if (!info?.data) {
         return <NotFound />;
     }
 

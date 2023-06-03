@@ -7,6 +7,10 @@ import { User } from '@/types/User';
 import useSWRMutation from 'swr/mutation';
 import { Availability } from '@/types/Availability';
 
+type NutritionistAvailabilityCalendarProps = {
+    availabilities: Availability[];
+};
+
 const daysOfCalendar = [
     'Domingo',
     'Segunda-feira',
@@ -43,15 +47,15 @@ async function submitAvailability(url: string, { arg }: { arg: { nutritionist: U
         url,
         body: {
             nutritionist: { id: arg.nutritionist.id },
-            date: arg.date,
+            date: arg.date, // TODO: discuss this with the team. The current way to set availabilities is odd
         },
     });
 }
 
-export default function NutritionistSetAvailabilityCalendar() {
+export default function NutritionistSetAvailabilityCalendar({ availabilities }: NutritionistAvailabilityCalendarProps) {
     const { data: nutritionist } = useFetcher<User>({ url: '/users/me' });
     const { trigger } = useSWRMutation(`/nutritionist-availabilities`, submitAvailability);
-    const [schedule, setSchedule] = useState<Date[]>([]);
+    const [schedule, setSchedule] = useState<Date[]>(availabilities.map((a) => new Date(a.attributes.date)));
 
     const handleSubmit = async (dates: Date[]) => {
         setSchedule(dates);

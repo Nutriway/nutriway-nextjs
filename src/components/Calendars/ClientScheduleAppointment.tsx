@@ -46,12 +46,6 @@ const getNoOfDays = (date: Date) => {
     return { blankDays: blankdaysArray, numDays: daysArray };
 };
 
-const submitDate = (selectedAvailability: Availability) => {
-    if (selectedAvailability) {
-        //send the availability object
-    }
-};
-
 export default function ClientScheduleAppointment({ availabilities }: ClientScheduleAppointmentProps) {
     const [month, setMonth] = useState(new Date().getMonth());
     const year = new Date().getFullYear();

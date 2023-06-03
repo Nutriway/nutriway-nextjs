@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import { User } from '@/types/User';
 import useSWRMutation from 'swr/mutation';
 import { clientFetcher } from '@/lib/fetchers/clientFetcher';
-import { Appointment } from '@/types/Appointment';
-import { StrapiResponse } from '@/types/StrapiResponse';
 import { Availability } from '@/types/Availability';
 import Spinner from '@/components/Skeletons/Spinner';
 import { useRouter } from 'next/navigation';
@@ -57,7 +55,7 @@ async function updateUser(url: string, { arg }: { arg: User }) {
     });
 }
 
-async function createAppointment(
+async function startPayment(
     url: string,
     {
         arg,
@@ -71,38 +69,29 @@ async function createAppointment(
         };
     },
 ) {
-    return clientFetcher<StrapiResponse<Appointment>>({
+    return clientFetcher<{ url: string }>({
         url,
         method: 'post',
         body: {
-            data: {
-                goal: '',
-                nutritionist: arg.nutritionistId,
-                client: arg.clientId,
-                medical_condition: arg.form.condition,
-                nutritionist_availability: { id: arg.nutritionistAvailability },
-                date: arg.appointmentDate,
-                meeting_url: `https://meet.jit.si/${arg.nutritionistAvailability}-${new Date(
-                    arg.appointmentDate,
-                ).getTime()}`,
-            },
+            goal: arg.form.motivation,
+            nutritionist: arg.nutritionistId,
+            client: arg.clientId,
+            medical_condition: arg.form.condition,
+            nutritionist_availability: arg.nutritionistAvailability,
+            date: arg.appointmentDate,
+            meeting_url: `https://meet.jit.si/${arg.nutritionistAvailability}-${new Date(
+                arg.appointmentDate,
+            ).getTime()}`,
         },
     });
 }
 
-async function startPayment(url: string, { arg }: { arg: null }) {
-    return clientFetcher<{ url: string }>({
-        url,
-        method: 'post',
-    });
-}
-
 export default function UserInfoForm({ currentUser, availability }: { currentUser: User; availability: Availability }) {
+    // TODO: use the availability to pass to strapi as metadata
     const [user, setUser] = useState<User>(currentUser);
     const [form, setForm] = useState<Form>({ condition: '', motivation: '' });
 
     const { trigger: userTrigger } = useSWRMutation(`/users/${user.id}`, updateUser);
-    const { trigger: formTrigger } = useSWRMutation('/appointments', createAppointment);
 
     const [loading, setLoading] = useState(false);
     const router = useRouter();
@@ -115,21 +104,20 @@ export default function UserInfoForm({ currentUser, availability }: { currentUse
                 method="POST"
                 onSubmit={async (e) => {
                     e.preventDefault();
-                    const [updateduser, appointment] = await Promise.all([
-                        userTrigger(user),
-                        formTrigger({
-                            form,
-                            appointmentDate: availability.attributes.date,
-                            clientId: user.id,
-                            nutritionistId: availability.attributes.nutritionist!.id,
-                            nutritionistAvailability: availability.id,
-                        }),
-                    ]);
-                    if (updateduser && appointment) {
+                    const updateduser = await userTrigger(user);
+                    if (updateduser) {
                         setLoading(true);
-                        const stripePayment = await strapiTrigger(null);
-                        if (stripePayment) {
-                            router.push(stripePayment.url);
+                        if (availability.attributes.nutritionist) {
+                            const stripePayment = await strapiTrigger({
+                                form,
+                                appointmentDate: availability.attributes.date,
+                                clientId: user.id,
+                                nutritionistId: availability.attributes.nutritionist.id,
+                                nutritionistAvailability: availability.id,
+                            });
+                            if (stripePayment) {
+                                router.push(stripePayment.url);
+                            }
                         }
                     }
                 }}

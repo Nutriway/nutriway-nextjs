@@ -4,10 +4,9 @@ import { serverFetcher } from '@/lib/fetchers/serverFetcher';
 import { Appointment } from '@/types/Appointment';
 import { User } from '@/types/User';
 import { StrapiResponse } from '@/types/StrapiResponse';
-import { NutritionistAvailability } from '@/types/NutritionistAvailability';
 import SimpleCTA from '@/components/CTA/SimpleCTA';
-import NutritionistAvailabilityOverview from '@/components/Calendars/NutritionistAvaliabilityOverview';
 import NutritionistSetAvailabilityCalendar from '@/components/Calendars/NutritionistSetAvailabilityCalendar';
+import { Availability } from '@/types/Availability';
 
 async function getUser() {
     return serverFetcher<User>({
@@ -19,7 +18,7 @@ async function getUser() {
 
 async function getNutritionistAppointments(user: User | undefined) {
     const response = await serverFetcher<StrapiResponse<Appointment>>({
-        url: `/appointments?populate[appointment_payment][populate]&populate[client][populate]&filter[appointment_payment.nutritionist]=${user?.id}`,
+        url: `/appointments?populate[appointment_payment][populate]&populate[client][populate]&filter[appointment_payment.nutritionist]=${user?.id}&sort=date:asc`,
         method: 'get',
     });
 
@@ -27,10 +26,10 @@ async function getNutritionistAppointments(user: User | undefined) {
 }
 
 async function getNutritionistAvailability(user: User | undefined) {
-    const response = await serverFetcher<StrapiResponse<NutritionistAvailability>>({
+    const response = await serverFetcher<StrapiResponse<Availability>>({
         url: `/nutritionist-availabilities?populate[nutritionist][populate]&filters[nutritionist][id]=${
             user?.id
-        }&filters[date]>=${new Date().toISOString()}`,
+        }&filters[date][$gte]=${new Date().toISOString()}`,
         method: 'get',
     });
 
@@ -42,23 +41,14 @@ export default async function Home() {
     const nutritionistAppointments = (await getNutritionistAppointments(user)) || [];
     const futureNutritionistAvailability = (await getNutritionistAvailability(user)) || [];
 
-    const hasAvailability = futureNutritionistAvailability.length > 0;
-    const availabilityComponent = !hasAvailability ? (
-        <SimpleCTA
-            title="Ainda não marcou a sua disponibilidade..."
-            description="Sem a sua disponibilidade os cliente não conseguem marcar consultas consigo."
-        >
-            <NutritionistSetAvailabilityCalendar />
-        </SimpleCTA>
-    ) : (
-        <div className="py-8 px-8 max-w-screen-xl sm:py-16 rounded-2xl bg-gray-50">
-            <NutritionistAvailabilityOverview />
-        </div>
-    );
-
     return (
         <div className="flex space-x-5 justify-center">
-            {availabilityComponent}
+            <SimpleCTA
+                title="Ainda não marcou a sua disponibilidade..."
+                description="Sem a sua disponibilidade os cliente não conseguem marcar consultas consigo."
+            >
+                <NutritionistSetAvailabilityCalendar availabilities={futureNutritionistAvailability} />
+            </SimpleCTA>
             <section className="bg-white">
                 <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6 rounded-2xl bg-gray-50">
                     <div className="mx-auto max-w-screen-lg text-center">

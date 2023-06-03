@@ -25,7 +25,7 @@ export default async function Info({ searchParams }: InfoProps) {
     const user = await getUser();
     const availability = await getAvailability(searchParams.availability);
 
-    // TODO: solve when this availability is not found
+    // TODO: solve when this availability is not found and show availability info on header
 
     return (
         <>
