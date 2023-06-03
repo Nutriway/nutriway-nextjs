@@ -22,7 +22,7 @@ async function getNutritionistAppointments(user: User | undefined) {
         method: 'get',
     });
 
-    return response?.data;
+    return response.data;
 }
 
 async function getNutritionistAvailability(user: User | undefined) {
@@ -31,7 +31,7 @@ async function getNutritionistAvailability(user: User | undefined) {
         method: 'get',
     });
 
-    return response?.data;
+    return response.data;
 }
 
 export default async function Home() {

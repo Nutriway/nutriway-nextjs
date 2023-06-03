@@ -1,7 +1,6 @@
 import { getCookie } from 'cookies-next';
 import { fetcher } from '@/lib/fetchers/fetchUtil';
 import useSWR, { SWRConfiguration } from 'swr';
-import { StrapiResponse } from '@/types/StrapiResponse';
 
 type FetcherParameters = {
     url: string;
@@ -11,7 +10,7 @@ type FetcherParameters = {
 };
 
 // POST, PUT, DELETE fetcher
-export function clientFetcher(params: FetcherParameters) {
+export function clientFetcher<DataType>(params: FetcherParameters): Promise<DataType> {
     const jwt = getCookie('jwt-cookie');
     return fetcher({ ...params, jwt });
 }
@@ -45,7 +44,7 @@ export function useFetcher<DataType>({
     );
 
     return {
-        data,
+        data: data as DataType,
         isLoading,
         isError: error,
         isValidating,

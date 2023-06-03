@@ -20,7 +20,7 @@ export default function CallToAction() {
                             loading="lazy"
                             width="400"
                             height="400"
-                            src="/images/avatars/avatar.webp"
+                            src="/images/avatars/avatar-1.png"
                             alt="member photo"
                             className="h-8 w-8 rounded-full object-cover"
                         />
@@ -28,7 +28,7 @@ export default function CallToAction() {
                             loading="lazy"
                             width="200"
                             height="200"
-                            src="/images/avatars/avatar-2.webp"
+                            src="/images/avatars/avatar-2.png"
                             alt="member photo"
                             className="h-12 w-12 rounded-full object-cover"
                         />
@@ -36,7 +36,7 @@ export default function CallToAction() {
                             loading="lazy"
                             width="200"
                             height="200"
-                            src="/images/avatars/avatar-3.webp"
+                            src="/images/avatars/avatar-3.png"
                             alt="member photo"
                             className="z-10 h-16 w-16 rounded-full object-cover"
                         />
@@ -44,7 +44,7 @@ export default function CallToAction() {
                             loading="lazy"
                             width="200"
                             height="200"
-                            src="/images/avatars/avatar-4.webp"
+                            src="/images/avatars/avatar-4.png"
                             alt="member photo"
                             className="relative h-12 w-12 rounded-full object-cover"
                         />
@@ -52,7 +52,7 @@ export default function CallToAction() {
                             loading="lazy"
                             width="200"
                             height="200"
-                            src="/images/avatars/avatar-1.webp"
+                            src="/images/avatars/avatar-5.png"
                             alt="member photo"
                             className="h-8 w-8 rounded-full object-cover"
                         />

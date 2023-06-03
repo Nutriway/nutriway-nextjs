@@ -30,10 +30,10 @@ export default async function RootLayout({
 }) {
     const user =
         cookies().get('jwt-cookie') &&
-        ((await serverFetcher<User>({
+        (await serverFetcher<User>({
             url: '/users/me',
             method: 'get',
-        })) as User | undefined);
+        }));
     const userType = user?.type === 'client' ? client : nutritionist;
 
     return (
@@ -48,13 +48,12 @@ export default async function RootLayout({
                     strategy="afterInteractive"
                     dangerouslySetInnerHTML={{
                         __html: `
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${process.env.ANALYTICS}', {
-            page_path: window.location.pathname,
-          });
-        `,
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${process.env.ANALYTICS}', {
+                    page_path: window.location.pathname,
+                    });`,
                     }}
                 />
             </head>
