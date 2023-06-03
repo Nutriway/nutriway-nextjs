@@ -1,11 +1,13 @@
 'use client';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { User } from '@/types/User';
 import useSWRMutation from 'swr/mutation';
 import { clientFetcher } from '@/lib/fetchers/clientFetcher';
 import { Appointment } from '@/types/Appointment';
 import { StrapiResponse } from '@/types/StrapiResponse';
 import { Availability } from '@/types/Availability';
+import Spinner from '@/components/Skeletons/Spinner';
+import { useRouter } from 'next/navigation';
 
 function getActivityRate(activity: string) {
     switch (activity) {
@@ -88,6 +90,13 @@ async function createAppointment(
     });
 }
 
+async function startPayment(url: string, { arg }: { arg: null }) {
+    return clientFetcher<{ url: string }>({
+        url,
+        method: 'post',
+    });
+}
+
 export default function UserInfoForm({ currentUser, availability }: { currentUser: User; availability: Availability }) {
     const [user, setUser] = useState<User>(currentUser);
     const [form, setForm] = useState<Form>({ condition: '', motivation: '' });
@@ -95,8 +104,12 @@ export default function UserInfoForm({ currentUser, availability }: { currentUse
     const { trigger: userTrigger } = useSWRMutation(`/users/${user.id}`, updateUser);
     const { trigger: formTrigger } = useSWRMutation('/appointments', createAppointment);
 
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    const { trigger: strapiTrigger } = useSWRMutation(`/appointment-payment/createCheckoutIntent`, startPayment);
+
     return (
-        <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+        <div className="py-8 px-6 mx-auto max-w-2xl bg-white rounded-lg border border-gray-200 shadow-sm lg:mb-28 lg:-mt-80">
             <h2 className="mb-4 text-xl font-bold text-gray-900">Informações do cliente</h2>
             <form
                 method="POST"
@@ -112,9 +125,13 @@ export default function UserInfoForm({ currentUser, availability }: { currentUse
                             nutritionistAvailability: availability.id,
                         }),
                     ]);
-                    //TODO: continue from here
-                    console.log('user: ', updateduser);
-                    console.log('appointment: ', appointment);
+                    if (updateduser && appointment) {
+                        setLoading(true);
+                        const stripePayment = await strapiTrigger(null);
+                        if (stripePayment) {
+                            router.push(stripePayment.url);
+                        }
+                    }
                 }}
             >
                 <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
@@ -233,10 +250,11 @@ export default function UserInfoForm({ currentUser, availability }: { currentUse
                     </div>
                 </div>
                 <button
-                    type="submit"
                     className="inline-flex items-center py-2.5 px-5 mt-4 text-sm font-medium text-center text-white rounded-lg sm:mt-6 focus:ring-4 bg-primary-700 hover:bg-primary-800 focus:ring-primary-200"
+                    type="submit"
+                    disabled={loading}
                 >
-                    Guardar Informações
+                    {loading ? <Spinner /> : 'Seguir para pagamento'}
                 </button>
             </form>
         </div>
