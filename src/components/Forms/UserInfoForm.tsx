@@ -91,6 +91,10 @@ async function startPayment(
     }: {
         arg: {
             appointmentId: number;
+            nutritionistName: string;
+            goal: string;
+            date: string;
+            clientName: string;
         };
     },
 ) {
@@ -128,7 +132,6 @@ async function createAppointmentPayment(
 }
 
 export default function UserInfoForm({ currentUser, availability }: { currentUser: User; availability: Availability }) {
-    // TODO: use the availability to pass to strapi as metadata
     const [user, setUser] = useState<User>(currentUser);
     const [form, setForm] = useState<Form>({ condition: '', motivation: '' });
 
@@ -160,6 +163,10 @@ export default function UserInfoForm({ currentUser, availability }: { currentUse
                         if (availability.attributes.nutritionist) {
                             const stripePayment = await strapiTrigger({
                                 appointmentId: appointment.data.id,
+                                nutritionistName: availability.attributes.nutritionist.data.attributes.username,
+                                goal: form.motivation,
+                                date: availability.attributes.date,
+                                clientName: user.username,
                             });
                             if (stripePayment) {
                                 await appointmentPaymentTrigger({

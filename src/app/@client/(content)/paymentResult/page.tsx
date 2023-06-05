@@ -4,6 +4,10 @@ import Image from 'next/image';
 import { SingleStrapiResponse, StrapiResponse } from '@/types/StrapiResponse';
 import { AppointmentPayment } from '@/types/AppointmentPayment';
 import PaymentDialog from '@/components/Dialogs/PaymentDialog';
+import { format } from 'date-fns';
+import Link from 'next/link';
+import React from 'react';
+import Unpaid from '@/app/@client/(content)/paymentResult/Unpaid';
 
 type PaymentResultPageParams = {
     searchParams: {
@@ -13,6 +17,10 @@ type PaymentResultPageParams = {
 
 type Metadata = {
     appointmentId: number;
+    nutritionistName: string;
+    goal: string;
+    date: string;
+    clientName: string;
 };
 
 async function getPaymentStatus(session_id: string) {
@@ -56,144 +64,75 @@ export default async function PaymentResultPage({ searchParams }: PaymentResultP
         appointment.data[0].attributes.appointment_payment &&
         payment_status === 'paid'
     ) {
-        const payment = await updateAppointmentPayment(
-            appointment.data[0].attributes?.appointment_payment?.data.id,
-            payment_status,
-        );
-        console.log(payment);
+        await updateAppointmentPayment(appointment.data[0].attributes?.appointment_payment?.data.id, payment_status);
     }
 
-    return (
-        <>
-            <PaymentDialog />
-            <div className="bg-white">
-                <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+    const content = {
+        paid: (
+            <>
+                <PaymentDialog />
+                <div className="bg-white lightbg-gray-900 mx-auto max-w-3xl mt-0 px-4 sm:px-6 sm:py-24 lg:px-8">
                     <div className="max-w-xl">
-                        <h1 className="text-base font-medium text-indigo-600">Thank you!</h1>
-                        <p className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">Its on the way!</p>
+                        <h1 className="text-base font-medium text-indigo-600">Obrigado!</h1>
+                        <p className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
+                            A sua consulta foi reservada!
+                        </p>
                         <p className="mt-2 text-base text-gray-500">
-                            Your order #14034056 has shipped and will be with you soon.
+                            A sua consulta foi reservada com sucesso. Receberá um email com detalhes.
                         </p>
 
                         <dl className="mt-12 text-sm font-medium">
-                            <dt className="text-gray-900">Tracking number</dt>
-                            <dd className="mt-2 text-indigo-600">51547878755545848512</dd>
+                            <dt className="text-gray-900">O seu Nutricionista</dt>
+                            <dd className="mt-2 text-indigo-600">{metadata.nutritionistName}</dd>
                         </dl>
                     </div>
 
                     <div className="mt-10 border-t border-gray-200">
-                        <h2 className="sr-only">Your order</h2>
-
-                        <h3 className="sr-only">Items</h3>
-
                         <div className="flex space-x-6 border-b border-gray-200 py-10">
                             <Image
                                 width={80}
                                 height={80}
-                                src={''}
+                                src={'/images/hero/woman.png'}
                                 alt={'Nutritionist Image'}
                                 className="h-20 w-20 flex-none rounded-lg bg-gray-100 object-cover object-center sm:h-40 sm:w-40"
                             />
                             <div className="flex flex-auto flex-col">
                                 <div>
                                     <h4 className="font-medium text-gray-900">
-                                        <p>potato</p>
+                                        <p>Consulta de nutrição</p>
                                     </h4>
-                                    <p className="mt-2 text-sm text-gray-600">potato</p>
+                                    <p className="mt-2 text-sm text-gray-600">{metadata.goal}</p>
                                 </div>
                                 <div className="mt-6 flex flex-1 items-end">
                                     <dl className="flex space-x-4 divide-x divide-gray-200 text-sm sm:space-x-6">
                                         <div className="flex">
-                                            <dt className="font-medium text-gray-900">Goal</dt>
-                                            <dd className="ml-2 text-gray-700">potaot</dd>
+                                            <dt className="font-medium text-gray-900">Data</dt>
+                                            <dd className="ml-2 text-gray-700">
+                                                {format(new Date(metadata.date), 'yy/MM/dd HH:mm')}
+                                            </dd>
                                         </div>
                                         <div className="flex pl-4 sm:pl-6">
-                                            <dt className="font-medium text-gray-900">Medical conditions</dt>
-                                            <dd className="ml-2 text-gray-700">potato</dd>
+                                            <dt className="font-medium text-gray-900">Cliente</dt>
+                                            <dd className="ml-2 text-gray-700">{metadata.clientName}</dd>
                                         </div>
                                     </dl>
                                 </div>
                             </div>
                         </div>
-
-                        <div className="sm:ml-40 sm:pl-6">
-                            <h3 className="sr-only">Your information</h3>
-
-                            <h4 className="sr-only">Addresses</h4>
-                            <dl className="grid grid-cols-2 gap-x-6 py-10 text-sm">
-                                <div>
-                                    <dt className="font-medium text-gray-900">Shipping address</dt>
-                                    <dd className="mt-2 text-gray-700">
-                                        <address className="not-italic">
-                                            <span className="block">Kristin Watson</span>
-                                            <span className="block">7363 Cynthia Pass</span>
-                                            <span className="block">Toronto, ON N3Y 4H8</span>
-                                        </address>
-                                    </dd>
-                                </div>
-                                <div>
-                                    <dt className="font-medium text-gray-900">Billing address</dt>
-                                    <dd className="mt-2 text-gray-700">
-                                        <address className="not-italic">
-                                            <span className="block">Kristin Watson</span>
-                                            <span className="block">7363 Cynthia Pass</span>
-                                            <span className="block">Toronto, ON N3Y 4H8</span>
-                                        </address>
-                                    </dd>
-                                </div>
-                            </dl>
-
-                            <h4 className="sr-only">Payment</h4>
-                            <dl className="grid grid-cols-2 gap-x-6 border-t border-gray-200 py-10 text-sm">
-                                <div>
-                                    <dt className="font-medium text-gray-900">Payment method</dt>
-                                    <dd className="mt-2 text-gray-700">
-                                        <p>Apple Pay</p>
-                                        <p>Mastercard</p>
-                                        <p>
-                                            <span aria-hidden="true">••••</span>
-                                            <span className="sr-only">Ending in </span>1545
-                                        </p>
-                                    </dd>
-                                </div>
-                                <div>
-                                    <dt className="font-medium text-gray-900">Shipping method</dt>
-                                    <dd className="mt-2 text-gray-700">
-                                        <p>DHL</p>
-                                        <p>Takes up to 3 working days</p>
-                                    </dd>
-                                </div>
-                            </dl>
-
-                            <h3 className="sr-only">Summary</h3>
-
-                            <dl className="space-y-6 border-t border-gray-200 pt-10 text-sm">
-                                <div className="flex justify-between">
-                                    <dt className="font-medium text-gray-900">Subtotal</dt>
-                                    <dd className="text-gray-700">$36.00</dd>
-                                </div>
-                                <div className="flex justify-between">
-                                    <dt className="flex font-medium text-gray-900">
-                                        Discount
-                                        <span className="ml-2 rounded-full bg-gray-200 px-2 py-0.5 text-xs text-gray-600">
-                                            STUDENT50
-                                        </span>
-                                    </dt>
-                                    <dd className="text-gray-700">-$18.00 (50%)</dd>
-                                </div>
-                                <div className="flex justify-between">
-                                    <dt className="font-medium text-gray-900">Shipping</dt>
-                                    <dd className="text-gray-700">$5.00</dd>
-                                </div>
-                                <div className="flex justify-between">
-                                    <dt className="font-medium text-gray-900">Total</dt>
-                                    <dd className="text-gray-900">$23.00</dd>
-                                </div>
-                            </dl>
+                        <div className="w-full flex justify-center">
+                            <Link
+                                href="/home"
+                                className="mt-10 w-64 text-primary-700 border border-green-700 hover:bg-neutral-100 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
+                            >
+                                Voltar a página inicial
+                            </Link>
                         </div>
                     </div>
                 </div>
-            </div>
-        </>
-    );
+            </>
+        ),
+        unpaid: <Unpaid />,
+    };
+
+    return content[payment_status];
 }

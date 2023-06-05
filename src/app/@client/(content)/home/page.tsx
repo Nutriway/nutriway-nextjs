@@ -19,6 +19,12 @@ async function fetchAvailabilities() {
 export default async function Home() {
     const availabilities = await fetchAvailabilities();
 
+    availabilities.data = availabilities.data.filter(
+        (a) =>
+            !a.attributes.appointment ||
+            (a.attributes.appointment && !a.attributes.appointment?.data?.attributes.appointment_payment),
+    );
+
     return (
         <>
             <SimpleCTA
