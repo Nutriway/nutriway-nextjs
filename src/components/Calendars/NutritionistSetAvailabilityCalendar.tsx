@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { add, format, previousSunday, sub } from 'date-fns';
 import ScheduleSelector from 'react-schedule-selector';
 import { clientFetcher, useFetcher } from '@/lib/fetchers/clientFetcher';
@@ -41,13 +41,16 @@ function inSchedule(date: Date, schedule: Date[]) {
     return schedule.map((s) => s.getTime()).includes(date.getTime());
 }
 
-async function submitAvailability(url: string, { arg }: { arg: { nutritionist: User; dates: Date[] } }) {
+async function submitAvailability(url: string, { arg }: { arg: { nutritionist: User; dates: Date } }) {
+    console.log('submitAvailability', arg.dates.toISOString());
     await clientFetcher<Availability>({
         method: 'post',
         url,
         body: {
-            nutritionist: { id: arg.nutritionist.id },
-            date: arg.date, // TODO: discuss this with the team. The current way to set availabilities is odd
+            data: {
+                nutritionist: { id: arg.nutritionist.id },
+                date: arg.dates.toISOString(), // TODO: discuss this with the team. The current way to set availabilities is odd
+            },
         },
     });
 }
@@ -57,10 +60,13 @@ export default function NutritionistSetAvailabilityCalendar({ availabilities }: 
     const { trigger } = useSWRMutation(`/nutritionist-availabilities`, submitAvailability);
     const [schedule, setSchedule] = useState<Date[]>(availabilities.map((a) => new Date(a.attributes.date)));
 
-    const handleSubmit = async (dates: Date[]) => {
-        setSchedule(dates);
-        await trigger({ nutritionist, dates });
-    };
+    const handleSubmit = useCallback(
+        async (dates: Date[]) => {
+            setSchedule(dates);
+            await trigger({ nutritionist, dates: dates[dates.length - 1] });
+        },
+        [nutritionist, trigger],
+    );
 
     return (
         <ScheduleSelector

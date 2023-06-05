@@ -10,13 +10,7 @@ type PaymentResultPageParams = {
 };
 
 type Metadata = {
-    goal: string;
-    nutritionist: number;
-    client: number;
-    medical_condition: string;
-    nutritionist_availability: number;
-    date: string;
-    meeting_url: string;
+    appointmentId: number;
 };
 
 async function getPaymentStatus(session_id: string) {
@@ -32,19 +26,22 @@ async function getPaymentStatus(session_id: string) {
     });
 }
 
-async function createAppointment(data: Metadata) {
+async function getUnpaidAppointment(appointmentId: number) {
     return serverFetcher<SingleStrapiResponse<Appointment>>({
-        url: '/appointments',
+        url: `/appointment?filters[appointment_payment]=null&filters[id]=${appointmentId}`,
+        method: 'get',
+    });
+}
+
+async function createAppointmentPayment(data: Metadata, paymentStatus: 'paid' | 'unpaid', session_id: string) {
+    return serverFetcher<SingleStrapiResponse<Appointment>>({
+        url: '/appointment-payments',
         method: 'post',
         body: {
             data: {
-                goal: data.goal,
-                nutritionist: data.nutritionist,
-                client: { id: +data.client },
-                medical_condition: data.medical_condition,
-                nutritionist_availability: { id: +data.nutritionist_availability },
-                date: data.date,
-                meeting_url: data.meeting_url,
+                appointment: { id: data.appointmentId },
+                status: paymentStatus,
+                paymentId: session_id,
             },
         },
     });
@@ -52,9 +49,11 @@ async function createAppointment(data: Metadata) {
 
 export default async function PaymentResultPage({ searchParams }: PaymentResultPageParams) {
     const { payment_status, metadata } = await getPaymentStatus(searchParams.session_id);
+    const appointment = await getUnpaidAppointment(metadata.appointmentId);
 
-    if (payment_status === 'paid') {
-        const appointment = await createAppointment(metadata);
+    if (payment_status === 'paid' && !appointment) {
+        const payment = await createAppointmentPayment(metadata, payment_status, searchParams.session_id);
+        console.log(payment);
     }
     return (
         <div className="bg-white">
@@ -88,19 +87,19 @@ export default async function PaymentResultPage({ searchParams }: PaymentResultP
                         <div className="flex flex-auto flex-col">
                             <div>
                                 <h4 className="font-medium text-gray-900">
-                                    <p>{metadata.nutritionist}</p>
+                                    <p>potato</p>
                                 </h4>
-                                <p className="mt-2 text-sm text-gray-600">{metadata.date}</p>
+                                <p className="mt-2 text-sm text-gray-600">potato</p>
                             </div>
                             <div className="mt-6 flex flex-1 items-end">
                                 <dl className="flex space-x-4 divide-x divide-gray-200 text-sm sm:space-x-6">
                                     <div className="flex">
                                         <dt className="font-medium text-gray-900">Goal</dt>
-                                        <dd className="ml-2 text-gray-700">{metadata.goal}</dd>
+                                        <dd className="ml-2 text-gray-700">potaot</dd>
                                     </div>
                                     <div className="flex pl-4 sm:pl-6">
                                         <dt className="font-medium text-gray-900">Medical conditions</dt>
-                                        <dd className="ml-2 text-gray-700">{metadata.medical_condition}</dd>
+                                        <dd className="ml-2 text-gray-700">potato</dd>
                                     </div>
                                 </dl>
                             </div>

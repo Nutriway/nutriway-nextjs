@@ -6,6 +6,8 @@ import { clientFetcher } from '@/lib/fetchers/clientFetcher';
 import { Availability } from '@/types/Availability';
 import Spinner from '@/components/Skeletons/Spinner';
 import { useRouter } from 'next/navigation';
+import { SingleStrapiResponse } from '@/types/StrapiResponse';
+import { Appointment } from '@/types/Appointment';
 
 function getActivityRate(activity: string) {
     switch (activity) {
@@ -55,17 +57,40 @@ async function updateUser(url: string, { arg }: { arg: User }) {
     });
 }
 
+async function createAppointment(
+    url: string,
+    {
+        arg,
+    }: {
+        arg: { form: Form; availability: Availability; user: User };
+    },
+) {
+    return clientFetcher<SingleStrapiResponse<Appointment>>({
+        url: '/appointments',
+        method: 'post',
+        body: {
+            data: {
+                goal: arg.form.motivation,
+                nutritionist: arg.availability.attributes.nutritionist?.data.id,
+                client: { id: arg.user.id },
+                medical_condition: arg.form.condition,
+                nutritionist_availability: { id: arg.availability.id },
+                date: arg.availability.attributes.date,
+                meeting_url: `https://meet.jit.si/${arg.availability.id}-${new Date(
+                    arg.availability.attributes.date,
+                ).getTime()}`,
+            },
+        },
+    });
+}
+
 async function startPayment(
     url: string,
     {
         arg,
     }: {
         arg: {
-            form: Form;
-            appointmentDate: string;
-            clientId: number;
-            nutritionistId: number;
-            nutritionistAvailability: number;
+            appointmentId: number;
         };
     },
 ) {
@@ -73,15 +98,7 @@ async function startPayment(
         url,
         method: 'post',
         body: {
-            goal: arg.form.motivation,
-            nutritionist: arg.nutritionistId,
-            client: arg.clientId,
-            medical_condition: arg.form.condition,
-            nutritionist_availability: arg.nutritionistAvailability,
-            date: arg.appointmentDate,
-            meeting_url: `https://meet.jit.si/${arg.nutritionistAvailability}-${new Date(
-                arg.appointmentDate,
-            ).getTime()}`,
+            ...arg,
         },
     });
 }
@@ -96,6 +113,7 @@ export default function UserInfoForm({ currentUser, availability }: { currentUse
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const { trigger: strapiTrigger } = useSWRMutation(`/appointment-payment/createCheckoutIntent`, startPayment);
+    const { trigger: appointmentTrigger } = useSWRMutation(`/appointments`, createAppointment);
 
     return (
         <div className="py-8 px-6 mx-auto max-w-2xl bg-white rounded-lg border border-gray-200 shadow-sm lg:mb-28 lg:-mt-80">
@@ -104,16 +122,19 @@ export default function UserInfoForm({ currentUser, availability }: { currentUse
                 method="POST"
                 onSubmit={async (e) => {
                     e.preventDefault();
-                    const updateduser = await userTrigger(user);
-                    if (updateduser) {
+                    const [updatedUser, appointment] = await Promise.all([
+                        userTrigger(user),
+                        appointmentTrigger({
+                            form,
+                            availability,
+                            user,
+                        }),
+                    ]);
+                    if (updatedUser && appointment) {
                         setLoading(true);
                         if (availability.attributes.nutritionist) {
                             const stripePayment = await strapiTrigger({
-                                form,
-                                appointmentDate: availability.attributes.date,
-                                clientId: user.id,
-                                nutritionistId: availability.attributes.nutritionist.id,
-                                nutritionistAvailability: availability.id,
+                                appointmentId: appointment.data.id,
                             });
                             if (stripePayment) {
                                 router.push(stripePayment.url);
