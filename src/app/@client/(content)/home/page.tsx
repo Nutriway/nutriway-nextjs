@@ -10,7 +10,8 @@ const fetchAvailabilities = async () => {
     const today = new Date().toISOString();
 
     return serverFetcher<StrapiResponse<Availability>>({
-        url: `/nutritionist-availabilities?populate[nutritionist][populate]&filters[nutritionist][id]=2&filters[date][$gte]=${today}&filters[appointment]`,
+        // TODO: this was removed from below... &filters[nutritionist][id]=2
+        url: `/nutritionist-availabilities?populate[nutritionist][populate]&filters[date][$gte]=${today}&filters[appointment]`,
         method: 'get',
     });
 };

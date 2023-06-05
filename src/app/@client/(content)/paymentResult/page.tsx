@@ -55,7 +55,6 @@ export default async function PaymentResultPage({ searchParams }: PaymentResultP
 
     if (payment_status === 'paid') {
         const appointment = await createAppointment(metadata);
-        console.log(appointment);
     }
     return (
         <div className="bg-white">
