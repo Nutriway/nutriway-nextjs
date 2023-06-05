@@ -7,7 +7,7 @@ export type Availability = {
         createdAt: string;
         date: string;
         nutritionist?: { data: Client };
-        appointment?: { data: Appointment };
+        appointment?: { data?: Appointment };
         publishedAt: string;
         updatedAt: string;
     };
