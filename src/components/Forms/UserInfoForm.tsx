@@ -94,11 +94,35 @@ async function startPayment(
         };
     },
 ) {
-    return clientFetcher<{ url: string }>({
+    return clientFetcher<{ url: string; session_id: string }>({
         url,
         method: 'post',
         body: {
             ...arg,
+        },
+    });
+}
+
+async function createAppointmentPayment(
+    url: string,
+    {
+        arg,
+    }: {
+        arg: {
+            appointmentId: number;
+            session_id: string;
+        };
+    },
+) {
+    return clientFetcher({
+        url,
+        method: 'post',
+        body: {
+            data: {
+                appointment: { id: arg.appointmentId },
+                paymentId: arg.session_id,
+                status: 'unpaid',
+            },
         },
     });
 }
@@ -114,6 +138,7 @@ export default function UserInfoForm({ currentUser, availability }: { currentUse
     const router = useRouter();
     const { trigger: strapiTrigger } = useSWRMutation(`/appointment-payment/createCheckoutIntent`, startPayment);
     const { trigger: appointmentTrigger } = useSWRMutation(`/appointments`, createAppointment);
+    const { trigger: appointmentPaymentTrigger } = useSWRMutation(`/appointment-payments`, createAppointmentPayment);
 
     return (
         <div className="py-8 px-6 mx-auto max-w-2xl bg-white rounded-lg border border-gray-200 shadow-sm lg:mb-28 lg:-mt-80">
@@ -122,6 +147,7 @@ export default function UserInfoForm({ currentUser, availability }: { currentUse
                 method="POST"
                 onSubmit={async (e) => {
                     e.preventDefault();
+                    setLoading(true);
                     const [updatedUser, appointment] = await Promise.all([
                         userTrigger(user),
                         appointmentTrigger({
@@ -131,12 +157,15 @@ export default function UserInfoForm({ currentUser, availability }: { currentUse
                         }),
                     ]);
                     if (updatedUser && appointment) {
-                        setLoading(true);
                         if (availability.attributes.nutritionist) {
                             const stripePayment = await strapiTrigger({
                                 appointmentId: appointment.data.id,
                             });
                             if (stripePayment) {
+                                await appointmentPaymentTrigger({
+                                    appointmentId: appointment.data.id,
+                                    session_id: stripePayment.session_id,
+                                });
                                 router.push(stripePayment.url);
                             }
                         }

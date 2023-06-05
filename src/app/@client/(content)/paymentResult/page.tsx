@@ -1,7 +1,8 @@
 import { serverFetcher } from '@/lib/fetchers/serverFetcher';
 import { Appointment } from '@/types/Appointment';
 import Image from 'next/image';
-import { SingleStrapiResponse } from '@/types/StrapiResponse';
+import { SingleStrapiResponse, StrapiResponse } from '@/types/StrapiResponse';
+import { AppointmentPayment } from '@/types/AppointmentPayment';
 
 type PaymentResultPageParams = {
     searchParams: {
@@ -27,21 +28,19 @@ async function getPaymentStatus(session_id: string) {
 }
 
 async function getUnpaidAppointment(appointmentId: number) {
-    return serverFetcher<SingleStrapiResponse<Appointment>>({
-        url: `/appointment?filters[appointment_payment]=null&filters[id]=${appointmentId}`,
+    return serverFetcher<StrapiResponse<Appointment>>({
+        url: `/appointments?populate[appointment_payment][populate]&filters[appointment_payment][status]=unpaid&filters[id]=${appointmentId}`,
         method: 'get',
     });
 }
 
-async function createAppointmentPayment(data: Metadata, paymentStatus: 'paid' | 'unpaid', session_id: string) {
-    return serverFetcher<SingleStrapiResponse<Appointment>>({
-        url: '/appointment-payments',
-        method: 'post',
+async function updateAppointmentPayment(paymentId: number, payment_status: string) {
+    return serverFetcher<SingleStrapiResponse<AppointmentPayment>>({
+        url: `/appointment-payments/${paymentId}`,
+        method: 'put',
         body: {
             data: {
-                appointment: { id: data.appointmentId },
-                status: paymentStatus,
-                paymentId: session_id,
+                status: payment_status,
             },
         },
     });
@@ -51,10 +50,18 @@ export default async function PaymentResultPage({ searchParams }: PaymentResultP
     const { payment_status, metadata } = await getPaymentStatus(searchParams.session_id);
     const appointment = await getUnpaidAppointment(metadata.appointmentId);
 
-    if (payment_status === 'paid' && !appointment) {
-        const payment = await createAppointmentPayment(metadata, payment_status, searchParams.session_id);
+    if (
+        appointment.data.length > 0 &&
+        appointment.data[0].attributes.appointment_payment &&
+        payment_status === 'paid'
+    ) {
+        const payment = await updateAppointmentPayment(
+            appointment.data[0].attributes?.appointment_payment?.data.id,
+            payment_status,
+        );
         console.log(payment);
     }
+
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">

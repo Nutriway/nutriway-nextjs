@@ -39,7 +39,7 @@ export default async function Info({ searchParams }: InfoProps) {
                         <p className="inline font-light text-white">
                             Nutricionista:{' '}
                             <span className="font-medium">
-                                {availability.data.attributes.nutritionist?.data.attributes.username}
+                                {availability.data.attributes?.nutritionist?.data.attributes.username}
                             </span>
                         </p>
                         <p className="inline font-light text-white">
