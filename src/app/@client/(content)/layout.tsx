@@ -8,11 +8,18 @@ const clientHeader = {
     logo: true,
 };
 
-export default function ClientContentLayout({ children }: { children: React.ReactNode }) {
+export default function ClientContentLayout({
+    children,
+    modal,
+}: {
+    children: React.ReactNode;
+    modal: React.ReactNode;
+}) {
     return (
         <>
             <AppHeader {...clientHeader} />
             <div className="pt-20">{children}</div>
+            {modal}
             <AppFooter />
         </>
     );
