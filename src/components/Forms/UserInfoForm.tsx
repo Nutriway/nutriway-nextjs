@@ -1,10 +1,13 @@
 'use client';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { User } from '@/types/User';
 import useSWRMutation from 'swr/mutation';
 import { clientFetcher } from '@/lib/fetchers/clientFetcher';
+import { Availability } from '@/types/Availability';
+import Spinner from '@/components/Skeletons/Spinner';
+import { useRouter } from 'next/navigation';
+import { SingleStrapiResponse } from '@/types/StrapiResponse';
 import { Appointment } from '@/types/Appointment';
-import { StrapiResponse } from '@/types/StrapiResponse';
 
 function getActivityRate(activity: string) {
     switch (activity) {
@@ -59,69 +62,121 @@ async function createAppointment(
     {
         arg,
     }: {
-        arg: {
-            form: Form;
-            appointmentDate: Date;
-            clientId: number;
-            nutritionistId: number;
-            nutritionistAvailability: number;
-        };
+        arg: { form: Form; availability: Availability; user: User };
     },
 ) {
-    return clientFetcher<StrapiResponse<Appointment>>({
-        url,
+    return clientFetcher<SingleStrapiResponse<Appointment>>({
+        url: '/appointments',
         method: 'post',
         body: {
             data: {
-                goal: '',
-                nutritionist: arg.nutritionistId,
-                client: arg.clientId,
+                goal: arg.form.motivation,
+                nutritionist: arg.availability.attributes.nutritionist?.data.id,
+                client: { id: arg.user.id },
                 medical_condition: arg.form.condition,
-                nutritionist_availability: { id: arg.nutritionistAvailability },
-                date: arg.appointmentDate,
-                meeting_url: `https://meet.jit.si/${arg.nutritionistAvailability}-${arg.appointmentDate.getTime()}`,
+                nutritionist_availability: { id: arg.availability.id },
+                date: arg.availability.attributes.date,
+                meeting_url: `https://meet.jit.si/${arg.availability.id}-${new Date(
+                    arg.availability.attributes.date,
+                ).getTime()}`,
             },
         },
     });
 }
 
-export default function UserInfoForm({
-    currentUser,
-    appointmentDate,
-    nutritionistId,
-    nutritionistAvailability,
-}: {
-    currentUser: User;
-    appointmentDate: Date;
-    nutritionistId: number;
-    nutritionistAvailability: number;
-}) {
+async function startPayment(
+    url: string,
+    {
+        arg,
+    }: {
+        arg: {
+            appointmentId: number;
+            nutritionistName: string;
+            goal: string;
+            date: string;
+            clientName: string;
+        };
+    },
+) {
+    return clientFetcher<{ url: string; session_id: string }>({
+        url,
+        method: 'post',
+        body: {
+            ...arg,
+        },
+    });
+}
+
+async function createAppointmentPayment(
+    url: string,
+    {
+        arg,
+    }: {
+        arg: {
+            appointmentId: number;
+            session_id: string;
+        };
+    },
+) {
+    return clientFetcher({
+        url,
+        method: 'post',
+        body: {
+            data: {
+                appointment: { id: arg.appointmentId },
+                paymentId: arg.session_id,
+                status: 'unpaid',
+            },
+        },
+    });
+}
+
+export default function UserInfoForm({ currentUser, availability }: { currentUser: User; availability: Availability }) {
     const [user, setUser] = useState<User>(currentUser);
     const [form, setForm] = useState<Form>({ condition: '', motivation: '' });
 
     const { trigger: userTrigger } = useSWRMutation(`/users/${user.id}`, updateUser);
-    const { trigger: formTrigger } = useSWRMutation('/appointments', createAppointment);
+
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+    const { trigger: strapiTrigger } = useSWRMutation(`/appointment-payment/createCheckoutIntent`, startPayment);
+    const { trigger: appointmentTrigger } = useSWRMutation(`/appointments`, createAppointment);
+    const { trigger: appointmentPaymentTrigger } = useSWRMutation(`/appointment-payments`, createAppointmentPayment);
 
     return (
-        <div className="py-8 px-4 mx-auto max-w-2xl lg:py-16">
+        <div className="py-8 px-6 mx-auto max-w-2xl bg-white rounded-lg border border-gray-200 shadow-sm lg:mb-28 lg:-mt-80">
             <h2 className="mb-4 text-xl font-bold text-gray-900">Informações do cliente</h2>
             <form
                 method="POST"
                 onSubmit={async (e) => {
                     e.preventDefault();
-                    const [updateduser, appointment] = await Promise.all([
+                    setLoading(true);
+                    const [updatedUser, appointment] = await Promise.all([
                         userTrigger(user),
-                        formTrigger({
+                        appointmentTrigger({
                             form,
-                            appointmentDate,
-                            clientId: user.id,
-                            nutritionistId,
-                            nutritionistAvailability,
+                            availability,
+                            user,
                         }),
                     ]);
-                    //TODO: continue from here
-                    console.log('user: ', updateduser);
-                    console.log('appointment: ', appointment);
+                    if (updatedUser && appointment) {
+                        if (availability.attributes.nutritionist) {
+                            const stripePayment = await strapiTrigger({
+                                appointmentId: appointment.data.id,
+                                nutritionistName: availability.attributes.nutritionist.data.attributes.username,
+                                goal: form.motivation,
+                                date: availability.attributes.date,
+                                clientName: user.username,
+                            });
+                            if (stripePayment) {
+                                await appointmentPaymentTrigger({
+                                    appointmentId: appointment.data.id,
+                                    session_id: stripePayment.session_id,
+                                });
+                                router.push(stripePayment.url);
+                            }
+                        }
+                    }
                 }}
             >
                 <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
@@ -240,10 +295,11 @@ export default function UserInfoForm({
                     </div>
                 </div>
                 <button
-                    type="submit"
                     className="inline-flex items-center py-2.5 px-5 mt-4 text-sm font-medium text-center text-white rounded-lg sm:mt-6 focus:ring-4 bg-primary-700 hover:bg-primary-800 focus:ring-primary-200"
+                    type="submit"
+                    disabled={loading}
                 >
-                    Guardar Informações
+                    {loading ? <Spinner /> : 'Seguir para pagamento'}
                 </button>
             </form>
         </div>

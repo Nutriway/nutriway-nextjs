@@ -1,32 +1,38 @@
 import BlogShowcase from '@/components/Blogs/BlogShowcase';
 import React from 'react';
 import SimpleCTA from '@/components/CTA/SimpleCTA';
-import ClientScheduleAppointment from '@/components/Calendars/ClientScheduleAppointment';
 import { serverFetcher } from '@/lib/fetchers/serverFetcher';
 import { StrapiResponse } from '@/types/StrapiResponse';
 import { Availability } from '@/types/Availability';
+import ClientScheduleAppointment from '@/components/Calendars/ClientScheduleAppointment';
 
-const fetchAvailabilities = async () => {
+async function fetchAvailabilities() {
     const today = new Date().toISOString();
 
     return serverFetcher<StrapiResponse<Availability>>({
-        url: `/nutritionist-availabilities?populate[nutritionist][populate]&filters[nutritionist][id]=2&filters[date][$gte]=${today}`,
+        // TODO: this was removed from below... &filters[nutritionist][id]=2
+        url: `/nutritionist-availabilities?populate[nutritionist][populate]&populate[appointment][populate][1]=appointment_payment&filters[date][$gte]=${today}`,
         method: 'get',
     });
-};
+}
 
 export default async function Home() {
     const availabilities = await fetchAvailabilities();
+
+    availabilities.data = availabilities.data.filter(
+        (a) =>
+            !a.attributes.appointment ||
+            (a.attributes.appointment && !a.attributes.appointment?.data?.attributes.appointment_payment),
+    );
 
     return (
         <>
             <SimpleCTA
                 title="Parece que ainda não tem nenhuma consulta marcada..."
                 description="Reserve agora a sua primeira consulta."
-                buttonText="Marcar consulta"
-            />
-
-            <ClientScheduleAppointment availabilities={availabilities.data} />
+            >
+                <ClientScheduleAppointment availabilities={availabilities.data} />
+            </SimpleCTA>
 
             <section>
                 {

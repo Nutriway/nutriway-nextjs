@@ -10,8 +10,8 @@ type FetcherParameters = {
 
 const BASE_URL = process.env.REACT_APP_PROD || 'http://127.0.0.1:1337/api';
 
-function showError(url: string, body: object | undefined, method: string) {
-    console.error(`url: ${BASE_URL}${url}\nbody: ${JSON.stringify(body)}\nmethod: ${method}`);
+function showError(url: string, body: object | undefined, method: string, status?: number) {
+    console.error(`url: ${BASE_URL}${url}\nbody: ${JSON.stringify(body)}\nmethod: ${method}\nstatus: ${status}`);
 }
 
 export async function fetcher({
@@ -39,7 +39,7 @@ export async function fetcher({
         });
 
         if (!res.ok) {
-            showError(url, body, method);
+            showError(url, body, method, res.status);
             return null;
         } else if (json) {
             return await res.json();
