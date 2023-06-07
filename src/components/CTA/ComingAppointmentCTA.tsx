@@ -2,17 +2,11 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Appointment } from '@/types/Appointment';
-import { differenceInMinutes, format, intervalToDuration, startOfToday } from 'date-fns';
+import { differenceInMinutes, format, intervalToDuration } from 'date-fns';
 
 type ComingAppointmentCTAProps = {
-    appointments: Appointment[];
+    appointment: Appointment;
 };
-
-function sortedAppointmentsAfterToday(appointments: Appointment[]) {
-    return appointments
-        .filter((a) => new Date(a.attributes.date) > startOfToday())
-        .sort((a, b) => new Date(a.attributes.date).getTime() - new Date(b.attributes.date).getTime());
-}
 
 function timeToAppointment(appointment: Appointment) {
     const duration = intervalToDuration({
@@ -38,16 +32,8 @@ function minutesToAppointment(appointment: Appointment) {
     return differenceInMinutes(new Date(appointment.attributes.date), new Date());
 }
 
-export default function ComingAppointmentCTA({ appointments }: ComingAppointmentCTAProps) {
-    const sortedAppointments = sortedAppointmentsAfterToday(appointments);
-    const nextAppointment = sortedAppointments.length > 0 ? sortedAppointments[0] : null;
-
-    // TODO: for the current use case, there is no chance of having less than one appointment, but if want to use this component in other places, we need to handle this case
-    if (!nextAppointment) {
-        return null;
-    }
-
-    console.log(minutesToAppointment(nextAppointment));
+export default function ComingAppointmentCTA({ appointment }: ComingAppointmentCTAProps) {
+    console.log(minutesToAppointment(appointment));
 
     return (
         <section className="bg-white">
@@ -75,12 +61,12 @@ export default function ComingAppointmentCTA({ appointments }: ComingAppointment
                             <div className="flex items-center justify-between gap-6">
                                 <div className="flex items-center gap-2">
                                     <span className="text-lg font-bold text-gray-900">
-                                        Faltam {timeToAppointment(nextAppointment)}
+                                        Faltam {timeToAppointment(appointment)}
                                     </span>
                                     <span className="text-sm font-normal text-gray-500">para a sua consulta</span>
                                 </div>
                                 <span className="text-xs font-normal text-right text-gray-500">
-                                    {format(new Date(nextAppointment.attributes.date), 'PPPp')}
+                                    {format(new Date(appointment.attributes.date), 'PPPp')}
                                 </span>
                             </div>
                             <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1">
@@ -88,7 +74,7 @@ export default function ComingAppointmentCTA({ appointments }: ComingAppointment
                                     className={`bg-primary-600 h-2.5 rounded-full`}
                                     // we are using style because we need to set the width dynamically
                                     // tailwind doesn't seem to support this as I cannot make it work - @Andree37
-                                    style={{ width: `${distanceToAppointment(nextAppointment)}%` }}
+                                    style={{ width: `${distanceToAppointment(appointment)}%` }}
                                 ></div>
                             </div>
                         </div>
@@ -99,7 +85,7 @@ export default function ComingAppointmentCTA({ appointments }: ComingAppointment
                         </p>
 
                         <div className="flex flex-col gap-4 sm:flex-row md:flex-col lg:flex-row lg:items-center">
-                            {minutesToAppointment(nextAppointment) <= 15 ? (
+                            {minutesToAppointment(appointment) <= 15 ? (
                                 <Link
                                     href="#"
                                     title=""

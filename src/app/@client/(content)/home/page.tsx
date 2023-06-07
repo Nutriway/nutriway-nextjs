@@ -8,6 +8,7 @@ import ClientScheduleAppointment from '@/components/Calendars/ClientScheduleAppo
 import { Appointment } from '@/types/Appointment';
 import { User } from '@/types/User';
 import ComingAppointmentCTA from '@/components/CTA/ComingAppointmentCTA';
+import { startOfToday } from 'date-fns';
 
 async function fetchAvailabilities() {
     const today = new Date().toISOString();
@@ -33,6 +34,12 @@ async function fetchUser() {
     });
 }
 
+function sortedAppointmentsAfterToday(appointments: Appointment[]) {
+    return appointments
+        .filter((a) => new Date(a.attributes.date) > startOfToday())
+        .sort((a, b) => new Date(a.attributes.date).getTime() - new Date(b.attributes.date).getTime());
+}
+
 export default async function Home() {
     const availabilities = await fetchAvailabilities();
 
@@ -45,10 +52,13 @@ export default async function Home() {
     const user = await fetchUser();
     const appointments = await fetchAppointmentsFromUser(user.id);
 
+    const sortedAppointments = sortedAppointmentsAfterToday(appointments.data);
+    const nextAppointment = sortedAppointments.length > 0 ? sortedAppointments[0] : null;
+
     return (
         <>
-            {appointments.data.length > 0 ? (
-                <ComingAppointmentCTA appointments={appointments.data} />
+            {nextAppointment ? (
+                <ComingAppointmentCTA appointment={nextAppointment} />
             ) : (
                 <SimpleCTA
                     title="Parece que ainda não tem nenhuma consulta marcada..."
