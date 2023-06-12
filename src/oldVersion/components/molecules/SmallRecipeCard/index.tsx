@@ -1,10 +1,13 @@
+'use client';
 import React, { useState } from 'react';
 import { Typography, Button, Box } from '@mui/material';
 import { styles } from './styles';
 import { useAuth } from '../../../providers/useAuth';
 import { deleteRecipe, selectRecipe } from '../../../api/recipe';
-import { createSearchParams, useNavigate } from 'react-router-dom';
 import { getRecipeNutritionalValue, Recipe } from '../../../util/recipes';
+import { useRouter } from 'next/navigation';
+import { clientFetcher, useFetcher } from '@/lib/fetchers/clientFetcher';
+import { User } from '@/types/User';
 
 const SmallRecipeCard = ({
     recipe,
@@ -25,10 +28,11 @@ const SmallRecipeCard = ({
     isSelectable?: boolean;
     allowMainCourses: boolean;
 }) => {
+    const { data: user } = useFetcher<User>({
+        url: '/users/me',
+    });
     const [isSelected, setIsSelected] = useState(false);
     const { push } = useRouter();
-
-    const { user } = useAuth();
 
     const viewDetails = () => {
         const isNutritionist = !!recipe.attributes.nutritionist;
@@ -39,7 +43,14 @@ const SmallRecipeCard = ({
         if (user?.type === 'client' && changeSelection) {
             setIsSelected(selected);
             changeSelection(recipe);
-            await selectRecipe(recipe.id, selected, user!.jwt);
+            await clientFetcher({
+                url: `client-recipes/${recipe.id}`,
+                method: 'put',
+                body: {
+                    selected,
+                },
+            });
+            /* await selectRecipe(recipe.id, selected, user!.jwt); */
         }
         if (user?.type === 'nutritionist' && changeSelection) {
             setIsSelected(selected);
@@ -50,15 +61,15 @@ const SmallRecipeCard = ({
     const editRecipe = (recipeId: number) => {
         push({
             pathname: '/nutritionistRecipes/nutritionistAddRecipe',
-            search: createSearchParams({
+            /*  search: createSearchParams({
                 recipeId: recipeId.toString(),
-            }).toString(),
+            }).toString(), */
         });
     };
 
     const onDeleteRecipe = async (recipeId: number) => {
-        await deleteRecipe(recipeId, user!.jwt);
-        await fetchNutritionistRecipes();
+        //  await deleteRecipe(recipeId, user!.jwt);
+        await clientFetcher({ url: `nutritionist-recipes/${recipe.id}`, method: 'delete' });
     };
 
     const getRecipeTitle = () => {

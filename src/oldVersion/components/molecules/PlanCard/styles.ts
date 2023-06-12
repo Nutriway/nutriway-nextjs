@@ -80,6 +80,7 @@ export const styles = {
         padding: '0 8px',
         textAlign: 'center',
         textTransform: 'uppercase',
+        backgroundColor: pallete.colors.primaryColor,
 
         '&:hover': {
             backgroundColor: pallete.colors.primaryColor,

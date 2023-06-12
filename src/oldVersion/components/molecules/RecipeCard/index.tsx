@@ -3,8 +3,8 @@ import { Typography, Button, Box } from '@mui/material';
 import { styles } from './styles';
 import { useAuth } from '../../../providers/useAuth';
 import { deleteRecipe, selectRecipe } from '../../../api/recipe';
-import { createSearchParams, useNavigate } from 'react-router-dom';
 import { getRecipeNutritionalValue, Recipe } from '../../../util/recipes';
+import { useRouter } from 'next/router';
 
 const RecipeCard = ({
     recipe,
@@ -53,9 +53,6 @@ const RecipeCard = ({
     const editRecipe = (recipeId: number) => {
         push({
             pathname: '/nutritionistRecipes/nutritionistAddRecipe',
-            search: createSearchParams({
-                recipeId: recipeId.toString(),
-            }).toString(),
         });
     };
 

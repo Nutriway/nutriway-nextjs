@@ -33,7 +33,6 @@ const NutritionistPlansList = () => {
 
     return (
         <Box>
-            {/*            <NavigationBar /> */}
             <Box sx={styles.pageWrapper}>
                 <Box sx={styles.buttonWrapper}>
                     <PrimaryButton

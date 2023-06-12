@@ -1,19 +1,22 @@
+'use client';
 import { Box } from '@mui/material';
 import React, { useState, memo, useCallback, useEffect } from 'react';
 import { AppointmentType } from '../../../pages/nutritionist/NutritionistAppointments';
 import { useAuth } from '../../../providers/useAuth';
 import { styles } from './styles';
-import { createSearchParams, useNavigate } from 'react-router-dom';
 import CustomTextField from '../../atoms/CustomTextField';
 import { createDietPlan, updateNutritionistDietPlan } from '../../../api/dietPlan';
 import { createAppointmentResult, updateAppointmentResultDietPlan } from '../../../api/appointment';
 
-import { DietPlan, isPlanFinished, PlanDay } from '../../../util/dietPlans';
+import { DietPlan, getRandomImageUrl, isPlanFinished, PlanDay } from '../../../util/dietPlans';
 import { toast } from 'react-toastify';
 import PrimaryButton from '../../atoms/PrimaryButton';
 import NutritionistCreateDietPlanDay, { QueuedMeal } from '../NutritionistCreateDietPlanDay';
 import { Recipe } from '../../../util/recipes';
 import QueuedMealNotification from '../QueuedMealNotification';
+import { useRouter } from 'next/navigation';
+import { clientFetcher, useFetcher } from '@/lib/fetchers/clientFetcher';
+import { User } from '@/types/User';
 
 type NutritionistCreateDietPlanProps = {
     appointment?: AppointmentType;
@@ -30,8 +33,11 @@ function NutritionistCreateDietPlan({
     recipes,
     onDietPlanFinish,
 }: NutritionistCreateDietPlanProps) {
+    const { data: user } = useFetcher<User>({
+        url: '/users/me',
+    });
     const { push } = useRouter();
-    const { user } = useAuth();
+
     const [mainCourses, setMainCourses] = useState(0);
     const [name, setName] = useState(dietPlan.attributes.name);
     const [goal, setGoal] = useState(dietPlan.attributes.goal);
@@ -69,9 +75,9 @@ function NutritionistCreateDietPlan({
             ) {
                 push({
                     pathname: '/nutritionistChosePlanIngredients',
-                    search: createSearchParams({
+                    /*  search: createSearchParams({
                         dietPlan: dietPlan?.id.toString(),
-                    }).toString(),
+                    }).toString(), */
                 });
             }
         }
@@ -96,28 +102,37 @@ function NutritionistCreateDietPlan({
                         plan: { ...dietPlan.attributes.plan, ...newPlanDay },
                     },
                 });
-
-                await updateNutritionistDietPlan(
-                    planId,
-                    dietPlan.attributes.name,
-                    dietPlan.attributes.goal,
-                    dietPlan.attributes.observations,
-                    { ...dietPlan.attributes.plan, ...newPlanDay },
-                    user!.jwt,
-                );
+                await clientFetcher({
+                    url: `/nutritionist-diet-plans/${planId}`,
+                    method: 'put',
+                    body: {
+                        name: dietPlan.attributes.name,
+                        goal: dietPlan.attributes.goal,
+                        observations: dietPlan.attributes.observations,
+                        plan: { ...dietPlan.attributes.plan, ...newPlanDay },
+                    },
+                });
             } else {
-                const { data } = await createDietPlan(
-                    newPlanDay,
-                    dietPlan.attributes.name,
-                    dietPlan.attributes.goal,
-                    dietPlan.attributes.observations,
-                    user!.id,
-                    user!.jwt,
-                );
+                const { data } = await clientFetcher({
+                    url: '/nutritionist-diet-plans',
+                    method: 'post',
+                    body: {
+                        imageUrl: getRandomImageUrl(),
+                        name: dietPlan.attributes.name,
+                        goal: dietPlan.attributes.goal,
+                        observations: dietPlan.attributes.observations,
+                        plan: newPlanDay,
+                        nutritionist: { id: user.id },
+                    },
+                });
 
                 onDietPlanChange(data);
                 if (appointment) {
                     if (appointment.attributes.appointment_result?.data) {
+                        await clientFetcher({
+                            url: `appointment-results/${appointment?.attributes?.appointment_result?.data?.id}`,
+                            method: 'put',
+                        });
                         await updateAppointmentResultDietPlan(
                             appointment?.attributes?.appointment_result?.data?.id,
                             data.id,

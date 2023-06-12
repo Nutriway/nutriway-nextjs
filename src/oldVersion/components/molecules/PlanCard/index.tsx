@@ -31,14 +31,8 @@ const PlanCard = ({ dietPlan, isEditable, isDeletable, selected, onSelection, on
         );
     };
 
-    const navigateToViewDietPlan = () => {
-        push(
-            '/dietPlanInfo' /* ,
-            search: createSearchParams({
-                dietPlan: dietPlan.id.toString(),
-            }).toString(),
-        } */,
-        );
+    const navigateToViewDietPlan = (id: number) => {
+        push(`/dietPlan/${id}`);
     };
 
     const onDeletePlanCard = async (dietPlanId: number) => {
@@ -74,7 +68,11 @@ const PlanCard = ({ dietPlan, isEditable, isDeletable, selected, onSelection, on
                 </Box>
             </Box>
 
-            <Button sx={styles.detailsButton} className={'bg-primary-400'} onClick={navigateToViewDietPlan}>
+            <Button
+                sx={styles.detailsButton}
+                className={'bg-primary-400'}
+                onClick={() => navigateToViewDietPlan(dietPlan.id)}
+            >
                 Detalhes
             </Button>
 
