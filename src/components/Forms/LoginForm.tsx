@@ -4,7 +4,7 @@ import { clientFetcher } from '@/lib/fetchers/clientFetcher';
 import { setCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 import { useRouter } from 'next/navigation';
-import Spinner from '../Skeletons/Spinner';
+import Spinner from '@/components/Skeletons/Spinner';
 
 const initialState = {
     email: '',
