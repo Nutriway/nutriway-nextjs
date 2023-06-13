@@ -4,6 +4,7 @@ import { clientFetcher } from '@/lib/fetchers/clientFetcher';
 import { setCookie } from 'cookies-next';
 import useSWRMutation from 'swr/mutation';
 import { useRouter } from 'next/navigation';
+import Spinner from '@/components/Skeletons/Spinner';
 
 const initialState = {
     email: '',
@@ -31,7 +32,7 @@ async function doLogin(url: string, { arg: { email, password } }: { arg: { email
 
 export default function LoginForm() {
     const [login, setLogin] = useState(initialState);
-    const { trigger } = useSWRMutation('/auth/local', doLogin);
+    const { trigger, isMutating } = useSWRMutation('/auth/local', doLogin);
     const router = useRouter();
     return (
         <form
@@ -166,7 +167,7 @@ export default function LoginForm() {
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
-                Entre na sua conta
+                {isMutating ? <Spinner /> : 'Entre na sua conta'}
             </button>
         </form>
     );
