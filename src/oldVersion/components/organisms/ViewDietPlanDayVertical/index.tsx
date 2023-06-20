@@ -1,7 +1,6 @@
 'use client';
 import { Box, Divider, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useAuth } from '../../../providers/useAuth';
 import { getWeekDay } from '../../../util/dietPlans';
 import { Recipe } from '../../../util/recipes';
 import PlanRecipeCard from '../../molecules/PlanRecipeCard';
@@ -13,7 +12,6 @@ type ViewDietPlanDayVerticalProps = {
 };
 
 function ViewDietPlanDayVertical({ dietPlan, weekDay }: ViewDietPlanDayVerticalProps) {
-    const { user } = useAuth();
     const [meals, setMeals] = useState<any>([]);
 
     const fetchMeals = useCallback(async () => {
@@ -25,10 +23,10 @@ function ViewDietPlanDayVertical({ dietPlan, weekDay }: ViewDietPlanDayVerticalP
     }, [dietPlan?.plan, weekDay]);
 
     useEffect(() => {
-        if (user && dietPlan?.plan[weekDay]) {
+        if (dietPlan?.plan[weekDay]) {
             fetchMeals();
         }
-    }, [user, dietPlan, fetchMeals, weekDay]);
+    }, [dietPlan, fetchMeals, weekDay]);
 
     const getTotalCalories = () => {
         if (meals.length) {

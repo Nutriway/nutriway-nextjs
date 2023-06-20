@@ -13,7 +13,7 @@ const PlanRecipeCard = ({ recipe }: PlanRecipeCardProps) => {
 
     const viewDetails = () => {
         const isNutritionist = !!recipe.attributes.nutritionist;
-        push(`../recipeDetails/${recipe.id}/${isNutritionist}`);
+        push(`/recipeDetails/${recipe.id}?nutritionist=${isNutritionist}`);
     };
 
     const getRecipeTitle = () => {

@@ -1,10 +1,12 @@
+'use client';
 import React, { useState, useCallback } from 'react';
 import { Typography, Button, Box } from '@mui/material';
 import { styles } from './styles';
-import { useAuth } from '../../../providers/useAuth';
 import { deleteRecipe, selectRecipe } from '../../../api/recipe';
 import { getRecipeNutritionalValue, Recipe } from '../../../util/recipes';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+import { User } from '@/types/User';
+import { useFetcher } from '@/lib/fetchers/clientFetcher';
 
 const RecipeCard = ({
     recipe,
@@ -27,12 +29,13 @@ const RecipeCard = ({
 }) => {
     const [isSelected, setIsSelected] = useState(false);
     const { push } = useRouter();
-
-    const { user } = useAuth();
+    const { data: user } = useFetcher<User>({
+        url: '/users/me',
+    });
 
     const viewDetails = () => {
         const isNutritionist = !!recipe.attributes.nutritionist;
-        push(`../recipeDetails/${recipe.id}/${isNutritionist}`);
+        push(`/recipeDetails/${recipe.id}?nutritionist=${isNutritionist}`);
     };
 
     const updateSelectedList = useCallback(
@@ -40,7 +43,7 @@ const RecipeCard = ({
             if (user?.type === 'client' && changeSelection) {
                 setIsSelected(selected);
                 changeSelection(recipe);
-                await selectRecipe(recipe.id, selected, user!.jwt);
+                //await selectRecipe(recipe.id, selected, user!.jwt);
             }
             if (user?.type === 'nutritionist' && changeSelection) {
                 setIsSelected(selected);
@@ -51,13 +54,13 @@ const RecipeCard = ({
     );
 
     const editRecipe = (recipeId: number) => {
-        push({
+        /*   push({
             pathname: '/nutritionistRecipes/nutritionistAddRecipe',
-        });
+        }); */
     };
 
     const onDeleteRecipe = async (recipeId: number) => {
-        await deleteRecipe(recipeId, user!.jwt);
+        //await deleteRecipe(recipeId, user!.jwt);
         await fetchNutritionistRecipes();
     };
 

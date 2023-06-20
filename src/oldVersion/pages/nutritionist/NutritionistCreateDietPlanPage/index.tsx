@@ -14,12 +14,14 @@ import { DietPlan } from '../../../util/dietPlans';
 import { useFetcher } from '@/lib/fetchers/clientFetcher';
 import { User } from '@/types/User';
 import { StrapiResponse } from '@/types/StrapiResponse';
+import { useSearchParams } from 'next/navigation';
 
 function NutritionistCreateDietPlanPage() {
+    const searchParams = useSearchParams();
+
     const { data: user } = useFetcher<User>({
         url: '/users/me',
     });
-    console.log('ENTER user', user);
 
     const { data: apiRecipes } = useFetcher<StrapiResponse<any>>({
         url: `/api-recipes?populate=*&pagination[pageSize]=10000`,
@@ -34,6 +36,13 @@ function NutritionistCreateDietPlanPage() {
         shouldFetch: !!user,
     });
 
+    const dietPlanId = searchParams.get('dietPlan');
+
+    const { data: dietPlanData } = useFetcher<StrapiResponse<DietPlan>>({
+        url: `/nutritionist-diet-plans?populate=*&filters[id][$eq]=${dietPlanId}`,
+        shouldFetch: !!user,
+    });
+
     const [recipes, setRecipes] = useState<Recipe[]>();
     const [dietPlan, setDietPlan] = useState<DietPlan>({
         id: -1,
@@ -44,7 +53,19 @@ function NutritionistCreateDietPlanPage() {
         if (nutritionistRecipes && apiRecipes) {
             setRecipes([...nutritionistRecipes.data, ...apiRecipes.data]);
         }
-    }, [apiRecipes, nutritionistRecipes]);
+
+        if (dietPlanData?.data.length > 0) {
+            setDietPlan({
+                id: dietPlanData?.data[0].id,
+                attributes: {
+                    name: dietPlanData?.data[0].attributes.name,
+                    plan: dietPlanData?.data[0].attributes.plan,
+                    goal: dietPlanData?.data[0].attributes.goal,
+                    observations: dietPlanData?.data[0].attributes.observations,
+                },
+            });
+        }
+    }, [apiRecipes, dietPlanData, nutritionistRecipes]);
 
     return (
         <Box sx={styles.pageWrapper}>

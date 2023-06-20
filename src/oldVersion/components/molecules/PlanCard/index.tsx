@@ -7,6 +7,8 @@ import { deleteDietPlan } from '../../../api/dietPlan';
 import { useAuth } from '../../../providers/useAuth';
 import { DietPlan, isPlanFinished } from '../../../util/dietPlans';
 import { useRouter } from 'next/navigation';
+import { clientFetcher } from '@/lib/fetchers/clientFetcher';
+import useSWRMutation from 'swr/mutation';
 
 type PlanCardProps = {
     dietPlan: DietPlan;
@@ -18,27 +20,25 @@ type PlanCardProps = {
     onDelete?(dietPlanId: number): void;
 };
 
+const onDeletePlanCard = async (url: string, { arg: { dietPlanId } }: { arg: { dietPlanId: number } }) => {
+    await clientFetcher({
+        url: `${url}/${dietPlanId}`,
+        method: 'delete',
+    });
+};
+
 const PlanCard = ({ dietPlan, isEditable, isDeletable, selected, onSelection, onDelete }: PlanCardProps) => {
     const { user } = useAuth();
     const { push } = useRouter();
 
-    const editPlanCard = () => {
-        push(
-            '/nutritionistCreateDietPlanPage',
-            /*  search: createSearchParams({
-                dietPlan: dietPlan.id.toString(),
-            }).toString(), */
-        );
+    const { trigger: deleteTrigger } = useSWRMutation('/nutritionist-diet-plans', onDeletePlanCard);
+
+    const editPlanCard = (id: number) => {
+        push(`/createDietPlan?dietPlan=${id}`);
     };
 
     const navigateToViewDietPlan = (id: number) => {
         push(`/dietPlan/${id}`);
-    };
-
-    const onDeletePlanCard = async (dietPlanId: number) => {
-        await deleteDietPlan(dietPlanId, user!.jwt);
-
-        if (onDelete) onDelete(dietPlanId);
     };
 
     const selectPlan = () => {
@@ -77,7 +77,11 @@ const PlanCard = ({ dietPlan, isEditable, isDeletable, selected, onSelection, on
             </Button>
 
             {isEditable && (
-                <Button sx={styles.detailsButton} className={'bg-primary-400'} onClick={editPlanCard}>
+                <Button
+                    sx={styles.detailsButton}
+                    className={'bg-primary-400'}
+                    onClick={() => editPlanCard(dietPlan.id)}
+                >
                     Editar
                 </Button>
             )}
@@ -85,7 +89,7 @@ const PlanCard = ({ dietPlan, isEditable, isDeletable, selected, onSelection, on
                 <Button
                     sx={styles.detailsButton}
                     className={'bg-primary-400'}
-                    onClick={() => onDeletePlanCard(dietPlan.id)}
+                    onClick={() => deleteTrigger({ dietPlanId: dietPlan.id })}
                 >
                     Apagar
                 </Button>

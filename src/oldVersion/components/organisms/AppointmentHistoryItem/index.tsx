@@ -44,7 +44,7 @@ function AppointmentHistoryItem() {
     const navigateToCreatePlan = () => {
         if (appointment) {
             push({
-                pathname: '/nutritionistCreateDietPlanPage',
+                pathname: '/createDietPlan',
                 search: createSearchParams({
                     appointment: appointment.id.toString(),
                 }).toString(),

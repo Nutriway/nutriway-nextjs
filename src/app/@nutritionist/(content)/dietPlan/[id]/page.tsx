@@ -79,19 +79,23 @@ type DietPlanDetailsParams = {
 async function getInfo(id: string) {
     console.log('ENTER here');
 
-    return serverFetcher<SingleStrapiResponse<DietPlan>>({
+    console.log(id);
+
+    return serverFetcher<SingleStrapiResponse<DietPlan[]>>({
         url: `/nutritionist-diet-plans?populate=*&filters[id][$eq]=${id}`,
         method: 'get',
     });
 }
 
 export default async function DietPlanDetails({ params }: DietPlanDetailsParams) {
-    const info = await getInfo(params.id);
-    console.log('ENTER info', info);
+    const { data } = await getInfo(params.id);
+    console.log('ENTER info', data);
 
-    if (!info?.data) {
+    if (!data) {
         return <NotFound />;
     }
 
-    return <DietPlanInfo dietPlan={info.data} />;
+    const dietPlanInfo = data[0];
+
+    return <DietPlanInfo dietPlan={dietPlanInfo} />;
 }

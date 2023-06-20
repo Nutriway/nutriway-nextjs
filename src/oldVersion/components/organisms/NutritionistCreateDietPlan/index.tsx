@@ -58,28 +58,20 @@ function NutritionistCreateDietPlan({
         if (name && goal) {
             if (onDietPlanFinish) onDietPlanFinish(name, goal, observations);
 
-            await updateNutritionistDietPlan(
-                dietPlan?.id,
-                name,
-                goal,
-                observations,
-                dietPlan?.attributes.plan,
-                user!.jwt,
-            );
-            toast.success('Plano completo');
+            await clientFetcher({
+                url: `/nutritionist-diet-plans/${dietPlan?.id}`,
+                method: 'put',
+                body: {
+                    data: {
+                        name,
+                        goal,
+                        observations,
+                        plan: { ...dietPlan.attributes.plan },
+                    },
+                },
+            });
 
-            if (
-                appointment &&
-                appointment.attributes?.appointment_result?.data?.attributes?.planType ===
-                    'nutritionistDeliverIngredients'
-            ) {
-                push({
-                    pathname: '/nutritionistChosePlanIngredients',
-                    /*  search: createSearchParams({
-                        dietPlan: dietPlan?.id.toString(),
-                    }).toString(), */
-                });
-            }
+            toast.success('Plano completo');
         }
 
         if (!name) {
@@ -102,32 +94,37 @@ function NutritionistCreateDietPlan({
                         plan: { ...dietPlan.attributes.plan, ...newPlanDay },
                     },
                 });
+
                 await clientFetcher({
                     url: `/nutritionist-diet-plans/${planId}`,
                     method: 'put',
                     body: {
-                        name: dietPlan.attributes.name,
-                        goal: dietPlan.attributes.goal,
-                        observations: dietPlan.attributes.observations,
-                        plan: { ...dietPlan.attributes.plan, ...newPlanDay },
+                        data: {
+                            name: dietPlan.attributes.name,
+                            goal: dietPlan.attributes.goal,
+                            observations: dietPlan.attributes.observations,
+                            plan: { ...dietPlan.attributes.plan, ...newPlanDay },
+                        },
                     },
                 });
             } else {
-                const { data } = await clientFetcher({
+                const { data } = await clientFetcher<any>({
                     url: '/nutritionist-diet-plans',
                     method: 'post',
                     body: {
-                        imageUrl: getRandomImageUrl(),
-                        name: dietPlan.attributes.name,
-                        goal: dietPlan.attributes.goal,
-                        observations: dietPlan.attributes.observations,
-                        plan: newPlanDay,
-                        nutritionist: { id: user.id },
+                        data: {
+                            imageUrl: getRandomImageUrl(),
+                            name: name,
+                            goal: goal,
+                            observations: observations,
+                            plan: newPlanDay,
+                            nutritionist: { id: user.id },
+                        },
                     },
                 });
 
                 onDietPlanChange(data);
-                if (appointment) {
+                /*    if (appointment) {
                     if (appointment.attributes.appointment_result?.data) {
                         await clientFetcher({
                             url: `appointment-results/${appointment?.attributes?.appointment_result?.data?.id}`,
@@ -141,10 +138,10 @@ function NutritionistCreateDietPlan({
                     } else {
                         await createAppointmentResult(appointment.id, data.id, user!.jwt);
                     }
-                }
+                } */
             }
         },
-        [appointment, dietPlan, onDietPlanChange, user],
+        [dietPlan, goal, name, observations, onDietPlanChange, user.id],
     );
 
     const handleQueuedMeal = useCallback((mealToQueue: QueuedMeal) => {

@@ -21,7 +21,7 @@ const NutritionistPlansList = () => {
         url: '/users/me',
     });
 
-    const { data: nutritionistDietPlan } = useFetcher<StrapiResponse<NutritionistDietPlan>>({
+    const { data: nutritionistDietPlans } = useFetcher<StrapiResponse<NutritionistDietPlan>>({
         url: `/nutritionist-diet-plans?populate=*&pagination[pageSize]=10000&filters[nutritionist][id][$eq]=${user?.id}`,
         shouldFetch: !!user,
     });
@@ -35,21 +35,19 @@ const NutritionistPlansList = () => {
         <Box>
             <Box sx={styles.pageWrapper}>
                 <Box sx={styles.buttonWrapper}>
-                    <PrimaryButton
-                        sx={{ mb: 3 }}
-                        onClick={() => push('/nutritionistCreateDietPlanPage')}
-                        endIcon={<AddIcon />}
-                    >
+                    <PrimaryButton sx={{ mb: 3 }} onClick={() => push('/createDietPlan')} endIcon={<AddIcon />}>
                         novo plano
                     </PrimaryButton>
                 </Box>
                 <Box sx={styles.listWrapper}>
-                    {nutritionistDietPlan?.data?.length ? (
+                    {nutritionistDietPlans?.data?.length ? (
                         <PlansList
                             onDelete={(deletedId: number) => {
-                                nutritionistDietPlan?.data.filter((plan) => plan.id !== deletedId);
+                                /*  nutritionistDietPlans.data = nutritionistDietPlans?.data.filter(
+                                    (plan) => plan.id !== deletedId,
+                                ); */
                             }}
-                            plans={nutritionistDietPlan && nutritionistDietPlan}
+                            plans={nutritionistDietPlans && nutritionistDietPlans}
                             appointmentPlans={appointmentResultsWithDietPlan?.data?.map(
                                 (ap) => ap?.attributes?.nutritionist_diet_plan?.data?.id,
                             )}
